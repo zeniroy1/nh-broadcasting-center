@@ -230,63 +230,115 @@
         transform: translateX(0);
     }
 
-    /* Mobile Footer Improvements - Centered and Compact */
+    /* Mobile Footer Improvements */
     .site-footer {
-        padding: 0.75rem 0;
-        margin-top: 1rem;
+        padding: 2rem 0;
+        margin-top: 2rem;
     }
 
     .footer-content {
         flex-direction: column;
-        /* Stacked looks better for centering on mobile */
-        justify-content: center;
-        align-items: center;
         text-align: center;
-        gap: 0.5rem;
+        gap: 1.5rem;
     }
 
     .footer-info h3 {
-        font-size: 0.95rem;
-        margin-bottom: 2px;
-        margin-right: 0;
-        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
     }
 
     .footer-info p {
-        font-size: 0.75rem;
-        display: block;
-        opacity: 0.7;
+        font-size: 0.9rem;
+        opacity: 0.8;
     }
 
     .footer-links {
-        font-size: 0.7rem;
-        border-top: none;
-        padding-top: 0;
+        font-size: 0.8rem;
+        border-top: 1px solid rgba(var(--color-primary-rgb), 0.1);
+        padding-top: 1rem;
         width: 100%;
-        text-align: center;
+    }
+
+    .dark .footer-links {
+        border-top-color: rgba(var(--color-accent-rgb), 0.1);
     }
 }
 
-/* Landscape Mode Adjustments for Mobile */
+/* Landscape Mode Adjustments for Mobile - OPTIMIZED FOR SPREAD MENU */
 @media (max-width: 932px) and (orientation: landscape) {
     :root {
-        --header-height: 50px !important;
+        --header-height: 54px !important;
     }
 
-    .desktop-nav {
-        display: none !important;
+    /* Force desktop nav to stay visible but take less space */
+    .desktop-nav-wrapper {
+        display: block !important;
+        position: static !important;
+        transform: none !important;
+        flex: 1 !important;
+        margin: 0 0.5rem !important;
+        overflow: hidden !important;
     }
 
     .mobile-menu-btn {
+        display: none !important;
+        /* Hide burger when desktop links are visible */
+    }
+
+    .header-content {
         display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        height: 54px !important;
+        padding: 0 0.5rem !important;
+        gap: 0.3rem !important;
     }
 
-    .nav-container {
-        height: 50px !important;
-        padding: 0 1rem !important;
+    .logo {
+        flex: 0 0 auto !important;
+        gap: 0.4rem !important;
     }
 
-    .logo-container h1 {
-        font-size: 1.1rem !important;
+    .logo-icon-wrapper {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .logo-text {
+        flex-direction: row !important;
+        gap: 3px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .brand {
+        font-size: 0.9rem !important;
+    }
+
+    .dept {
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+    }
+
+    .header-actions {
+        display: flex !important;
+        gap: 0.3rem !important;
+        flex: 0 0 auto !important;
+    }
+
+    .icon-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    /* Force small size for Nav Items in landscape */
+    .nav-list {
+        gap: 0.3rem !important;
+        padding: 2px !important;
+    }
+
+    .menu-item {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.75rem !important;
+        border-radius: 10px !important;
     }
 }
