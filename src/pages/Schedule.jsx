@@ -160,7 +160,7 @@ const Schedule = () => {
                             </span>
                             {isHoliday && <span className="holiday-name">{isHoliday}</span>}
                         </div>
-                        <div className="events-container">
+                        <div className={`events-container ${dayEvents.length >= 5 ? 'has-many-events' : ''}`}>
                             {dayEvents.map((event, idx) => (
                                 <div key={idx} className="event-pill" style={{ backgroundColor: event.color || '#37bc9b' }}>
                                     {!event.allDay && <span className="event-time-badge">{format(event.start, 'HH:mm')}</span>}

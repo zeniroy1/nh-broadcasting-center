@@ -377,6 +377,19 @@
         text-overflow: ellipsis;
         font-weight: 500;
     }
+
+    /* Bar Mode for 5+ events on mobile */
+    .has-many-events {
+        gap: 2px !important;
+    }
+
+    .has-many-events .event-pill {
+        min-height: 6px !important;
+        height: 6px !important;
+        padding: 0 !important;
+        font-size: 0 !important;
+        border-radius: 2px !important;
+    }
 }
 
 /* Desktop Defaults for the new classes */
