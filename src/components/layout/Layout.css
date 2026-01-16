@@ -267,17 +267,18 @@
 /* Landscape Mode Adjustments for Mobile - OPTIMIZED FOR SPREAD MENU */
 @media (max-width: 932px) and (orientation: landscape) {
     :root {
-        --header-height: 54px !important;
+        --header-height: 60px !important;
     }
 
-    /* Force desktop nav to stay visible but take less space */
+    /* Force desktop nav to be perfectly centered */
     .desktop-nav-wrapper {
         display: block !important;
-        position: static !important;
-        transform: none !important;
-        flex: 1 !important;
-        margin: 0 0.5rem !important;
-        overflow: hidden !important;
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        z-index: 10 !important;
+        width: auto !important;
     }
 
     .mobile-menu-btn {
@@ -289,56 +290,46 @@
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        height: 54px !important;
-        padding: 0 0.5rem !important;
-        gap: 0.3rem !important;
+        height: 60px !important;
+        padding: 0 1.5rem !important;
+        position: relative !important;
+        /* Base for absolute menu */
     }
 
     .logo {
         flex: 0 0 auto !important;
-        gap: 0.4rem !important;
-    }
-
-    .logo-icon-wrapper {
-        width: 32px !important;
-        height: 32px !important;
+        z-index: 5 !important;
     }
 
     .logo-text {
         flex-direction: row !important;
-        gap: 3px !important;
-        font-size: 0.9rem !important;
+        gap: 5px !important;
     }
 
     .brand {
-        font-size: 0.9rem !important;
+        font-size: 1.1rem !important;
     }
 
     .dept {
-        font-size: 0.8rem !important;
+        font-size: 0.9rem !important;
         white-space: nowrap !important;
     }
 
     .header-actions {
         display: flex !important;
-        gap: 0.3rem !important;
-        flex: 0 0 auto !important;
+        gap: 1rem !important;
+        z-index: 5 !important;
     }
 
-    .icon-btn {
-        width: 32px !important;
-        height: 32px !important;
-    }
-
-    /* Force small size for Nav Items in landscape */
+    /* Increase spacing and size for a more stable feel */
     .nav-list {
-        gap: 0.3rem !important;
-        padding: 2px !important;
+        gap: 1.2rem !important;
+        padding: 0 !important;
     }
 
     .menu-item {
-        padding: 0.3rem 0.6rem !important;
-        font-size: 0.75rem !important;
-        border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 0.85rem !important;
+        border-radius: 15px !important;
     }
 }
