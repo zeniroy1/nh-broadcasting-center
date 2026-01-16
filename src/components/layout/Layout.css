@@ -230,36 +230,41 @@
         transform: translateX(0);
     }
 
-    /* Mobile Footer Improvements */
+    /* Mobile Footer Improvements - Matching PC Format */
     .site-footer {
-        padding: 2rem 0;
-        margin-top: 2rem;
+        padding: 1rem 0;
+        margin-top: 1.5rem;
     }
 
     .footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 1.5rem;
+        flex-direction: row;
+        /* Force horizontal like PC */
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        gap: 1rem;
+        flex-wrap: wrap;
+        /* Safety for very narrow screens */
     }
 
     .footer-info h3 {
-        font-size: 1.2rem;
-        margin-bottom: 0.25rem;
+        font-size: 1rem;
+        margin-bottom: 0px;
+        display: inline-block;
+        margin-right: 0.5rem;
     }
 
     .footer-info p {
-        font-size: 0.9rem;
-        opacity: 0.8;
+        font-size: 0.8rem;
+        display: inline-block;
+        opacity: 0.7;
     }
 
     .footer-links {
-        font-size: 0.8rem;
-        border-top: 1px solid rgba(var(--color-primary-rgb), 0.1);
-        padding-top: 1rem;
-        width: 100%;
-    }
-
-    .dark .footer-links {
-        border-top-color: rgba(var(--color-accent-rgb), 0.1);
+        font-size: 0.75rem;
+        border-top: none;
+        padding-top: 0;
+        width: auto;
+        text-align: right;
     }
 }
