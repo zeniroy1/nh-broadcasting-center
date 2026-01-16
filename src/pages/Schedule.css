@@ -325,24 +325,53 @@
     }
 
     .events-container {
-        gap: 2px;
+        gap: 3px;
     }
 
     .event-pill {
         font-size: 0.65rem;
-        padding: 1px 3px;
+        padding: 2px 4px;
         line-height: 1.1;
-        border-radius: 3px;
-        min-height: 12px;
-        text-indent: -999px;
-        /* Hide text, show as a bar on mobile */
-        height: 4px;
+        border-radius: 4px;
+        min-height: 18px;
+        /* High enough for one line of text */
+        height: auto;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
     }
 
-    .event-time-badge {
+    .event-pill .event-title-text {
         display: none;
+        /* Hide title on mobile bars as requested */
     }
+
+    .event-pill .event-time-badge {
+        display: inline-block;
+        font-size: 0.6rem;
+        margin-right: 0;
+        font-weight: 800;
+    }
+
+    .event-pill .event-location-text {
+        display: block;
+        font-size: 0.55rem;
+        opacity: 0.9;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Desktop Defaults for the new classes */
+.event-title-text {
+    display: inline;
+}
+
+.event-location-text {
+    display: none;
+    /* Usually hide location on compact desktop view, or show on hover? */
 }
 
 /* Extra small screens */
@@ -357,6 +386,19 @@
 
     .cell .number {
         font-size: 0.75rem;
+    }
+
+    .event-pill {
+        padding: 1px 3px;
+        min-height: 14px;
+    }
+
+    .event-pill .event-time-badge {
+        font-size: 0.55rem;
+    }
+
+    .event-pill .event-location-text {
+        font-size: 0.5rem;
     }
 }
 
