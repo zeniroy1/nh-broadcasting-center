@@ -165,7 +165,7 @@ const Schedule = () => {
                                 <div key={idx} className="event-pill" style={{ backgroundColor: event.color || '#37bc9b' }}>
                                     {!event.allDay && <span className="event-time-badge">{format(event.start, 'HH:mm')}</span>}
                                     <span className="event-title-text">{event.title}</span>
-                                    {event.location && <span className="event-location-text">{event.location}</span>}
+                                    <span className="event-location-text">{event.location || '방송운영단'}</span>
                                 </div>
                             ))}
                         </div>
