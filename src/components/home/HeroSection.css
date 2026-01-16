@@ -229,3 +229,84 @@
     color: var(--color-text-muted);
     opacity: 0.7;
 }
+
+/* ==========================================
+   MOBILE RESPONSIVE STYLES
+   ========================================== */
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+        padding: calc(var(--header-height) + 2rem) 1rem 3rem;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    /* Reduce animated shapes on mobile */
+    .shape-1 {
+        width: 300px;
+        height: 300px;
+        top: -80px;
+        right: -80px;
+    }
+
+    .shape-2 {
+        width: 250px;
+        height: 250px;
+        bottom: -50px;
+        left: -80px;
+    }
+
+    .shape-3 {
+        width: 200px;
+        height: 200px;
+    }
+
+    .scroll-indicator {
+        bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .hero-description {
+        font-size: 0.9rem;
+    }
+}

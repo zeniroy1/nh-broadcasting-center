@@ -89,3 +89,58 @@
     opacity: 1;
     transform: translateX(0);
 }
+
+/* ==========================================
+   MOBILE RESPONSIVE STYLES
+   ========================================== */
+
+@media (max-width: 768px) {
+    .quick-access-section {
+        padding: 3rem 0;
+    }
+
+    .section-header {
+        margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .access-card {
+        padding: 1.5rem;
+    }
+
+    .access-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 1rem;
+    }
+
+    .access-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .access-card p {
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .card-arrow {
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+}

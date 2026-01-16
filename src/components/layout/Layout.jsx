@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon, MonitorPlay } from 'lucide-react';
 import './Layout.css';
 import AnimatedNav from './AnimatedNav';
+import SwipeBack from './SwipeBack';
 
 const Layout = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -50,6 +51,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className={`app-layout ${isDark ? 'dark' : ''}`}>
+      <SwipeBack />
       <header className={`site-header ${isScrolled ? 'scrolled glass' : ''} ${isHeaderHidden ? 'header-hidden' : ''}`}>
         <div className="container header-content">
           <Link to="/" className="logo">
