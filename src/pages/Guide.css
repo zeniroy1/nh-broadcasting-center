@@ -1,0 +1,329 @@
+.guide-page {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+}
+
+/* Kinetic Typography Animation */
+.kinetic-title {
+    display: flex;
+    justify-content: center;
+    perspective: 500px;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.kinetic-title span {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tabs-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tabs-header {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1rem;
+}
+
+.tab-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: transparent;
+    transition: color var(--transition-fast);
+}
+
+.tab-btn:hover {
+    color: var(--color-primary);
+}
+
+.tab-btn.active {
+    color: var(--color-primary);
+}
+
+.active-indicator {
+    position: absolute;
+    bottom: -17px;
+    /* Adjust based on padding + border */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 3px 3px 0 0;
+}
+
+.guide-content {
+    background: var(--color-bg-card);
+    padding: 3rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+}
+
+.guide-section {
+    margin-bottom: 3rem;
+}
+
+.guide-section:last-child {
+    margin-bottom: 0;
+}
+
+.guide-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 0.5rem;
+}
+
+.section-icon {
+    color: var(--color-accent-hover);
+}
+
+.process-steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.step {
+    flex: 1;
+    background: var(--color-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    position: relative;
+}
+
+.step-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary-light);
+    opacity: 0.2;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.step h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+.step p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.step-arrow {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    /* Match approximate step height */
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+}
+
+.contact-box {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--color-border);
+    font-size: 0.9rem;
+}
+
+.alert-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+}
+
+.time-list,
+.info-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.time-list li,
+.info-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.time-list li::before,
+.info-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* 3D Magnetic Tilt Card Wrapper */
+.contact-card-wrapper {
+    perspective: 800px;
+}
+
+.contact-card {
+    background: var(--color-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+    /* Uniform card height */
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glowing border effect on hover */
+.contact-card.card-glow {
+    border-color: var(--color-primary);
+    box-shadow:
+        0 0 15px rgba(0, 53, 148, 0.3),
+        0 0 30px rgba(0, 53, 148, 0.15),
+        inset 0 0 20px rgba(0, 53, 148, 0.05);
+}
+
+/* Light mode: stronger glow for visibility */
+:root .contact-card.card-glow {
+    box-shadow:
+        0 0 20px rgba(0, 53, 148, 0.4),
+        0 0 40px rgba(0, 53, 148, 0.2),
+        0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Shimmer effect overlay - Light mode (blue tint) */
+.card-shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(0, 53, 148, 0.15),
+            rgba(58, 134, 255, 0.1),
+            transparent);
+    transition: left 0.5s ease;
+    pointer-events: none;
+}
+
+/* Dark mode: white shimmer for contrast */
+.dark .card-shimmer {
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            rgba(255, 255, 255, 0.08),
+            transparent);
+}
+
+.contact-card:hover .card-shimmer {
+    left: 100%;
+}
+
+.contact-card:hover {
+    border-color: var(--color-primary);
+}
+
+.contact-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    flex: 1;
+    min-height: 50px;
+}
+
+.contact-info .phone {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.contact-info .sub {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    min-height: 1.2em;
+}
+
+.contact-card .dept {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: var(--color-bg-card);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+    .process-steps {
+        flex-direction: column;
+    }
+
+    .step-arrow {
+        display: none;
+    }
+
+    .tabs-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .tab-btn {
+        justify-content: center;
+    }
+
+    .active-indicator {
+        display: none;
+        /* Hide animated underline on mobile for simpler look, or adjust */
+    }
+
+    .tab-btn.active {
+        background: var(--color-primary);
+        color: white;
+        border-radius: var(--radius-sm);
+    }
+}

@@ -1,0 +1,208 @@
+Sub 근태자동정리()
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets("근태기록")
+    
+    ' 날짜 헤더 행 번호
+    Dim dateRows As Variant
+    dateRows = Array(4, 7, 10, 13, 16, 19, 22, 25, 28, 31)
+    
+    ' 순회 범위 설정
+    Dim firstRow As Long, lastRow As Long
+    Dim firstCol As Long, lastCol As Long
+    firstRow = Application.Min(dateRows) + 1  ' 5
+    lastRow = Application.Max(dateRows) + 2   ' 33
+    firstCol = 1
+    lastCol = 31
+    
+    Dim dtR As Variant, c As Long
+    Dim headerFmt As String
+    
+    '── 빈 날짜 헤더셀 자동 채우기 (옆 셀 +1, 폰트·크기·진한 파랑 적용) ──
+    For Each dtR In dateRows
+        headerFmt = ws.Cells(dtR, firstCol).NumberFormat
+        For c = firstCol + 1 To lastCol
+            With ws.Cells(dtR, c)
+                If Trim(.Value) = "" Then
+                    .Value = ws.Cells(dtR, c - 1).Value + 1
+                    .NumberFormat = headerFmt
+                    .Font.Name = "바탕"
+                    .Font.Size = 12
+                    .Font.Color = RGB(0, 0, 139)
+                End If
+            End With
+        Next c
+    Next dtR
+    
+    Application.ScreenUpdating = False
+    Randomize
+    
+    Dim r As Long, cell As Range
+    Dim inStart As String, inEnd As String
+    Dim outStart As String, outEnd As String
+    
+    For r = firstRow To lastRow
+        ' 헤더 날짜 행이면 건너뛰기
+        If IsInArray(r, dateRows) Then GoTo NextRow
+        
+        For c = firstCol To lastCol
+            Set cell = ws.Cells(r, c)
+            
+            If cell.MergeCells Then GoTo NextCell
+            If cell.Interior.Color = RGB(0, 176, 240) Then GoTo NextCell
+            
+            ' Z6:AE6 구간만 다른 출퇴근 시간
+            If r = 6 And c >= 26 And c <= 31 Then
+                inStart = "08:00": inEnd = "08:30"
+                outStart = "17:30": outEnd = "17:35"
+            Else
+                inStart = "08:40": inEnd = "08:50"
+                outStart = "18:00": outEnd = "18:10"
+            End If
+            
+            ' 열 번호를 일자로 사용
+            Dim dayNum As Long
+            dayNum = c
+            
+            ' 원본 셀 서식 보관
+            Dim origFmt As String, origIndent As Long, origShrink As Boolean
+            origFmt = cell.NumberFormat
+            origIndent = cell.IndentLevel
+            origShrink = cell.ShrinkToFit
+            
+            ' 25일 이후: 평일 랜덤, 주말 공란
+            If dayNum > 25 Then
+                Dim chkDate As Date
+                chkDate = DateSerial(Year(Date), Month(Date), dayNum)
+                If Weekday(chkDate, vbMonday) > 5 Then
+                    cell.ClearContents
+                Else
+                    cell.Value = RandomTime(inStart, inEnd) & vbLf & RandomTime(outStart, outEnd)
+                    With cell
+                        .WrapText = True
+                        .HorizontalAlignment = xlCenter
+                        .VerticalAlignment = xlTop
+                        .NumberFormat = origFmt
+                        .IndentLevel = origIndent
+                        .ShrinkToFit = origShrink
+                    End With
+                End If
+                GoTo NextCell
+            End If
+            
+            ' 1~25일: 기존 데이터 분리·보정
+            If InStr(cell.Value, ":") = 0 Then GoTo NextCell
+            
+            Dim timesArr As Variant, cleanTimes() As String
+            Dim i As Long, t As String, cnt As Long
+            timesArr = Split(cell.Value, vbLf)
+            cnt = 0
+            For i = LBound(timesArr) To UBound(timesArr)
+                t = Trim(timesArr(i))
+                If Len(t) > 0 Then
+                    ReDim Preserve cleanTimes(cnt)
+                    cleanTimes(cnt) = t
+                    cnt = cnt + 1
+                End If
+            Next i
+            
+            If cnt >= 3 Then
+                SortTimes cleanTimes
+                Dim firstTime As String, lastTime As String
+                firstTime = cleanTimes(0)
+                lastTime = cleanTimes(UBound(cleanTimes))
+                ReDim cleanTimes(1)
+                cleanTimes(0) = firstTime
+                cleanTimes(1) = lastTime
+                
+            ElseIf cnt = 2 Then
+                SortTimes cleanTimes
+                If TimeValue(cleanTimes(1)) < TimeValue("12:00") Then
+                    Dim origIn As String
+                    origIn = cleanTimes(0)
+                    ReDim cleanTimes(1)
+                    cleanTimes(0) = origIn
+                    cleanTimes(1) = RandomTime(outStart, outEnd)
+                End If
+                
+            ElseIf cnt = 1 Then
+                Dim singleTime As String
+                singleTime = cleanTimes(0)
+                ReDim cleanTimes(1)
+                If TimeValue(singleTime) < TimeValue("12:00") Then
+                    cleanTimes(0) = singleTime
+                    cleanTimes(1) = RandomTime(outStart, outEnd)
+                Else
+                    cleanTimes(0) = RandomTime(inStart, inEnd)
+                    cleanTimes(1) = singleTime
+                End If
+            End If
+            
+            cell.Value = cleanTimes(0) & vbLf & cleanTimes(1)
+            With cell
+                .WrapText = True
+                .HorizontalAlignment = xlCenter
+                .VerticalAlignment = xlTop
+                .NumberFormat = origFmt
+                .IndentLevel = origIndent
+                .ShrinkToFit = origShrink
+            End With
+            
+NextCell:
+        Next c
+NextRow:
+    Next r
+    
+    Application.ScreenUpdating = True
+    
+    ' 숨길 영역 값 삭제
+    Dim hideAreas As Variant, addr As Variant
+    hideAreas = Array( _
+        "Z5:AE5", "Z8:AE8", "Z11:AE11", "Z14:AE14", _
+        "Z17:AE17", "Z20:AE20", "Z23:AE23", "Z26:AE26", _
+        "Z29:AE29", "Z32:AE32" _
+    )
+    For Each addr In hideAreas
+        ws.Range(addr).ClearContents
+    Next addr
+    
+    MsgBox "근태 정리가 완료되었습니다!", vbInformation
+End Sub
+
+'―― 보조 함수들 ――
+Function SortTimes(arr() As String)
+    Dim i As Long, j As Long, tmp As String
+    For i = LBound(arr) To UBound(arr) - 1
+        For j = i + 1 To UBound(arr)
+            If TimeValue(arr(i)) > TimeValue(arr(j)) Then
+                tmp = arr(i)
+                arr(i) = arr(j)
+                arr(j) = tmp
+            End If
+        Next j
+    Next i
+End Function
+
+Function RandomTime(t1 As String, t2 As String) As String
+    Dim h1 As Integer, m1 As Integer
+    Dim h2 As Integer, m2 As Integer
+    Dim minTot As Long, maxTot As Long, rndTot As Long
+    h1 = Hour(TimeValue(t1)): m1 = Minute(TimeValue(t1))
+    h2 = Hour(TimeValue(t2)): m2 = Minute(TimeValue(t2))
+    minTot = h1 * 60 + m1
+    maxTot = h2 * 60 + m2
+    rndTot = Int((maxTot - minTot + 1) * Rnd + minTot)
+    RandomTime = Format(TimeSerial(rndTot \ 60, rndTot Mod 60, 0), "hh:mm")
+End Function
+
+Function IsInArray(val As Long, arr As Variant) As Boolean
+    Dim x As Long
+    For x = LBound(arr) To UBound(arr)
+        If arr(x) = val Then
+            IsInArray = True
+            Exit Function
+        End If
+    Next x
+    IsInArray = False
+End Function
+
+

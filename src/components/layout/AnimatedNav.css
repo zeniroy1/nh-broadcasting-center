@@ -1,0 +1,130 @@
+.animated-nav-container {
+    position: relative;
+    height: 50px;
+    /* Reduced height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+/* 
+   NEUMORPHISM DESIGN SYSTEM 
+   Key Concept: Element color matches background color.
+*/
+
+/* --- BASE STYLES (Light Mode Default) --- */
+.menu-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    /* Reduced padding */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    /* Slightly smaller font */
+    cursor: pointer;
+    border-radius: 20px;
+    /* Slightly improved shape */
+
+    /* Light Mode Palette */
+    background: #f8f9fa;
+    /* Matches var(--color-bg) */
+    color: #4a5568;
+
+    /* Light Neumorphism Shadows: SOFTER */
+    box-shadow: 3px 3px 6px #e2e8f0,
+        -3px -3px 6px #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* Hover & Active State (Light) */
+.menu-item:hover,
+.menu-item.active {
+    /* Pressed Effect (Inset) - Softened */
+    box-shadow: inset 2px 2px 5px #e2e8f0,
+        inset -2px -2px 5px #ffffff;
+    color: #003566;
+    /* Primary Navy */
+    transform: translateY(1px);
+}
+
+/* --- DARK MODE OVERRIDES --- */
+.dark .menu-item {
+    background: #1a1f35;
+    color: #e2e8f0;
+    /* Brighter text for dark mode */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    /* Dark Neumorphism Shadows - Softened */
+    box-shadow: 4px 4px 8px #131624,
+        -4px -4px 8px #212642;
+}
+
+.dark .menu-item:hover,
+.dark .menu-item.active {
+    /* Softened active state */
+    box-shadow: inset 3px 3px 6px #131624,
+        inset -3px -3px 6px #212642;
+    color: #60a5fa;
+    /* Lighter blue for better visibility */
+}
+
+/* --- SPECIAL BUTTONS - REMOVED BLUE BTN AS REQUESTED --- */
+/* Kept generic just in case needed later, but not used now */
+
+/* --- LAYOUT UTILS --- */
+
+.nav-items-wrapper {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    top: 0;
+    /* Align to top of container */
+    z-index: 100;
+    pointer-events: none;
+}
+
+.animated-nav-container:hover .nav-items-wrapper {
+    pointer-events: auto;
+}
+
+.nav-list {
+    display: flex;
+    gap: 0.8rem;
+    /* Reduced gap */
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+}
+
+.nav-trigger {
+    z-index: 10;
+}
+
+/* Light mode trigger text color fix */
+.nav-trigger .trigger-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4a5568;
+    /* Default light mode color */
+}
+
+.dark .nav-trigger .trigger-content {
+    color: #4dabf7;
+    /* Dark mode highlight color */
+}
+
+/* Ensure hover state maintains color for trigger */
+.nav-trigger:hover .trigger-content {
+    color: #003566;
+}
+
+.dark .nav-trigger:hover .trigger-content {
+    color: #4dabf7;
+}

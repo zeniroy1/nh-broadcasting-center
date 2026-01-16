@@ -1,0 +1,30 @@
+{
+    "mcpServers": {
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp",
+                "--api-key",
+                "ctx7sk-eae2ab57-a3d2-4423-91c5-7f979e58a253"
+            ]
+        },
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        },
+        "TestSprite": {
+            "command": "npx",
+            "args": [
+                "@testsprite/testsprite-mcp@latest"
+            ],
+            "env": {
+                "API_KEY": "ctx7sk-eae2ab57-a3d2-4423-91c5-7f979e58a253",
+                "PATH": "C:\\Program Files\\PowerShell\\7;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Python313\\Scripts\\;C:\\Python313\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Bandizip\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\7\\;C:\\Program Files\\nodejs\\;C:\\Users\\hamcoding\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hamcoding\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hamcoding\\AppData\\Roaming\\npm;C:\\Users\\hamcoding\\AppData\\Local\\Programs\\Antigravity\\bin;c:\\Users\\hamcoding\\.antigravity\\extensions\\ms-python.debugpy-2025.14.1-win32-x64\\bundled\\scripts\\noConfigScripts"
+            }
+        }
+    }
+}

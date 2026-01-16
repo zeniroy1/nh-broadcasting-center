@@ -1,0 +1,18 @@
+/* [project]/components/ThemeToggle.module.css [app-client] (css) */
+.ThemeToggle-module__3b5zuq__light {
+  display: block;
+}
+
+.ThemeToggle-module__3b5zuq__dark {
+  display: none;
+}
+
+[data-mantine-color-scheme="dark"] .ThemeToggle-module__3b5zuq__light {
+  display: none;
+}
+
+[data-mantine-color-scheme="dark"] .ThemeToggle-module__3b5zuq__dark {
+  display: block;
+}
+
+/*# sourceMappingURL=components_ThemeToggle_module_css_bad6b30c._.single.css.map*/

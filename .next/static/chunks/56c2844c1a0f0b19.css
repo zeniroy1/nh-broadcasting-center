@@ -1,0 +1,2 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+.ThemeToggle-module__3b5zuq__light{display:block}.ThemeToggle-module__3b5zuq__dark{display:none}[data-mantine-color-scheme=dark] .ThemeToggle-module__3b5zuq__light{display:none}[data-mantine-color-scheme=dark] .ThemeToggle-module__3b5zuq__dark{display:block}

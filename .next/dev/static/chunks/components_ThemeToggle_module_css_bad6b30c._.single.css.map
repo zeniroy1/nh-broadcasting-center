@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/ThemeToggle.module.css"],"sourcesContent":[".light {\r\n    display: block;\r\n}\r\n\r\n.dark {\r\n    display: none;\r\n}\r\n\r\n:global([data-mantine-color-scheme='dark']) .light {\r\n    display: none;\r\n}\r\n\r\n:global([data-mantine-color-scheme='dark']) .dark {\r\n    display: block;\r\n}"],"names":[],"mappings":"AAAA;;;;AAIA;;;;AAIA;;;;AAIA"}}]
+}

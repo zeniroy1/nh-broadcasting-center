@@ -1,0 +1,198 @@
+.about-page {
+    padding-bottom: 6rem;
+}
+
+.about-hero {
+    /* Light Mode Default */
+    background: var(--color-bg);
+    /* White/Light as per theme */
+    color: var(--color-text-primary);
+    padding: 8rem 0 6rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Override */
+.dark .about-hero {
+    /* Luxurious Deep Navy Gradient */
+    background: linear-gradient(135deg, #090919 0%, #161836 50%, #1a2845 100%);
+    color: white;
+}
+
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Light mode subtle texture or plain */
+    background: transparent;
+}
+
+.dark .about-hero::before {
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.2), transparent);
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.about-hero p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    position: relative;
+    color: var(--color-text-muted);
+    /* Adapt to theme */
+}
+
+.dark .about-hero p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* --- Animated Gradient Text Styles --- */
+.animated-gradient-char {
+    font-size: 4rem;
+    /* Slightly larger */
+    font-weight: 900;
+    display: inline-block;
+
+    /* Light Mode: Navy -> Blue Gradient */
+    background: linear-gradient(to bottom, #1a2845 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Soft shadow for light mode */
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.dark .animated-gradient-char {
+    /* Dark Mode: White -> Cyan (Frost effect) */
+    background: linear-gradient(to bottom, #ffffff 0%, #00F2FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Strong shadow for readability on dark bg */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 6rem;
+}
+
+.about-card {
+    padding: 3rem;
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 5px solid var(--color-primary);
+}
+
+.about-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-primary);
+}
+
+.about-card p {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.8;
+}
+
+.organization-chart {
+    text-align: center;
+}
+
+.organization-chart h2 {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: var(--color-text-primary);
+}
+
+.chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.chart-node {
+    padding: 1rem 2rem;
+    background: var(--color-bg-card);
+    /* Adapt to theme */
+    border: 2px solid var(--color-primary);
+    border-radius: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    min-width: 150px;
+    box-shadow: var(--shadow-sm);
+}
+
+.chart-node.root {
+    background: var(--color-primary);
+    color: white;
+    font-size: 1.2rem;
+}
+
+.chart-lines {
+    width: 2px;
+    height: 30px;
+    background: var(--color-primary);
+}
+
+.chart-row {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+}
+
+.chart-row::before {
+    content: '';
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 2rem;
+    background: var(--color-primary);
+}
+
+.chart-row::after {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    /* Halfway up the vertical line */
+    left: 20%;
+    /* Adjust based on gap */
+    right: 20%;
+    height: 2px;
+    background: var(--color-primary);
+    z-index: -1;
+}
+
+@media (max-width: 768px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .chart-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .chart-row::after {
+        display: none;
+    }
+}

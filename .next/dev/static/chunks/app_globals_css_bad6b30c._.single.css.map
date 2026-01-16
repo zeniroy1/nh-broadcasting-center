@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/app/globals.css"],"sourcesContent":["@tailwind base;\r\n@tailwind components;\r\n@tailwind utilities;\r\n\r\n/* Mantine handles body background automatically based on theme */\r\nbody {\r\n    /* No hardcoded color/background */\r\n}"],"names":[],"mappings":"AAAA;;AACA;;AACA"}}]
+}

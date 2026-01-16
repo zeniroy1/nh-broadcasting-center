@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Large files
+Antigravity.exe
+backup
+*.exe
+
+# Build outputs (Vercel will build itself)
+.next
+dist
+
+# Local files
+excel자동화작업
+구글 스프레시트작업
+연차계산프로그램(excel)
+전달사진
+n8n_files
+mcp
+
+# Test files
+tests
+playwright.config.js
+
+# Misc
+*.txt
+*.py

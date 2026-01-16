@@ -1,0 +1,1767 @@
+/** 통합 버전 (2025-12-24)
+ * 업무일지 동기화 + 사진틀 + 레터박스 + 사진업로드 + PDF 저장 유틸
+ ******************************************************/
+
+const CONFIG = {
+  SOURCE_SPREADSHEET_ID: '1SWehj9GwUfeAAnVXIx4OYrUxX6JF54CFn09rNb76YsE',
+  SOURCE_SHEET_NAMES: ['월','화','수','목','금'],
+  TARGET_SHEET_BY_BUILDING: { '본관': '2. 본관 방송운영 상세', '신관': '3. 신관 방송운영 상세' },
+  SRC_COL: { TIME:3, PLACE:4, SUBJECT:5, DEPT:6, HEAD:7 },
+  TARGET_HEADER_ROWS: 2,
+  TIMEZONE: 'Asia/Seoul',
+  FONT_FAMILY: 'Malgun Gothic',
+  FONT_SIZE: 9
+};
+
+const CONFIG_UI = { USE_TOAST: false };
+
+const PHOTO_INPUT = {
+  SLOT_NAME: {
+    B:  '사진슬롯_본관',
+    S:  '사진슬롯_신관',
+    MB: '사진슬롯_본관_보수',
+    MS: '사진슬롯_신관_보수'
+  },
+  SECOND_COL_OFFSET: 2
+};
+
+const MONTH_HEADER = {
+  MAIN_TEXT:  '월 주요 회의/행사',
+  MAINT_TEXT: '월 보수 및 사용불능 & 장애 예방 활동',
+  WIDTH_COLS: 3,
+  HDR_HEIGHT: 48,
+  SPC_HEIGHT: 20
+};
+
+const COLORS = {
+  BLACK:'#000000', WHITE:'#ffffff', RED:'#ff0022',
+  FONT_MAIN:'#ff0022', FONT_MAINT:'#000000'
+};
+
+const PDF_UI = {
+  TOAST_TITLE: '📄 PDF',
+  TOAST_SECONDS: 4
+};
+
+const PDF2_EXPORT = {
+  TARGET_NUM_START: 1,
+  TARGET_NUM_END: 7,
+  FOLDER_ID: '',
+  PDF_SIZE: 'A4',
+  PORTRAIT: true,
+  FIT_TO_WIDTH: true,
+  HORIZONTAL_CENTER: true,
+  TOP_MARGIN: '0.79',
+  BOTTOM_MARGIN: '0.60',
+  LEFT_MARGIN: '0.71',
+  RIGHT_MARGIN: '0.71',
+  GRIDLINES: false,
+  IMAGE_RENDER_WAIT_MS: 4000,
+  VALIDATE_PDF_MIN_BYTES: 1024,
+  FETCH_RETRY_MAX: 3,
+  FETCH_RETRY_BASE_SLEEP_MS: 800,
+  CREATEFILE_RETRY_MAX: 5,
+  CREATEFILE_RETRY_BASE_SLEEP_MS: 800,
+  CREATEFILE_THROTTLE_MS: 500,
+  CREATE_RUN_SUBFOLDER: true,
+  RUN_FOLDER_PREFIX: 'PDF_1-7',
+  LOG_SHEET_NAME: 'PDF_Export_Log',
+  AUTO_TRIGGER_HOUR: 9,
+  AUTO_TRIGGER_MINUTE: 0,
+  LOCK_WAIT_MS: 15000,
+  FREEZE_FROM_ORIGINAL_SHEET_NUMS: [1],
+  RANGE_WIZARD_PROP_PREFIX: 'PDF2W_RANGE_',
+  RANGE_WIZARD_RUN_PREFIX: 'PDF2W_RUN_',
+  RANGE_WIZARD_MAP_PREFIX: 'PDF2W_RANGE_MAP_'
+};
+
+function onOpen(){
+  try { if (SpreadsheetApp.getActive().getId() === CONFIG.SOURCE_SPREADSHEET_ID) return; } catch(e){}
+
+  SpreadsheetApp.getUi()
+    .createMenu('📡 방송업무일지 연동')
+      .addItem('주간(월~금)', 'sync_week_all')
+      .addItem('오늘(오늘날짜)', 'sync_today_only')
+      .addToUi();
+
+  SpreadsheetApp.getUi()
+    .createMenu('🧩 사진틀')
+      .addItem('사진틀 1개', 'photoFormat_cloneBlockOnceHere')
+      .addItem('사진틀 100개', 'photoFormat_cloneBlock100Here')
+      .addSeparator()
+      .addItem('레터박스(사진철)', 'photoFormat_insertMonthHeaderHere')
+      .addItem('레터박스(보수,점검)', 'photoFormat_insertMaintenanceHeaderHere')
+      .addItem('레터박스 제거', 'photoFormat_removeMonthHeaderHere')
+      .addToUi();
+
+  SpreadsheetApp.getUi()
+    .createMenu('▶ 사진업로드')
+      .addItem('실행', 'simplePhotoUpload_fillFromInput')
+      .addToUi();
+
+  SpreadsheetApp.getUi()
+    .createMenu('📄 PDF')
+      .addItem('범위 지정(드래그) 후 PDF 저장(실행)', 'PDF2W_startRangeWizard')
+      .addItem('저장 폴더 접근 테스트', 'PDF2_testTargetFolderAccess')
+      .addToUi();
+}
+
+function sync_today_only(){
+  const YOIL = ['일','월','화','수','목','금','토'];
+  const today = YOIL[new Date().getDay()];
+  if (!CONFIG.SOURCE_SHEET_NAMES.includes(today)) {
+    SpreadsheetApp.getUi().alert(`업무일지 탭은 평일만 존재합니다. (오늘: ${today})`);
+    return;
+  }
+  sync_core_([today]);
+}
+
+function sync_week_all(){ sync_core_(CONFIG.SOURCE_SHEET_NAMES); }
+
+function sync_core_(sheetNames){
+  if (SpreadsheetApp.getActive().getId() === CONFIG.SOURCE_SPREADSHEET_ID) {
+    throw new Error('이 코드는 2번 파일에서만 실행하세요. 1번 파일은 읽기 전용입니다.');
+  }
+  ensure_target_sheets_exist_();
+
+  const srcSS = SpreadsheetApp.openById(CONFIG.SOURCE_SPREADSHEET_ID);
+  const stats = {};
+  Object.keys(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(k => stats[k] = {written:0, left:0});
+
+  sheetNames.forEach(name=>{
+    const sh = srcSS.getSheetByName(name);
+    if (!sh) return;
+    const dateInfo = extract_date_from_sheet_(sh);
+    if (!dateInfo) return;
+    const {month, day} = dateInfo;
+
+    const sections = read_sections_from_source_(sh);
+    Object.keys(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(b=>{
+      const rows = sections[b] || [];
+      const {written, left} = upsert_one_day_noinsert_(b, month, day, rows);
+      stats[b].written += written;
+      stats[b].left    += left;
+    });
+  });
+
+  Object.values(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(apply_sheet_font_);
+  showSyncReport_(stats);
+}
+
+function ensure_target_sheets_exist_(){
+  const ss = SpreadsheetApp.getActive();
+  Object.values(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(n=>{
+    if (!ss.getSheetByName(n)) throw new Error('타깃 시트를 찾을 수 없습니다: ' + n);
+  });
+}
+
+function extract_date_from_sheet_(sh){
+  const vals = sh.getRange(1,1,Math.min(sh.getLastRow(),20), Math.min(sh.getLastColumn(),15)).getDisplayValues();
+  for (let r=0;r<vals.length;r++){
+    for (let c=0;c<vals[r].length;c++){
+      const s = String(vals[r][c]||'');
+      const m = s.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
+      if (m) return {year:+m[1], month:+m[2], day:+m[3]};
+    }
+  }
+  return null;
+}
+
+const _t  = s => (s==null ? '' : String(s).trim());
+const _tc = s => _t(s).replace(/\s+/g,'');
+const firstLine_ = s => _t(String(s||'').split(/[\r\n\u000b\u2028\u2029]/)[0]);
+const normKey_ = s => _t(s).toLowerCase().replace(/\s+/g,'');
+const TIME_RE = /^\d{2}:\d{2}\s*~\s*\d{2}:\d{2}$/;
+
+function splitSubjectAndTitle_(s){
+  const first = firstLine_(s);
+  const m = first.match(/\(([^()]*)\)\s*$/);
+  if (m) return { subject: first.slice(0, m.index).trim(), title: m[1].trim() };
+  return { subject: first, title: '' };
+}
+
+function read_sections_from_source_(sh){
+  const out = {'본관':[], '신관':[]};
+  const lastRow = sh.getLastRow();
+  if (lastRow < 1) return out;
+
+  const aRange = sh.getRange(1,1,lastRow,1);
+  const aVals  = aRange.getDisplayValues().map(r=>r[0]||'');
+  const merges = aRange.getMergedRanges();
+
+  const sections = [];
+  merges.forEach(m=>{
+    if (m.getColumn()!==1) return;
+    const label = _tc(m.getDisplayValue());
+    if (label==='본관' || label==='신관')
+      sections.push({type:label, start:m.getRow(), end:m.getRow()+m.getNumRows()-1});
+  });
+
+  function isInsideAny(r){ return sections.some(s => r>=s.start && r<=s.end); }
+  for (let r=1;r<=lastRow;r++){
+    const label = _tc(aVals[r-1]);
+    if ((label==='본관' || label==='신관') && !isInsideAny(r)){
+      let end = lastRow;
+      for (let rr=r+1; rr<=lastRow; rr++){
+        const l2 = _tc(aVals[rr-1]);
+        if (l2==='본관' || l2==='신관'){ end = rr-1; break; }
+      }
+      sections.push({type:label, start:r, end});
+    }
+  }
+
+  sections.sort((a,b)=> (a.start-b.start) || (a.end-b.end));
+  const uniq = [];
+  for (const s of sections){
+    if (!uniq.length || uniq[uniq.length-1].start!==s.start || uniq[uniq.length-1].end!==s.end) uniq.push(s);
+  }
+
+  const {TIME:C, PLACE:D, SUBJECT:E, DEPT:F, HEAD:G} = CONFIG.SRC_COL;
+  const headerTokens = new Set(['시간','운영시간','장소','회의실명','회의내용','회의명','주관부서','주관팀','담당','인원','비고','주요안내사항']);
+
+  uniq.forEach(sec=>{
+    const n = Math.max(0, sec.end-sec.start+1); if (!n) return;
+    const rows = sh.getRange(sec.start, 1, n, Math.max(G,7)).getDisplayValues();
+
+    let lastDept = '';
+    const seen = new Set();
+    for (let i=0;i<n;i++){
+      const r = rows[i];
+      const time = _t(r[C-1]);
+      const place = _t(r[D-1]);
+      const subjRaw = r[E-1];
+      const {subject, title} = splitSubjectAndTitle_(subjRaw);
+      let dept = _t(r[F-1]);
+      const head = _t(r[G-1]);
+
+      if (!dept) dept = lastDept; else lastDept = dept;
+
+      if ([time,place,subject,dept,head].every(v=>!v)) continue;
+      if ([time,place,subject,dept,head].some(x=>headerTokens.has(_tc(x)))) continue;
+      if (!TIME_RE.test(time) || (!place && !subject)) continue;
+
+      const key = [time, place, subject, dept].map(normKey_).join('|');
+      if (seen.has(key)) continue; seen.add(key);
+
+      out[sec.type].push({time, place, subject, title, dept, head});
+    }
+  });
+
+  return out;
+}
+
+function format_headcount_(s){ const n=String(s||'').replace(/[^\d]/g,''); return n? n+'명':''; }
+
+function lastDataRowBJ_(sh){
+  const hr=CONFIG.TARGET_HEADER_ROWS, max=sh.getLastRow();
+  if (max<=hr) return hr;
+  const vals=sh.getRange(hr+1, 2, max-hr, 9).getValues();
+  for (let i=vals.length-1;i>=0;i--){
+    if (vals[i].some(v => String(v).trim() !== '')) return hr + 1 + i;
+  }
+  return hr;
+}
+
+function copyTemplateFormatDJ_(sh,startRow,numRows){
+  if (numRows<=0) return;
+  const tplRow=Math.min(sh.getLastRow(), CONFIG.TARGET_HEADER_ROWS + 1) || (CONFIG.TARGET_HEADER_ROWS + 1);
+  const src=sh.getRange(tplRow,4,1,7);
+  const dst=sh.getRange(startRow,4,numRows,7);
+  src.copyTo(dst,{formatOnly:true});
+}
+
+function upsert_one_day_noinsert_(building,month,day,rows){
+  const name=CONFIG.TARGET_SHEET_BY_BUILDING[building]; if(!name) return {written:0,left:rows.length};
+  const sh=SpreadsheetApp.getActive().getSheetByName(name); if(!sh) throw new Error('타깃 시트를 찾지 못했습니다: '+name);
+  const hr=CONFIG.TARGET_HEADER_ROWS;
+
+  const dataLast=lastDataRowBJ_(sh);
+  const haveIdx=[];
+  if (dataLast>hr){
+    const bc=sh.getRange(hr+1,2,dataLast-hr,2).getValues();
+    for (let i=0;i<bc.length;i++){
+      const m=Number(String(bc[i][0]).replace(/[^\d]/g,'')); const d=Number(String(bc[i][1]).replace(/[^\d]/g,''));
+      if (m===month && d===day) haveIdx.push(hr+1+i);
+    }
+  }
+  const existingMap=new Map();
+  haveIdx.forEach(idx=>{
+    const v=sh.getRange(idx,4,1,4).getDisplayValues()[0];
+    const k=[v[0],v[1],v[2],v[3]].map(normKey_).join('|');
+    if(!existingMap.has(k)) existingMap.set(k,[]);
+    existingMap.get(k).push(idx);
+  });
+
+  const seen=new Set(); const filtered=[];
+  rows.forEach(r=>{ const k=[r.time,r.place,r.subject,r.dept].map(normKey_).join('|'); if(!seen.has(k)){seen.add(k); filtered.push(r);} });
+
+  let written=0; const used=new Set(); const append=[];
+  filtered.forEach(r=>{
+    const k=[r.time,r.place,r.subject,r.dept].map(normKey_).join('|');
+    const targets=(existingMap.get(k)||[]).filter(i=>!used.has(i));
+    const meetingType = r.title && r.title.trim() ? '주요회의':'일반회의';
+    const payload=[month,day,r.time,r.place,r.subject,r.dept,format_headcount_(r.head),r.title||'',meetingType];
+    if (targets.length){ const idx=targets[0]; sh.getRange(idx,2,1,9).setValues([payload]); used.add(idx); written++; }
+    else append.push(payload);
+  });
+
+  let left=0;
+  if (append.length){
+    const start=lastDataRowBJ_(sh)+1;
+    const canWrite=Math.max(0, sh.getLastRow()-start+1);
+    const n=Math.min(canWrite, append.length);
+    if (n>0){ copyTemplateFormatDJ_(sh,start,n); sh.getRange(start,2,n,9).setValues(append.slice(0,n)); written+=n; }
+    left = append.length - n;
+  }
+  haveIdx.forEach(i=>{ if(!used.has(i)) sh.getRange(i,2,1,9).clearContent(); });
+
+  return {written,left};
+}
+
+function apply_sheet_font_(name){
+  const sh = SpreadsheetApp.getActive().getSheetByName(name);
+  if (!sh) return;
+
+  const lr = Math.max(1, sh.getLastRow());
+  const lc = Math.max(1, sh.getLastColumn());
+
+  sh.getRange(1,1,lr,lc).setFontFamily(CONFIG.FONT_FAMILY);
+
+  if (lr >= 2) {
+    sh.getRange(2,1,lr-1,lc).setFontSize(CONFIG.FONT_SIZE);
+  }
+  if (lc > 10) {
+    sh.getRange(1,11,1,lc-10).setFontSize(CONFIG.FONT_SIZE);
+  }
+}
+
+function showSyncReport_(stats){
+  const lines = Object.keys(CONFIG.TARGET_SHEET_BY_BUILDING).map(b=>{
+    const s = stats[b] || {written:0, left:0};
+    return `${b} — 기록: ${s.written||0}건  미기록: ${s.left||0}건`;
+  });
+  const msg = lines.join('\n');
+  SpreadsheetApp.getUi().alert(msg);
+  if (CONFIG_UI.USE_TOAST) SpreadsheetApp.getActive().toast(msg, '동기화 결과', 5);
+}
+
+function photoFormat_cloneBlockOnceHere(){ photoFormat_cloneBlocksRowPairHere_(1); }
+function photoFormat_cloneBlock100Here(){ photoFormat_cloneBlocksRowPairHere_(100); }
+
+function photoFormat_cloneBlocksRowPairHere_(count){
+  const sh=SpreadsheetApp.getActiveSheet(), ui=SpreadsheetApp.getUi(), sel=sh.getActiveRange();
+  if(!sel){ ui.alert('먼저 복제할 블록의 한 칸을 선택해 주세요.'); return; }
+
+  const slotName =
+    (sh.getName().indexOf('본관')>-1 && sh.getName().indexOf('보수')>-1) ? PHOTO_INPUT.SLOT_NAME.MB :
+    (sh.getName().indexOf('신관')>-1 && sh.getName().indexOf('보수')>-1) ? PHOTO_INPUT.SLOT_NAME.MS :
+    (sh.getName().indexOf('본관')>-1) ? PHOTO_INPUT.SLOT_NAME.B :
+    (sh.getName().indexOf('신관')>-1) ? PHOTO_INPUT.SLOT_NAME.S : null;
+
+  if(!slotName){ ui.alert('이 기능은 본관/신관 (사진)·(보수점검) 시트에서만 사용하세요.'); return; }
+
+  const base=sh.getParent().getRangeByName(slotName);
+  if(!base || base.getSheet().getSheetId()!==sh.getSheetId()){ ui.alert('이름범위 "'+slotName+'" (첫 사진칸 1칸)부터 설정하세요.'); return; }
+  if(base.getNumRows()!==1 || base.getNumColumns()!==1){ ui.alert('이름범위 "'+slotName+'" 은 1칸이어야 합니다.'); return; }
+
+  const r0=base.getRow(), cL=base.getColumn(), cR=cL+(PHOTO_INPUT.SECOND_COL_OFFSET||2), STEP=3;
+  let top=sel.getRow(); top = top - ((top - r0) % STEP);
+  if (LB_isHeaderRow_(sh, top, cL, cR)){ ui.alert('레터박스 행에서는 복제할 수 없습니다.'); return; }
+
+  const tplL=sh.getRange(top,cL,STEP,1), tplR=sh.getRange(top,cR,STEP,1);
+  const insertAfter = top + STEP - 1;
+  sh.insertRowsAfter(insertAfter, STEP * count);
+
+  for(let i=0;i<count;i++){
+    for(let r=0;r<STEP;r++){
+      const h=sh.getRowHeight(top+r);
+      sh.setRowHeight(insertAfter + (i*STEP) + 1 + r, h);
+    }
+    const dstRow = insertAfter + 1 + (i*STEP);
+    const dstL = sh.getRange(dstRow, cL, STEP, 1); tplL.copyTo(dstL,{formatOnly:true}); dstL.clearContent();
+    const dstR = sh.getRange(dstRow, cR, STEP, 1); tplR.copyTo(dstR,{formatOnly:true}); dstR.clearContent();
+  }
+
+  PF_whitenColumnB_(sh, insertAfter+1, insertAfter + STEP*count);
+  ui.alert(`블록을 아래로 ${count}개(각각 A/C 한 쌍) 추가했습니다.`);
+}
+
+function PF_whitenColumnB_(sheet, rowFrom, rowTo){
+  if (rowTo < rowFrom) return;
+  sheet.getRange(rowFrom,2,rowTo-rowFrom+1,1)
+       .setBorder(true, null, true, null, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+function LB_norm_(s){ return String(s||'').toLowerCase().replace(/\s+/g,'').replace(/[&/\\()]/g,''); }
+
+function PUP_isLetterboxTopRow_(sh, row){
+  const vals = sh.getRange(row,1,1,3).getDisplayValues()[0].join(' ');
+  const t = LB_norm_(vals);
+  return t.includes(LB_norm_(MONTH_HEADER.MAIN_TEXT)) ||
+         (t.includes('월보수') && (t.includes('장애예방') || t.includes('사용불능')));
+}
+
+function LB_isHeaderRow_(sheet, row, cL, cR){
+  const cells=[sheet.getRange(row,cL), sheet.getRange(row,cR)];
+  for (let i=0;i<cells.length;i++){
+    try{
+      const cell=cells[i]; if(!cell.isPartOfMerge()) continue;
+      const merged=cell.getMergedRanges()[0];
+      if(merged && merged.getNumRows()===1 && merged.getNumColumns()>=MONTH_HEADER.WIDTH_COLS){
+        const t=LB_norm_(merged.getDisplayValue());
+        if (t.includes(LB_norm_(MONTH_HEADER.MAIN_TEXT))) return true;
+        if (t.includes('월보수') && (t.includes('장애예방') || t.includes('사용불능'))) return true;
+      }
+    }catch(_){}
+  }
+  return false;
+}
+
+function LB_paintSpacerRowBorders_(sheet, spacerRow){
+  const A = sheet.getRange(spacerRow,1,1,1);
+  const B = sheet.getRange(spacerRow,2,1,1);
+  const C = sheet.getRange(spacerRow,3,1,1);
+
+  [A,C].forEach(r=>{
+    r.setBorder(true,true,true,true,false,false,COLORS.BLACK,SpreadsheetApp.BorderStyle.SOLID);
+  });
+
+  A.setBorder(null, null, null, true, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+  C.setBorder(null, true, null, true, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+  B.setBorder(true, null, true, null, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+function LB_paintHeaderBorders_(hdrRange){
+  hdrRange.setBorder(true,true,true,true,false,false,COLORS.BLACK,SpreadsheetApp.BorderStyle.SOLID);
+}
+
+function LB_insertHeaderCore_(text, fontColor){
+  const sh=SpreadsheetApp.getActiveSheet();
+  const sel=sh.getActiveRange()||sh.getRange('A1');
+
+  const insertBelow = sel.getLastRow();
+  sh.insertRowsAfter(insertBelow, 2);
+
+  const headerRow = insertBelow + 1;
+  const spacerRow = insertBelow + 2;
+
+  try{ sh.setRowHeight(headerRow, MONTH_HEADER.HDR_HEIGHT); sh.setRowHeight(spacerRow, MONTH_HEADER.SPC_HEIGHT); }catch(_){}
+  sh.getRange(headerRow,1,1,MONTH_HEADER.WIDTH_COLS).breakApart();
+  sh.getRange(spacerRow,1,1,MONTH_HEADER.WIDTH_COLS).breakApart();
+
+  const letterBg = sh.getRange(1,1).getBackground() || '#e0e0e0';
+  const hdr = sh.getRange(headerRow,1,1,MONTH_HEADER.WIDTH_COLS).merge();
+  hdr.setBackground(letterBg).setFontFamily('Arial').setFontSize(14).setFontStyle('normal').setFontColor(fontColor)
+     .setHorizontalAlignment('center').setVerticalAlignment('middle').setValue(text);
+
+  sh.getRange(spacerRow,1,1,MONTH_HEADER.WIDTH_COLS).setBackground(null);
+  LB_paintSpacerRowBorders_(sh, spacerRow);
+  LB_paintHeaderBorders_(hdr);
+  hdr.setBorder(null,null,true,null,null,null,COLORS.BLACK,SpreadsheetApp.BorderStyle.SOLID);
+
+  PF_whitenColumnB_(sh, headerRow, spacerRow);
+  SpreadsheetApp.getUi().alert('레터박스를 삽입했습니다.');
+}
+
+function photoFormat_insertMonthHeaderHere(){ LB_insertHeaderCore_(MONTH_HEADER.MAIN_TEXT, COLORS.FONT_MAIN); }
+function photoFormat_insertMaintenanceHeaderHere(){ LB_insertHeaderCore_(MONTH_HEADER.MAINT_TEXT, COLORS.FONT_MAINT); }
+
+function photoFormat_removeMonthHeaderHere(){
+  const sh=SpreadsheetApp.getActiveSheet();
+  const row=(sh.getActiveRange()||sh.getRange('A1')).getRow();
+
+  const mergedList = sh.getRange(row,1,1,MONTH_HEADER.WIDTH_COLS).getMergedRanges();
+  if (!mergedList.length){ SpreadsheetApp.getUi().alert('선택한 행이 레터박스(병합행)가 아닙니다.'); return; }
+  const merged = mergedList[0];
+
+  const t=LB_norm_(merged.getDisplayValue());
+  const ok = t.includes(LB_norm_(MONTH_HEADER.MAIN_TEXT)) ||
+             (t.includes('월보수') && (t.includes('장애예방')||t.includes('사용불능')));
+  if(!ok){ SpreadsheetApp.getUi().alert('기본 문구가 포함되지 않아 삭제하지 않았습니다.'); return; }
+
+  sh.deleteRow(row);
+  sh.deleteRow(row);
+  LB_restoreTopBorderAfterRemove_(sh, row);
+  SpreadsheetApp.getUi().alert('레터박스(2행)를 제거했습니다.');
+}
+
+function LB_restoreTopBorderAfterRemove_(sheet, imgRow){
+  if (imgRow > sheet.getLastRow()) return;
+
+  const A = sheet.getRange(imgRow,1,1,1);
+  const B = sheet.getRange(imgRow,2,1,1);
+  const C = sheet.getRange(imgRow,3,1,1);
+
+  A.setBorder(true, null, null, null, null, null, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+  C.setBorder(true, null, null, null, null, null, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+  B.setBorder(true, null, true, null, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+function simplePhotoUpload_fillFromInput() {
+  const sh=SpreadsheetApp.getActiveSheet(), ui=SpreadsheetApp.getUi();
+
+  const idsRaw=sh.getRange('K1:N1').getValues()[0];
+  const ids=idsRaw.map(v=>PUP_extractDriveId(String(v||''))).filter(Boolean);
+  if(!ids.length){ ui.alert('K1:N1에 유효한 구글 링크 또는 ID가 없습니다.'); return; }
+
+  const startFrom = PUP_forceBelowLetterbox_(sh, 2);
+  let cursor = Math.max(3, startFrom);
+
+  const placed=[];
+  ids.forEach(id=>{
+    const slot=PUP_findNextFreeSlot_(sh,cursor); if(!slot) throw new Error('빈 슬롯을 찾지 못했습니다. 블록을 추가해 주세요.');
+
+    const img=sh.getRange(slot.row,slot.col);
+    const tit=sh.getRange(slot.row+1,slot.col);
+    const idc=sh.getRange(slot.row+2,slot.col);
+
+    idc.setValue(id).setFontColor(COLORS.WHITE);
+    img.setFormula(`=IMAGE("https://drive.google.com/uc?export=download&id=" & ${idc.getA1Notation()}, 2)`);
+
+    try{ sheetResizeForPhoto_(sh); }catch(_){}
+
+    if(String(tit.getValue()||'').trim()==='') tit.setValue('행사 제목');
+
+    placed.push(`${img.getA1Notation()} (ID=${id})`);
+    cursor = slot.nextStart;
+  });
+
+  ui.alert(`총 ${placed.length}개 업로드 완료\n`+placed.join('\n'));
+  sh.getRange('K1:N1').clearContent();
+}
+
+function sheetResizeForPhoto_(sh){
+  try{
+    sh.setColumnWidth(1,280);
+    sh.setColumnWidth(3,280);
+  }catch(_){}
+}
+
+function PUP_forceBelowLetterbox_(sh,jump){
+  const last=sh.getLastRow();
+  for(let r=last;r>=1;r--){
+    if(PUP_isLetterboxTopRow_(sh,r)) return r + Math.max(2, jump|0);
+  }
+  return 3;
+}
+
+function PUP_findNextFreeSlot_(sh,startRow){
+  const lastRow=Math.max(sh.getMaxRows(),startRow);
+  let r=Math.max(3,startRow); const colA=1,colC=3;
+  while(r<=lastRow){
+    if(PUP_isLetterboxTopRow_(sh,r)){ r+=2; continue; }
+    if(!PUP_isBlockUsed_(sh,r,colA)) return {row:r,col:colA,nextStart:r};
+    if(!PUP_isBlockUsed_(sh,r,colC)) return {row:r,col:colC,nextStart:r+3};
+    r+=3;
+  }
+  return null;
+}
+
+function PUP_isBlockUsed_(sh,row,col){
+  const idc=sh.getRange(row+2,col), img=sh.getRange(row,col), tit=sh.getRange(row+1,col);
+  const idv=String(idc.getValue()||'').trim(), fm=String(img.getFormula()||'').trim(),
+        dv=String(img.getDisplayValue()||'').trim(), tv=String(tit.getValue()||'').trim();
+  const hasOverlay = (()=>{ try{ return sh.getImages().some(im=>{const a=im.getAnchorCell(); return a&&a.getRow()===row&&a.getColumn()===col;}); }catch(_){ return false; }})();
+  return !!(idv || /^=IMAGE\(/i.test(fm) || dv || hasOverlay || tv);
+}
+
+function PUP_extractDriveId(str){
+  if(!str) return '';
+  let m=str.match(/\/d\/([A-Za-z0-9_-]{25,})/); if(m) return m[1];
+  m=str.match(/[?&]id=([A-Za-z0-9_-]{25,})/);   if(m) return m[1];
+  return /^[A-Za-z0-9_-]{25,40}$/.test(str) ? str : '';
+}
+
+function PDF2_toast_(msg) {
+  try {
+    SpreadsheetApp.getActiveSpreadsheet().toast(String(msg || ''), PDF_UI.TOAST_TITLE, PDF_UI.TOAST_SECONDS);
+  } catch (_) {}
+  try { Logger.log('[PDF2] ' + msg); } catch (_) {}
+}
+
+function PDF2_buildProgressBar_(current, total, barLength) {
+  barLength = barLength || 20;
+  const percent = Math.min(100, Math.round((current / total) * 100));
+  const filled = Math.round((current / total) * barLength);
+  const empty = barLength - filled;
+  const bar = '▓'.repeat(filled) + '░'.repeat(empty);
+  return `${bar} ${percent}%`;
+}
+
+function PDF2_toastProgress_(stepName, current, total, detail) {
+  const bar = PDF2_buildProgressBar_(current, total);
+  const stepText = `[${current}/${total}] ${stepName}`;
+  const msg = detail ? `${stepText}\n${bar}\n${detail}` : `${stepText}\n${bar}`;
+  try {
+    SpreadsheetApp.getActiveSpreadsheet().toast(msg, PDF_UI.TOAST_TITLE, PDF_UI.TOAST_SECONDS + 2);
+  } catch (_) {}
+  try { Logger.log('[PDF2] ' + stepText + ' - ' + (detail || '')); } catch (_) {}
+}
+
+function PDF2_sleepMs_(ms) {
+  try { Utilities.sleep(ms); } catch (_) {}
+}
+
+function PDF2_parseLeadingNumber_(sheetName) {
+  const s = String(sheetName || '').trim();
+  const m = s.match(/^(\d{1,2})\s*[.)]/);
+  if (!m) return null;
+  const n = parseInt(m[1], 10);
+  return Number.isFinite(n) ? n : null;
+}
+
+function PDF2_getTargetSheets_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const start = PDF2_EXPORT.TARGET_NUM_START;
+  const end = PDF2_EXPORT.TARGET_NUM_END;
+
+  return ss.getSheets()
+    .filter(sh => {
+      const n = PDF2_parseLeadingNumber_(sh.getName());
+      return n != null && n >= start && n <= end;
+    })
+    .sort((a, b) => (PDF2_parseLeadingNumber_(a.getName()) || 999) - (PDF2_parseLeadingNumber_(b.getName()) || 999));
+}
+
+function PDF2_validateTargets_(sheets) {
+  const seen = {};
+  for (const sh of sheets) {
+    const n = PDF2_parseLeadingNumber_(sh.getName());
+    if (n == null) continue;
+    if (seen[n]) {
+      return {
+        ok: false,
+        msg: `${n}번 시트가 2개 이상 감지되었습니다.\n- ${seen[n]}\n- ${sh.getName()}\n\n번호 기준 자동화에서는 중복을 안전하게 처리할 수 없습니다.`
+      };
+    }
+    seen[n] = sh.getName();
+  }
+  return { ok: true, msg: '' };
+}
+
+function PDF2_buildPdfFileName_(sheetName) {
+  const name = String(sheetName || '').trim();
+  const safe = name.replace(/[\\/]/g, '-');
+  return safe + '.pdf';
+}
+
+function PDF2_extractPureFolderId_(input) {
+  if (!input) return null;
+  const s = String(input).trim();
+
+  let m = s.match(/\/folders\/([A-Za-z0-9_-]{10,})/);
+  if (m && m[1]) return m[1];
+
+  m = s.match(/[?&]id=([A-Za-z0-9_-]{10,})/);
+  if (m && m[1]) return m[1];
+
+  const cleaned = s.replace(/[?#].*$/, '');
+  if (/^[A-Za-z0-9_-]{10,}$/.test(cleaned)) return cleaned;
+
+  return null;
+}
+
+function PDF2_resolveTargetFolderOrFallback_(ss) {
+  const raw = (PDF2_EXPORT.FOLDER_ID || '').trim();
+  if (raw) {
+    const pureId = PDF2_extractPureFolderId_(raw);
+    if (pureId) {
+      try {
+        const f = DriveApp.getFolderById(pureId);
+        f.getName();
+        return f;
+      } catch (e) {
+        Logger.log('PDF2 지정 폴더 접근 실패: ' + (e && e.message ? e.message : e));
+      }
+    } else {
+      Logger.log('PDF2 폴더 ID 추출 실패: ' + raw);
+    }
+  }
+
+  try {
+    const file = DriveApp.getFileById(ss.getId());
+    const parents = file.getParents();
+    if (parents && parents.hasNext()) return parents.next();
+  } catch (e2) {
+    Logger.log('PDF2 폴백 폴더 탐색 실패: ' + (e2 && e2.message ? e2.message : e2));
+  }
+
+  return DriveApp.getRootFolder();
+}
+
+function PDF2_makeFolderUrl_(folderId) {
+  if (!folderId) return '';
+  return 'https://drive.google.com/drive/folders/' + folderId;
+}
+
+function PDF2_makeFileUrl_(fileId) {
+  if (!fileId) return '';
+  return 'https://drive.google.com/file/d/' + fileId + '/view';
+}
+
+function PDF2_hardDeleteFileOrTrashFallback_(fileId) {
+  try {
+    if (typeof Drive !== 'undefined' && Drive.Files && typeof Drive.Files.remove === 'function') {
+      Drive.Files.remove(fileId);
+      return true;
+    }
+  } catch (e) {
+    Logger.log('Drive.Files.remove 실패: ' + (e && e.message ? e.message : e));
+  }
+
+  try {
+    DriveApp.getFileById(fileId).setTrashed(true);
+    return false;
+  } catch (e2) {
+    Logger.log('DriveApp setTrashed 실패: ' + (e2 && e2.message ? e2.message : e2));
+    return false;
+  }
+}
+
+function PDF2_testTargetFolderAccess() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const folder = PDF2_resolveTargetFolderOrFallback_(ss);
+  const blob = Utilities.newBlob('folder-access-test', 'text/plain', 'access_test.txt');
+  const f = folder.createFile(blob);
+  f.setTrashed(true);
+  SpreadsheetApp.getUi().alert('저장 폴더 접근 OK', '폴더명: ' + folder.getName(), SpreadsheetApp.getUi().ButtonSet.OK);
+}
+
+function PDF2_fetchPdfOrThrow_(url) {
+  const token = ScriptApp.getOAuthToken();
+  const res = UrlFetchApp.fetch(url, {
+    headers: { Authorization: 'Bearer ' + token },
+    muteHttpExceptions: true,
+    followRedirects: true
+  });
+
+  const code = res.getResponseCode();
+  const blob = res.getBlob();
+  const headers = res.getHeaders();
+  const ct = String(headers && headers['Content-Type'] ? headers['Content-Type'] : (blob.getContentType() || ''));
+  const size = blob.getBytes().length;
+
+  if (code !== 200) throw new Error('PDF 내보내기 실패 - HTTP ' + code);
+
+  const looksPdf = /application\/pdf/i.test(ct);
+  if (!looksPdf || size < PDF2_EXPORT.VALIDATE_PDF_MIN_BYTES) {
+    Logger.log('Unexpected PDF content: CT=' + ct + ', size=' + size + ', head=\n' + blob.getDataAsString().slice(0, 500));
+    throw new Error('PDF가 아닌 응답 또는 비정상 파일(CT=' + ct + ', ' + size + 'B)');
+  }
+
+  return blob;
+}
+
+function PDF2_fetchPdfWithRetry_(url) {
+  const maxTry = Math.max(1, PDF2_EXPORT.FETCH_RETRY_MAX || 1);
+  const baseSleep = Math.max(200, PDF2_EXPORT.FETCH_RETRY_BASE_SLEEP_MS || 800);
+
+  let lastErr = null;
+  for (let i = 0; i < maxTry; i++) {
+    try {
+      return PDF2_fetchPdfOrThrow_(url);
+    } catch (e) {
+      lastErr = e;
+      const wait = baseSleep * (i + 1);
+      Logger.log('[PDF2] fetch retry ' + (i + 1) + '/' + maxTry + ' wait=' + wait + 'ms err=' + (e && e.message ? e.message : e));
+      PDF2_sleepMs_(wait);
+    }
+  }
+  throw lastErr;
+}
+
+function PDF2_createFileWithRetry_(folder, blob, fileName) {
+  const maxTry = Math.max(1, PDF2_EXPORT.CREATEFILE_RETRY_MAX || 1);
+  const baseSleep = Math.max(200, PDF2_EXPORT.CREATEFILE_RETRY_BASE_SLEEP_MS || 800);
+
+  let lastErr = null;
+  for (let i = 0; i < maxTry; i++) {
+    try {
+      const f = folder.createFile(blob);
+      try { f.setName(fileName); } catch (nameErr) { Logger.log('[PDF2] setName failed but file created: ' + (nameErr && nameErr.message ? nameErr.message : nameErr)); }
+      return f;
+    } catch (e) {
+      lastErr = e;
+      const wait = baseSleep * (i + 1);
+      Logger.log('[PDF2] createFile retry ' + (i + 1) + '/' + maxTry + ' wait=' + wait + 'ms err=' + (e && e.message ? e.message : e));
+      PDF2_sleepMs_(wait);
+    }
+  }
+  throw lastErr;
+}
+
+function PDF2_getResizedBlobFromDrive_(fileId, targetW, targetH) {
+  try {
+    const w = Math.max(10, Math.floor(targetW));
+    const h = Math.max(10, Math.floor(targetH));
+    const url = 'https://drive.google.com/thumbnail?authuser=0&sz=w' + w + '-h' + h + '&id=' + encodeURIComponent(fileId);
+
+    const token = ScriptApp.getOAuthToken();
+    const res = UrlFetchApp.fetch(url, {
+      headers: { Authorization: 'Bearer ' + token },
+      muteHttpExceptions: true,
+      followRedirects: true
+    });
+
+    const code = res.getResponseCode();
+    if (code !== 200) throw new Error('thumb HTTP ' + code);
+
+    const blob = res.getBlob();
+    const ct = blob.getContentType() || '';
+    if (/text\/html/i.test(ct)) throw new Error('thumb HTML');
+
+    return blob;
+  } catch (_) {
+    return DriveApp.getFileById(fileId).getBlob();
+  }
+}
+
+function PDF2_fitAndShrinkDriveImage_(fileId, targetW, targetH, maxBytes, maxPixels) {
+  maxBytes = maxBytes || 2 * 1024 * 1024;
+  maxPixels = maxPixels || 1000000;
+
+  let blob = PDF2_getResizedBlobFromDrive_(fileId, targetW, targetH);
+  let factor = 1.0;
+
+  for (let i = 0; i < 8; i++) {
+    const bytes = blob.getBytes().length;
+    const estPixels = Math.round(targetW * factor * (targetH * factor));
+    if (bytes <= maxBytes && estPixels <= maxPixels) break;
+
+    factor *= 0.85;
+    const bw = Math.max(10, Math.floor(targetW * factor));
+    const bh = Math.max(10, Math.floor(targetH * factor));
+    blob = PDF2_getResizedBlobFromDrive_(fileId, bw, bh);
+  }
+  return blob;
+}
+
+function PDF2_materializeDriveImagesWithCrossSheet_(sheetCopy, originalSS) {
+  const lr = sheetCopy.getLastRow();
+  const lc = sheetCopy.getLastColumn();
+  if (lr === 0 || lc === 0) return { hasImage: false, inserted: 0 };
+
+  const rg = sheetCopy.getRange(1, 1, lr, lc);
+  const formulas = rg.getFormulas();
+
+  const originalSheet = originalSS.getSheetByName(sheetCopy.getName());
+  if (!originalSheet) return { hasImage: false, inserted: 0 };
+  const originalDisplays = originalSheet.getRange(1, 1, lr, lc).getDisplayValues();
+
+  const anyImageCall = /(^|=|\W)IMAGE\s*\(/i;
+
+  function findDriveIdInText_(text) {
+    if (!text) return null;
+    const s = String(text).trim();
+    const patterns = [
+      /id=([a-zA-Z0-9_-]{25,})/i,
+      /\/d\/([a-zA-Z0-9_-]{25,})(?:\/|$)/i
+    ];
+    for (const pat of patterns) {
+      const m = s.match(pat);
+      if (m && m[1]) return m[1];
+    }
+    if (/^[a-zA-Z0-9_-]{25,}$/.test(s)) return s;
+    return null;
+  }
+
+  function extractCellRefFromFormula_(formula) {
+    if (!formula) return null;
+    const m = formula.match(/&\s*\$?([A-Z]+)\$?(\d+)/i);
+    if (m) return { col: m[1], row: parseInt(m[2], 10) };
+    return null;
+  }
+
+  function measureMergedPixelBox_(r, c) {
+    const cell = sheetCopy.getRange(r + 1, c + 1);
+    const mr = cell.isPartOfMerge() ? cell.getMergedRanges()[0] : cell;
+    const rows = mr.getNumRows();
+    const cols = mr.getNumColumns();
+    let totalW = 0, totalH = 0;
+    for (let cc = mr.getColumn(); cc < mr.getColumn() + cols; cc++) totalW += sheetCopy.getColumnWidth(cc);
+    for (let rr = mr.getRow(); rr < mr.getRow() + rows; rr++) totalH += sheetCopy.getRowHeight(rr);
+    // 테두리가 보이도록 패딩 증가 (4픽셀)
+    const padding = 4;
+    return { box: mr, pxW: Math.max(10, totalW - padding), pxH: Math.max(10, totalH - padding) };
+  }
+
+  let hasAnyImageFormula = false;
+  for (let r0 = 0; r0 < formulas.length && !hasAnyImageFormula; r0++) {
+    for (let c0 = 0; c0 < formulas[r0].length; c0++) {
+      if (anyImageCall.test(formulas[r0][c0] || '')) { hasAnyImageFormula = true; break; }
+    }
+  }
+
+  if (!hasAnyImageFormula) {
+    SpreadsheetApp.flush();
+    Utilities.sleep(300);
+    return { hasImage: false, inserted: 0 };
+  }
+
+  try { sheetCopy.getImages().forEach(img => { try { img.remove(); } catch (_) {} }); } catch (_) {}
+
+  let inserted = 0;
+
+  for (let r = 0; r < formulas.length; r++) {
+    for (let c = 0; c < formulas[r].length; c++) {
+      const f = formulas[r][c] || '';
+      if (!anyImageCall.test(f)) continue;
+
+      let fileId = null;
+
+      const cellRef = extractCellRefFromFormula_(f);
+      if (cellRef && cellRef.row > 0 && cellRef.row <= originalDisplays.length) {
+        const refCol = cellRef.col.toUpperCase().charCodeAt(0) - 65;
+        if (refCol >= 0 && refCol < originalDisplays[0].length) {
+          fileId = findDriveIdInText_(originalDisplays[cellRef.row - 1][refCol]);
+        }
+      }
+
+      if (!fileId) {
+        const cell = sheetCopy.getRange(r + 1, c + 1);
+        const mr = cell.isPartOfMerge() ? cell.getMergedRanges()[0] : cell;
+        const lastRowOfMerge = mr.getRow() + mr.getNumRows() - 1;
+        const idRow = lastRowOfMerge + 1;
+        if (idRow <= originalDisplays.length) {
+          fileId = findDriveIdInText_(originalDisplays[idRow - 1][c]);
+        }
+      }
+
+      if (!fileId) fileId = findDriveIdInText_(f);
+      if (!fileId) {
+        Logger.log('PDF2 Drive ID 못찾음: IMAGE셀=(' + (r+1) + ',' + (c+1) + ')');
+        continue;
+      }
+
+      try {
+        const m = measureMergedPixelBox_(r, c);
+        let w = m.pxW, h = m.pxH;
+        if (w * h > 1000000) {
+          const s = Math.sqrt(1000000 / (w * h));
+          w = Math.max(10, Math.floor(w * s));
+          h = Math.max(10, Math.floor(h * s));
+        }
+        const blob = PDF2_fitAndShrinkDriveImage_(fileId, w, h, 2 * 1024 * 1024, 1000000);
+        const over = sheetCopy.insertImage(blob, m.box.getColumn(), m.box.getRow());
+        over.setWidth(Math.round(w));
+        over.setHeight(Math.round(h));
+        // 테두리가 보이도록 오프셋 적용 (2픽셀)
+        try { 
+          over.setAnchorCellXOffset(2);
+          over.setAnchorCellYOffset(2);
+        } catch (_) {}
+        try { m.box.setValue(''); } catch (_) {}
+
+        inserted++;
+      } catch (e) {
+        Logger.log('PDF2 이미지 삽입 실패 (' + (r+1) + ',' + (c+1) + '): ' + (e && e.message ? e.message : e));
+      }
+    }
+  }
+
+  const lastIdCells = [];
+  let maxIdRow = 0;
+  for (let r = 0; r < formulas.length; r++) {
+    for (let c = 0; c < formulas[r].length; c++) {
+      if (anyImageCall.test(formulas[r][c] || '')) {
+        const cell = sheetCopy.getRange(r + 1, c + 1);
+        const mr = cell.isPartOfMerge() ? cell.getMergedRanges()[0] : cell;
+        const idRow = mr.getRow() + mr.getNumRows() + 1;
+        if (idRow > maxIdRow) maxIdRow = idRow;
+        lastIdCells.push({ row: idRow, col: mr.getColumn(), numCols: mr.getNumColumns() });
+      }
+    }
+  }
+
+  // ID 행 높이 변경 코드 제거 - 모든 사진 블록 구조 일관성 유지
+  // (기존: maxIdRow의 높이를 1로 설정하여 마지막 행만 숨겨지는 문제 발생)
+
+  SpreadsheetApp.flush();
+  Utilities.sleep(inserted > 0 ? 1500 : 300);
+  return { hasImage: hasAnyImageFormula, inserted };
+}
+
+function PDF2_buildSheetPdfExportUrl_(spreadsheetId, sheetGid) {
+  const params = {
+    format: 'pdf',
+    size: PDF2_EXPORT.PDF_SIZE,
+    portrait: String(!!PDF2_EXPORT.PORTRAIT),
+    fitw: String(!!PDF2_EXPORT.FIT_TO_WIDTH),
+    horizontal_alignment: 'CENTER',
+    top_margin: String(PDF2_EXPORT.TOP_MARGIN),
+    bottom_margin: String(PDF2_EXPORT.BOTTOM_MARGIN),
+    left_margin: String(PDF2_EXPORT.LEFT_MARGIN),
+    right_margin: String(PDF2_EXPORT.RIGHT_MARGIN),
+    sheetnames: 'false',
+    printtitle: 'false',
+    pagenum: 'UNDEFINED',
+    gridlines: String(!!PDF2_EXPORT.GRIDLINES),
+    fzr: 'false',
+    gid: String(sheetGid)
+  };
+  const query = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+  return 'https://docs.google.com/spreadsheets/d/' + spreadsheetId + '/export?' + query;
+}
+
+function PDF2_prepareTempSpreadsheet_(sourceSS, targetSheets) {
+  const tempSS = SpreadsheetApp.create('__PDF2_TEMP__' + sourceSS.getId() + '_' + Date.now());
+  const first = tempSS.getSheets()[0];
+  try { first.setName('__PDF2_DEFAULT__'); } catch (_) {}
+
+  const copies = [];
+  for (const sh of targetSheets) {
+    const copy = sh.copyTo(tempSS);
+    copy.setName(sh.getName());
+    copies.push(copy);
+  }
+
+  try {
+    const ds = tempSS.getSheetByName('__PDF2_DEFAULT__');
+    if (ds && tempSS.getSheets().length > 1) tempSS.deleteSheet(ds);
+  } catch (_) {}
+
+  SpreadsheetApp.flush();
+  return { tempSS, copies };
+}
+
+function PDF2_formatRunStamp_(d) {
+  const pad = n => (n < 10 ? '0' + n : '' + n);
+  const yyyy = d.getFullYear();
+  const mm = pad(d.getMonth() + 1);
+  const dd = pad(d.getDate());
+  const hh = pad(d.getHours());
+  const mi = pad(d.getMinutes());
+  const ss = pad(d.getSeconds());
+  return `${yyyy}-${mm}-${dd}_${hh}-${mi}-${ss}`;
+}
+
+function PDF2_createRunFolderIfNeeded_(baseFolder) {
+  if (!PDF2_EXPORT.CREATE_RUN_SUBFOLDER) return baseFolder;
+  const stamp = PDF2_formatRunStamp_(new Date());
+  const name = `${PDF2_EXPORT.RUN_FOLDER_PREFIX}_${stamp}`;
+  const f = baseFolder.createFolder(name);
+  f.getName();
+  return f;
+}
+
+function PDF2_planText_(targets, folderName) {
+  const plan = targets.map(sh => `${PDF2_parseLeadingNumber_(sh.getName())}. ${sh.getName()} → ${PDF2_buildPdfFileName_(sh.getName())}`);
+  return `대상 시트: ${targets.length}개\n저장 폴더: ${folderName}\n\n` + plan.join('\n');
+}
+
+
+
+function PDF2_withDocumentLock_(interactive, fn) {
+  const lock = LockService.getDocumentLock();
+  const ok = lock.tryLock(PDF2_EXPORT.LOCK_WAIT_MS);
+
+  if (!ok) {
+    if (interactive) {
+      SpreadsheetApp.getUi().alert('실행 중', '이미 다른 PDF 작업이 진행 중입니다.\n잠시 후 다시 실행해 주세요.', SpreadsheetApp.getUi().ButtonSet.OK);
+    } else {
+      Logger.log('[PDF2] lock busy. exit.');
+    }
+    return;
+  }
+
+  try { fn(); } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+function PDF2_isFreezeTargetSheetNum_(num) {
+  const arr = PDF2_EXPORT.FREEZE_FROM_ORIGINAL_SHEET_NUMS || [];
+  return arr.indexOf(num) >= 0;
+}
+
+function PDF2_freezeValuesFromOriginal_(originalSheet, copySheet) {
+  const lr = originalSheet.getLastRow();
+  const lc = originalSheet.getLastColumn();
+  if (lr <= 0 || lc <= 0) return;
+
+  const display = originalSheet.getRange(1, 1, lr, lc).getDisplayValues();
+  copySheet.getRange(1, 1, lr, lc).setValues(display);
+
+  SpreadsheetApp.flush();
+}
+
+function PDF2_a1ToRowCol_(a1) {
+  const s = String(a1 || '').trim().toUpperCase();
+  const m = s.match(/^([A-Z]{1,3})(\d+)$/);
+  if (!m) return null;
+
+  const colLetters = m[1];
+  const row = parseInt(m[2], 10);
+  if (!Number.isFinite(row) || row < 1) return null;
+
+  let col = 0;
+  for (let i = 0; i < colLetters.length; i++) col = col * 26 + (colLetters.charCodeAt(i) - 64);
+  if (col < 1) return null;
+
+  return { row, col };
+}
+
+function PDF2_parseRangeA1_(rangeA1) {
+  const s = String(rangeA1 || '').trim();
+  const m = s.match(/^([^:]+):([^:]+)$/);
+  if (!m) return null;
+
+  const start = PDF2_a1ToRowCol_(m[1]);
+  const end = PDF2_a1ToRowCol_(m[2]);
+  if (!start || !end) return null;
+
+  const r1 = Math.min(start.row, end.row);
+  const c1 = Math.min(start.col, end.col);
+  const r2 = Math.max(start.row, end.row);
+  const c2 = Math.max(start.col, end.col);
+  return { r1, c1, r2, c2 };
+}
+
+function PDF2_applyRangeTrimByMap_(copySheet, rangesBySheetNum) {
+  const num = PDF2_parseLeadingNumber_(copySheet.getName());
+  if (num == null) return null;
+
+  const a1 = rangesBySheetNum && rangesBySheetNum[num] ? String(rangesBySheetNum[num]).trim() : '';
+  if (!a1) return null;
+
+  const parsed = PDF2_parseRangeA1_(a1);
+  if (!parsed) {
+    Logger.log('[PDF2] invalid range: sheet=' + copySheet.getName() + ' range=' + a1);
+    return null;
+  }
+
+  const { r1, c1, r2, c2 } = parsed;
+
+  try { if (r1 > 1) copySheet.hideRows(1, r1 - 1); } catch (_) {}
+  try { if (c1 > 1) copySheet.hideColumns(1, c1 - 1); } catch (_) {}
+
+  try {
+    const maxRows = copySheet.getMaxRows();
+    if (r2 < maxRows) copySheet.deleteRows(r2 + 1, maxRows - r2);
+  } catch (e1) {
+    Logger.log('[PDF2] deleteRows failed: ' + (e1 && e1.message ? e1.message : e1));
+  }
+
+  try {
+    const maxCols = copySheet.getMaxColumns();
+    if (c2 < maxCols) copySheet.deleteColumns(c2 + 1, maxCols - c2);
+  } catch (e2) {
+    Logger.log('[PDF2] deleteColumns failed: ' + (e2 && e2.message ? e2.message : e2));
+  }
+
+  SpreadsheetApp.flush();
+  return a1;
+}
+
+
+
+function PDF2_exportWithRanges_(rangesBySheetNum) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ui = SpreadsheetApp.getUi();
+
+  const allTargets = PDF2_getTargetSheets_();
+  if (!allTargets.length) return ui.alert('PDF 저장', '조건(1.~7.)에 맞는 시트를 찾지 못했습니다.', ui.ButtonSet.OK);
+
+  const targets = allTargets.filter(sh => {
+    const num = PDF2_parseLeadingNumber_(sh.getName());
+    return num != null && rangesBySheetNum && rangesBySheetNum[num];
+  });
+
+  if (!targets.length) return ui.alert('PDF 저장', '범위가 저장된 시트가 없습니다.', ui.ButtonSet.OK);
+
+  const v = PDF2_validateTargets_(targets);
+  if (!v.ok) return ui.alert('PDF 저장', v.msg, ui.ButtonSet.OK);
+
+  const baseFolder = PDF2_resolveTargetFolderOrFallback_(ss);
+  const resp = ui.alert('범위 지정 후 PDF 저장(실행)', PDF2_planText_(targets, baseFolder.getName()), ui.ButtonSet.OK_CANCEL);
+  if (resp !== ui.Button.OK) return;
+
+  PDF2_withDocumentLock_(true, function () {
+    const runStamp = PDF2_formatRunStamp_(new Date());
+    const runFolder = PDF2_createRunFolderIfNeeded_(baseFolder);
+    const runFolderName = runFolder.getName();
+    const runFolderUrl = PDF2_makeFolderUrl_(runFolder.getId());
+
+    let tempId = '';
+    const success = [];
+    const fail = [];
+    const createdKeySet = {};
+    const appliedRanges = {};
+
+    function markCreated_(sheetName, fileName) {
+      const k = sheetName + '||' + fileName;
+      if (createdKeySet[k]) return false;
+      createdKeySet[k] = true;
+      return true;
+    }
+
+    const totalSteps = 5 + targets.length;
+    let currentStep = 0;
+
+    try {
+      currentStep++;
+      PDF2_toastProgress_('임시파일 생성', currentStep, totalSteps, '시트 복사 중...');
+      const built = PDF2_prepareTempSpreadsheet_(ss, targets);
+      tempId = built.tempSS.getId();
+
+      currentStep++;
+      PDF2_toastProgress_('이미지 변환', currentStep, totalSteps, '사진 오버레이 삽입 중...');
+      for (const shCopy of built.copies) {
+        PDF2_materializeDriveImagesWithCrossSheet_(shCopy, ss);
+      }
+
+      currentStep++;
+      PDF2_toastProgress_('범위 적용', currentStep, totalSteps, `${built.copies.length}개 시트 처리`);
+      for (const shCopy of built.copies) {
+        const a1 = PDF2_applyRangeTrimByMap_(shCopy, rangesBySheetNum);
+        const num = PDF2_parseLeadingNumber_(shCopy.getName());
+        if (num != null && a1) appliedRanges[num] = a1;
+      }
+
+      currentStep++;
+      PDF2_toastProgress_('표시값 고정', currentStep, totalSteps, '수식 → 값 변환 중...');
+      for (const shCopy of built.copies) {
+        const num = PDF2_parseLeadingNumber_(shCopy.getName());
+        if (num != null && PDF2_isFreezeTargetSheetNum_(num)) {
+          const originalSheet = ss.getSheetByName(shCopy.getName());
+          if (originalSheet) PDF2_freezeValuesFromOriginal_(originalSheet, shCopy);
+        }
+      }
+
+      currentStep++;
+      PDF2_toastProgress_('렌더링 대기', currentStep, totalSteps, `${PDF2_EXPORT.IMAGE_RENDER_WAIT_MS/1000}초 대기...`);
+      PDF2_sleepMs_(PDF2_EXPORT.IMAGE_RENDER_WAIT_MS);
+
+      let idx = 0;
+      for (const shCopy of built.copies) {
+        idx++;
+        const sheetName = shCopy.getName();
+        const fileName = PDF2_buildPdfFileName_(sheetName);
+        const exportUrl = PDF2_buildSheetPdfExportUrl_(tempId, shCopy.getSheetId());
+        const num = PDF2_parseLeadingNumber_(sheetName);
+        const rangeA1 = (num != null && appliedRanges[num]) ? appliedRanges[num] : '';
+
+        if (!markCreated_(sheetName, fileName)) {
+          Logger.log('[PDF2] duplicate prevented: ' + sheetName + ' / ' + fileName);
+          continue;
+        }
+
+        currentStep++;
+        PDF2_toastProgress_('PDF 저장', currentStep, totalSteps, `${sheetName} → ${fileName}`);
+
+        try {
+          const blob = PDF2_fetchPdfWithRetry_(exportUrl);
+          const sizeKb = Math.round(blob.getBytes().length / 1024);
+          blob.setName(fileName);
+
+          const file = PDF2_createFileWithRetry_(runFolder, blob, fileName);
+          const fileId = file.getId();
+          const fileUrl = PDF2_makeFileUrl_(fileId);
+
+          success.push(fileName);
+
+
+
+        } catch (e) {
+          const msg = (e && e.message) ? e.message : String(e);
+          fail.push(sheetName + ' | ' + msg);
+
+
+        }
+
+        PDF2_sleepMs_(PDF2_EXPORT.CREATEFILE_THROTTLE_MS);
+      }
+
+      PDF2_toastProgress_('✅ 완료', totalSteps, totalSteps, `성공: ${success.length}개 / 실패: ${fail.length}개`);
+
+      const summaryLines = [
+        `런 폴더: ${runFolderName}`, `런 폴더 링크: ${runFolderUrl}`,
+        `성공: ${success.length} / 실패: ${fail.length}`, '',
+        (success.length ? ('[성공]\n' + success.join('\n')) : '[성공]\n없음'), '',
+        (fail.length ? ('[실패]\n' + fail.join('\n')) : '[실패]\n없음')
+      ];
+
+      ui.alert('PDF 저장 결과', summaryLines.join('\n'), ui.ButtonSet.OK);
+
+    } finally {
+      if (tempId) { try { PDF2_hardDeleteFileOrTrashFallback_(tempId); } catch (_) {} }
+    }
+  });
+}
+
+function PDF2W_newRunId_() {
+  return 'RUN_' + Utilities.getUuid().replace(/-/g, '').slice(0, 16) + '_' + Date.now();
+}
+
+function PDF2W_propKey_(runId, sheetNum) {
+  return PDF2_EXPORT.RANGE_WIZARD_PROP_PREFIX + String(runId) + '_' + String(sheetNum);
+}
+
+function PDF2W_mapKey_(runId) {
+  return PDF2_EXPORT.RANGE_WIZARD_MAP_PREFIX + String(runId);
+}
+
+function PDF2W_readMap_(runId) {
+  const props = PropertiesService.getDocumentProperties();
+  const raw = props.getProperty(PDF2W_mapKey_(runId));
+  if (!raw) return {};
+  try {
+    const obj = JSON.parse(raw);
+    return (obj && typeof obj === 'object') ? obj : {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function PDF2W_writeMap_(runId, mapObj) {
+  const props = PropertiesService.getDocumentProperties();
+  const safe = mapObj && typeof mapObj === 'object' ? mapObj : {};
+  props.setProperty(PDF2W_mapKey_(runId), JSON.stringify(safe));
+}
+
+function PDF2W_clearRunProps_(runId) {
+  const props = PropertiesService.getDocumentProperties();
+  const all = props.getProperties();
+
+  const prefix = PDF2_EXPORT.RANGE_WIZARD_PROP_PREFIX + String(runId) + '_';
+  const mapKey = PDF2W_mapKey_(runId);
+
+  const del = [];
+  Object.keys(all).forEach(k => {
+    if (k.indexOf(prefix) === 0) del.push(k);
+    if (k === mapKey) del.push(k);
+  });
+  del.forEach(k => props.deleteProperty(k));
+}
+
+function PDF2W_getSavedRanges_(runId) {
+  const targets = PDF2_getTargetSheets_();
+  const mapFromJson = PDF2W_readMap_(runId);
+  const normalized = {};
+  let hasAny = false;
+
+  for (const sh of targets) {
+    const n = PDF2_parseLeadingNumber_(sh.getName());
+    if (n == null) continue;
+
+    const k = String(n);
+    const v = mapFromJson[k];
+    if (v && String(v).indexOf(':') > 0) {
+      normalized[n] = String(v).trim();
+      hasAny = true;
+    }
+  }
+
+  if (hasAny) return normalized;
+
+  const props = PropertiesService.getDocumentProperties();
+  const fallback = {};
+  for (const sh of targets) {
+    const n = PDF2_parseLeadingNumber_(sh.getName());
+    if (n == null) continue;
+    const v = props.getProperty(PDF2W_propKey_(runId, n));
+    if (v) fallback[n] = String(v).trim();
+  }
+
+  if (Object.keys(fallback).length) {
+    const merge = {};
+    Object.keys(fallback).forEach(k => { merge[String(k)] = fallback[k]; });
+    PDF2W_writeMap_(runId, merge);
+  }
+
+  return fallback;
+}
+
+function PDF2W_setSavedRange_(runId, sheetNum, rangeA1) {
+  const n = parseInt(sheetNum, 10);
+  const a1 = String(rangeA1 || '').trim();
+
+  const props = PropertiesService.getDocumentProperties();
+  props.setProperty(PDF2W_propKey_(runId, n), a1);
+
+  const mapObj = PDF2W_readMap_(runId);
+  mapObj[String(n)] = a1;
+  PDF2W_writeMap_(runId, mapObj);
+}
+
+function PDF2W_startRangeWizard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const targets = PDF2_getTargetSheets_();
+  if (!targets.length) {
+    SpreadsheetApp.getUi().alert('범위 지정', '조건(1.~7.)에 맞는 시트를 찾지 못했습니다.', SpreadsheetApp.getUi().ButtonSet.OK);
+    return;
+  }
+
+  const v = PDF2_validateTargets_(targets);
+  if (!v.ok) {
+    SpreadsheetApp.getUi().alert('범위 지정', v.msg, SpreadsheetApp.getUi().ButtonSet.OK);
+    return;
+  }
+
+  const runId = PDF2W_newRunId_();
+  PDF2W_clearRunProps_(runId);
+
+  try { ss.setActiveSheet(targets[0]); } catch (_) {}
+
+  const html = HtmlService.createHtmlOutput(PDF2W_sidebarHtml_(runId))
+    .setTitle('PDF 범위 지정')
+    .setWidth(360);
+
+  SpreadsheetApp.getUi().showSidebar(html);
+}
+
+function PDF2W_getContext(runId) {
+  const targets = PDF2_getTargetSheets_();
+  const items = targets.map(sh => {
+    const n = PDF2_parseLeadingNumber_(sh.getName());
+    return { num: n, name: sh.getName() };
+  }).filter(x => x.num != null);
+
+  return {
+    runId: String(runId || ''),
+    targets: items,
+    saved: PDF2W_getSavedRanges_(runId)
+  };
+}
+
+function PDF2W_goToSheet(runId, sheetNum) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const targets = PDF2_getTargetSheets_();
+  const n = parseInt(sheetNum, 10);
+
+  const target = targets.find(sh => PDF2_parseLeadingNumber_(sh.getName()) === n);
+  if (!target) return { ok: false, message: '시트를 찾지 못했습니다: ' + sheetNum };
+
+  ss.setActiveSheet(target);
+
+  const saved = PDF2W_getSavedRanges_(runId)[n];
+  if (saved) {
+    try { target.getRange(saved).activate(); } catch (_) {}
+  }
+
+  return { ok: true, message: 'OK' };
+}
+
+function PDF2W_captureActiveRange(runId, sheetNum) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getActiveSheet();
+  const n = parseInt(sheetNum, 10);
+
+  const actualNum = PDF2_parseLeadingNumber_(sh.getName());
+  if (actualNum == null || actualNum !== n) {
+    return { ok: false, message: '현재 활성 시트가 대상 시트가 아닙니다. 먼저 해당 시트로 이동하세요.' };
+  }
+
+  const rg = sh.getActiveRange();
+  if (!rg) return { ok: false, message: '선택된 범위를 찾지 못했습니다.' };
+
+  const a1 = rg.getA1Notation();
+  if (!a1 || a1.indexOf(':') < 0) {
+    return { ok: false, message: '범위를 드래그로 선택해 주세요. (예: A1:K40)' };
+  }
+
+  PDF2W_setSavedRange_(runId, n, a1);
+  return { ok: true, rangeA1: a1 };
+}
+
+function PDF2W_clearAll(runId) {
+  PDF2W_clearRunProps_(runId);
+  return { ok: true };
+}
+
+function PDF2W_validateAllRanges(runId) {
+  const targets = PDF2_getTargetSheets_();
+  const saved = PDF2W_getSavedRanges_(runId);
+
+  const missing = [];
+  for (const sh of targets) {
+    const n = PDF2_parseLeadingNumber_(sh.getName());
+    if (n == null) continue;
+    if (!saved[n]) missing.push(`${n}. ${sh.getName()}`);
+  }
+
+  return { ok: missing.length === 0, missing, savedCount: Object.keys(saved).length };
+}
+
+function PDF2W_runExport(runId) {
+  const saved = PDF2W_getSavedRanges_(runId);
+  const savedCount = Object.keys(saved).length;
+
+  if (savedCount === 0) {
+    return { ok: false, message: '저장된 범위가 없습니다.\n최소 1개 이상의 시트 범위를 저장해 주세요.' };
+  }
+
+  PDF2_exportWithRanges_(saved);
+
+  PDF2W_clearRunProps_(runId);
+  return { ok: true, message: `${savedCount}개 시트 PDF 저장 요청됨` };
+}
+
+function PDF2W_sidebarHtml_(runId) {
+  const safeRunId = String(runId || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:12px;color:#111;}
+    .title{font-size:14px;font-weight:700;margin-bottom:8px;}
+    .sub{font-size:12px;line-height:1.4;color:#333;margin-bottom:10px;}
+    .box{border:1px solid #ddd;border-radius:10px;padding:10px;margin:10px 0;}
+    .row{display:flex;gap:8px;align-items:center;margin:6px 0;}
+    select,button{font-size:12px;}
+    select{width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;}
+    button{padding:8px 10px;border-radius:10px;border:1px solid #ccc;background:#fff;cursor:pointer;}
+    button.primary{border-color:#222;background:#222;color:#fff;}
+    button.warn{border-color:#c0392b;color:#c0392b;}
+    .small{font-size:11px;color:#666;}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;white-space:pre-wrap;}
+    .status{margin-top:8px;font-size:12px;white-space:pre-wrap;}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid #ddd;font-size:11px;margin-left:6px;}
+  </style>
+</head>
+<body>
+  <div class="title">범위 지정 후 PDF 저장<span class="pill">Run: ${safeRunId}</span></div>
+  <div class="sub">
+    1) 시트로 이동<br/>
+    2) 마우스로 드래그 선택<br/>
+    3) <b>[현재 선택범위 저장]</b><br/>
+    4) 1~7 반복 후 저장 실행<br/><br/>
+    실행 중 진행상황은 <b>스프레드시트 상단 Toast</b>로 표시됩니다.
+  </div>
+
+  <div class="box">
+    <div class="row">
+      <select id="sheetSel"></select>
+    </div>
+    <div class="row">
+      <button onclick="goSheet()">시트로 이동</button>
+      <button class="primary" onclick="saveRange()">현재 선택범위 저장</button>
+    </div>
+    <div class="row">
+      <button onclick="nextSheet()">다음 시트로 이동</button>
+      <button class="warn" onclick="clearAll()">전체 범위 초기화</button>
+    </div>
+    <div class="small">저장된 범위는 이번 실행에만 사용됩니다.</div>
+  </div>
+
+  <div class="box">
+    <div class="row">
+      <button class="primary" onclick="runExport()">저장한 범위로 PDF 저장</button>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="title" style="font-size:12px;">저장된 범위</div>
+    <div id="savedList" class="mono">불러오는 중...</div>
+  </div>
+
+  <div id="status" class="status"></div>
+
+<script>
+  const RUN_ID = "${safeRunId}";
+  let ctx = null;
+
+  function setStatus(msg){ document.getElementById('status').textContent = msg || ""; }
+
+  function loadCtx(){
+    setStatus("컨텍스트 로딩...");
+    google.script.run.withSuccessHandler(function(res){
+      ctx = res;
+      fillSelect();
+      renderSaved();
+      setStatus("");
+    }).withFailureHandler(function(err){
+      setStatus("오류: " + err);
+    }).PDF2W_getContext(RUN_ID);
+  }
+
+  function fillSelect(){
+    const sel = document.getElementById('sheetSel');
+    sel.innerHTML = "";
+    (ctx.targets || []).forEach(function(t){
+      const opt = document.createElement('option');
+      opt.value = t.num;
+      opt.textContent = t.name;
+      sel.appendChild(opt);
+    });
+  }
+
+  function currentNum(){
+    const sel = document.getElementById('sheetSel');
+    return parseInt(sel.value, 10);
+  }
+
+  function renderSaved(){
+    const map = (ctx && ctx.saved) ? ctx.saved : {};
+    const targets = (ctx && ctx.targets) ? ctx.targets : [];
+    const lines = targets.map(t => {
+      const v = map[t.num] ? map[t.num] : "(미지정)";
+      return t.num + ". " + t.name + " => " + v;
+    });
+    document.getElementById('savedList').textContent = lines.join("\\n");
+  }
+
+  function refreshCtx(){
+    google.script.run.withSuccessHandler(function(res){
+      ctx = res;
+      renderSaved();
+    }).withFailureHandler(function(err){
+      setStatus("오류: " + err);
+    }).PDF2W_getContext(RUN_ID);
+  }
+
+  function goSheet(){
+    const n = currentNum();
+    setStatus("시트 이동 중...");
+    google.script.run.withSuccessHandler(function(res){
+      setStatus(res.ok ? "이동 완료" : ("이동 실패: " + res.message));
+      refreshCtx();
+    }).withFailureHandler(function(err){
+      setStatus("오류: " + err);
+    }).PDF2W_goToSheet(RUN_ID, n);
+  }
+
+  function saveRange(){
+    const n = currentNum();
+    setStatus("범위 저장 중...");
+    google.script.run.withSuccessHandler(function(res){
+      if(res.ok){
+        setStatus("저장됨: " + res.rangeA1);
+        refreshCtx();
+      }else{
+        setStatus("저장 실패: " + res.message);
+      }
+    }).withFailureHandler(function(err){
+      setStatus("오류: " + err);
+    }).PDF2W_captureActiveRange(RUN_ID, n);
+  }
+
+  function nextSheet(){
+    const sel = document.getElementById('sheetSel');
+    if(sel.selectedIndex < sel.options.length - 1) sel.selectedIndex += 1;
+    goSheet();
+  }
+
+  function clearAll(){
+    setStatus("초기화 중...");
+    google.script.run.withSuccessHandler(function(){
+      setStatus("초기화 완료");
+      loadCtx();
+    }).withFailureHandler(function(err){
+      setStatus("오류: " + err);
+    }).PDF2W_clearAll(RUN_ID);
+  }
+
+  function runExport(){
+    setStatus("PDF 저장 요청 전송... (Toast로 진행상황 확인)");
+    google.script.run.withSuccessHandler(function(res){
+      setStatus(res.ok ? "저장 실행됨(알림창/Toast 확인)" : ("실행 불가: " + res.message));
+    }).withFailureHandler(function(err){
+      setStatus("오류: " + err);
+    }).PDF2W_runExport(RUN_ID);
+  }
+
+  loadCtx();
+</script>
+</body>
+</html>`;
+}
+
+/* ==========================================
+ * [복구] 삭제된 필수 헬퍼 함수들
+ * ========================================== */
+
+function PDF2_sleepMs_(ms) {
+  Utilities.sleep(ms);
+}
+
+function PDF2_toastProgress_(title, step, total, msg) {
+  try {
+    const pct = Math.round((step / total) * 100);
+    SpreadsheetApp.getActiveSpreadsheet().toast(msg, title + ' (' + pct + '%)', 3);
+  } catch (_) {}
+}
+
+function PDF2_parseLeadingNumber_(str) {
+  if (!str) return null;
+  const m = String(str).match(/^(\d+)[.]/);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function PDF2_getTargetSheets_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheets = ss.getSheets();
+  const targets = [];
+  const start = PDF2_EXPORT.TARGET_NUM_START;
+  const end = PDF2_EXPORT.TARGET_NUM_END;
+  for (const sh of sheets) {
+    const num = PDF2_parseLeadingNumber_(sh.getName());
+    if (num !== null && num >= start && num <= end) {
+      targets.push(sh);
+    }
+  }
+  return targets;
+}
+
+function PDF2_validateTargets_(targets) {
+  if (!targets || targets.length === 0) return { ok: false, msg: '대상 시트가 없습니다.' };
+  return { ok: true };
+}
+
+function PDF2_resolveTargetFolderOrFallback_(ss) {
+  if (PDF2_EXPORT.FOLDER_ID) {
+    try { return DriveApp.getFolderById(PDF2_EXPORT.FOLDER_ID); } catch (_) {}
+  }
+  return DriveApp.getRootFolder();
+}
+
+function PDF2_buildPdfFileName_(sheetName) {
+  return sheetName + '.pdf';
+}
+
+function PDF2_makeFolderUrl_(id) {
+  return 'https://drive.google.com/drive/folders/' + id;
+}
+
+function PDF2_makeFileUrl_(id) {
+  return 'https://drive.google.com/file/d/' + id + '/view';
+}
+
+function PDF2_fetchPdfWithRetry_(url) {
+  let lastErr;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const token = ScriptApp.getOAuthToken();
+      const res = UrlFetchApp.fetch(url, {
+        headers: { Authorization: 'Bearer ' + token },
+        muteHttpExceptions: true
+      });
+      if (res.getResponseCode() === 200) return res.getBlob();
+      lastErr = new Error('HTTP ' + res.getResponseCode());
+    } catch (e) { lastErr = e; }
+    Utilities.sleep(1000);
+  }
+  throw lastErr;
+}
+
+function PDF2_createFileWithRetry_(folder, blob, fileName) {
+  let lastErr;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const f = folder.createFile(blob);
+      f.setName(fileName);
+      return f;
+    } catch (e) { lastErr = e; }
+    Utilities.sleep(1000);
+  }
+  throw lastErr;
+}
+
+function PDF2_hardDeleteFileOrTrashFallback_(id) {
+  try { Drive.Files.remove(id); }
+  catch (e) { 
+    try { DriveApp.getFileById(id).setTrashed(true); } catch (_) {}
+  }
+}
+
+

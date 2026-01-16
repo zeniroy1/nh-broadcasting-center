@@ -1,0 +1,139 @@
+
+import React from 'react';
+import { Container, Title, Table, Badge, Grid, Card, Text, Group, ThemeIcon, ScrollArea } from '@mantine/core';
+import { motion } from 'framer-motion';
+import { IconMicrophone, IconVideo, IconDeviceLaptop, IconAntennaBars5, IconDisc, IconVolume } from '@tabler/icons-react';
+
+// Nanobanana Style: Icons Mapping
+const ICONS = {
+    wired: <IconMicrophone size={16} />,
+    wireless: <IconAntennaBars5 size={16} />,
+    conference: <IconVolume size={16} />,
+    anthem: <IconDisc size={16} />,
+    record: <IconVideo size={16} />,
+    video: <IconDeviceLaptop size={16} />
+};
+
+const DATA = [
+    {
+        building: '본관',
+        rooms: [
+            { name: '대강당', wired: '8', wireless: '8', conf: '-', anthem: 'O', record: 'O', video: '전광판' },
+            { name: '중회의실', wired: '4', wireless: '4', conf: '25', anthem: 'O', record: 'O', video: '전광판' },
+            { name: '화상회의실', wired: '1 (사회석)', wireless: '2', conf: '31 (고정)', anthem: 'O', record: 'O', video: '전광판' },
+            { name: '소회의실', wired: '2', wireless: '2', conf: 'X', anthem: 'X', record: 'X', video: '전자칠판' },
+            { name: '신토불이', wired: '1', wireless: '2', conf: 'X', anthem: 'X', record: 'X', video: 'X' },
+            { name: '두레식당', wired: '1', wireless: '2', conf: 'X', anthem: 'X', record: 'X', video: 'X' },
+            { name: '경영전략실', wired: '1', wireless: '2', conf: '21 (고정)', anthem: 'X', record: 'X', video: 'X' },
+            { name: '이동장비', wired: '2', wireless: '4', conf: 'X', anthem: 'O', record: 'X', video: 'X' }
+        ]
+    },
+    {
+        building: '신관',
+        rooms: [
+            { name: '대회의실', wired: '6', wireless: '6', conf: '24', anthem: 'O', record: 'O', video: '전광판' },
+            { name: '중회의실', wired: '6', wireless: '3', conf: '20', anthem: 'O', record: 'O', video: '전광판' },
+            { name: '1소회의실', wired: '2', wireless: '2', conf: 'X', anthem: 'X', record: 'O', video: '전광판' },
+            { name: '2소회의실', wired: '5', wireless: '2', conf: 'X', anthem: 'X', record: 'O', video: '전광판' },
+            { name: '3소회의실', wired: '5', wireless: '2', conf: 'X', anthem: 'X', record: 'O', video: '전광판' },
+            { name: '경영전략회의실', wired: '2', wireless: '1', conf: '20 (고정)', anthem: 'X', record: 'O', video: '전광판' },
+            { name: '행복마루', wired: '1', wireless: '2', conf: 'X', anthem: 'X', record: 'X', video: 'X' },
+            { name: '채움마루', wired: 'X', wireless: 'X', conf: 'X', anthem: 'X', record: 'X', video: 'X' }
+        ]
+    }
+];
+
+const StatusBoard = () => {
+    return (
+        <Container size="xl" py="xl">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <Title order={1} style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}> 방송장비 이용 가능 현황</Title>
+                    <Text c="dimmed" size="ls">각 장소별 방송장비 현황을 한번에 확인할 수 있습니다.</Text>
+                </div>
+
+                <Grid>
+                    {DATA.map((section, secIdx) => (
+                        <Grid.Col key={secIdx} span={{ base: 12 }}>
+                            <Card shadow="sm" padding="lg" radius="md" withBorder>
+                                <Card.Section withBorder inheritPadding py="xs" bg={secIdx === 0 ? 'blue.1' : 'green.1'}>
+                                    <Group justify="space-between">
+                                        <Text fw={700} size="xl" c={secIdx === 0 ? 'blue.9' : 'green.9'}>
+                                            {section.building}
+                                        </Text>
+                                        <Badge variant="light" color={secIdx === 0 ? 'blue' : 'green'}>
+                                            {section.rooms.length} Rooms
+                                        </Badge>
+                                    </Group>
+                                </Card.Section>
+
+                                <ScrollArea>
+                                    <Table striped highlightOnHover horizontalSpacing="md" verticalSpacing="sm" layout="fixed" miw={800}>
+                                        <Table.Thead>
+                                            <Table.Tr>
+                                                <Table.Th w={150}>회의장명</Table.Th>
+                                                <Table.Th><Group gap={5}><IconMicrophone size={14} /> 유선</Group></Table.Th>
+                                                <Table.Th><Group gap={5}><IconAntennaBars5 size={14} /> 무선</Group></Table.Th>
+                                                <Table.Th><Group gap={5}><IconVolume size={14} /> 회의용</Group></Table.Th>
+                                                <Table.Th><Group gap={5}><IconDisc size={14} /> 국민의례</Group></Table.Th>
+                                                <Table.Th><Group gap={5}><IconVideo size={14} /> 녹음/녹화</Group></Table.Th>
+                                                <Table.Th><Group gap={5}><IconDeviceLaptop size={14} /> 영상</Group></Table.Th>
+                                            </Table.Tr>
+                                        </Table.Thead>
+                                        <Table.Tbody>
+                                            {section.rooms.map((room, idx) => (
+                                                <Table.Tr key={idx}>
+                                                    <Table.Td fw={600} style={{ fontSize: '1.05rem' }}>{room.name}</Table.Td>
+                                                    <Table.Td>{renderCell(room.wired, 'wired')}</Table.Td>
+                                                    <Table.Td>{renderCell(room.wireless, 'wireless')}</Table.Td>
+                                                    <Table.Td>{renderCell(room.conf, 'conference')}</Table.Td>
+                                                    <Table.Td>{renderStatus(room.anthem)}</Table.Td>
+                                                    <Table.Td>{renderStatus(room.record)}</Table.Td>
+                                                    <Table.Td>{renderVideo(room.video)}</Table.Td>
+                                                </Table.Tr>
+                                            ))}
+                                        </Table.Tbody>
+                                    </Table>
+                                </ScrollArea>
+                            </Card>
+                        </Grid.Col>
+                    ))}
+                </Grid>
+
+                <Text ta="center" mt="xl" c="dimmed" size="s">
+                    * 본 현황은 2025.09.05 기준입니다. 실제 현황과 다를 수 있으니 방송운영단(5994)으로 확인 바랍니다.
+                </Text>
+            </motion.div>
+        </Container>
+    );
+};
+
+const renderCell = (value, type) => {
+    if (value === 'X' || value === '-') return <Text c="gray.4">-</Text>;
+    const isNumber = !isNaN(parseInt(value));
+    return (
+        <Group gap="xs">
+            {isNumber && <ThemeIcon size="sm" variant="light" color="blue">{ICONS[type]}</ThemeIcon>}
+            <Text fw={500}>{value}</Text>
+        </Group>
+    );
+};
+
+const renderStatus = (value) => {
+    if (value === 'O') return <Badge color="teal" variant="light" size="lg">✅ 가능</Badge>;
+    if (value === 'X') return <Text c="gray.3">❌</Text>;
+    return value;
+};
+
+const renderVideo = (value) => {
+    if (value === 'X') return <Text c="gray.3">-</Text>;
+    if (value.includes('전광판')) return <Badge color="grape" variant="dot" size="lg">📺 {value}</Badge>;
+    if (value.includes('전자칠판')) return <Badge color="orange" variant="outline" size="lg">🖍️ {value}</Badge>;
+    return value;
+};
+
+export default StatusBoard;
