@@ -266,3 +266,27 @@
         text-align: center;
     }
 }
+
+/* Landscape Mode Adjustments for Mobile */
+@media (max-width: 932px) and (orientation: landscape) {
+    :root {
+        --header-height: 50px !important;
+    }
+
+    .desktop-nav {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+
+    .nav-container {
+        height: 50px !important;
+        padding: 0 1rem !important;
+    }
+
+    .logo-container h1 {
+        font-size: 1.1rem !important;
+    }
+}

@@ -297,16 +297,30 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 932px) and (orientation: landscape) {
+    .hero-section {
+        padding-top: calc(var(--header-height) + 1rem);
+        min-height: auto;
+        height: auto;
+        padding-bottom: 4rem;
+    }
+
     .hero-title {
         font-size: 1.8rem;
     }
 
-    .hero-subtitle {
-        font-size: 0.8rem;
+    .hero-description {
+        margin-bottom: 1.5rem;
     }
 
-    .hero-description {
-        font-size: 0.9rem;
+    .hero-actions {
+        flex-direction: row;
+        width: auto;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: auto;
+        padding: 0.6rem 1.2rem;
     }
 }
