@@ -195,8 +195,9 @@
     }
 
     .about-hero p {
-        font-size: 1rem;
+        font-size: 1.1rem;
         padding: 0 1rem;
+        line-height: 1.6;
     }
 
     .about-grid {
@@ -205,15 +206,18 @@
     }
 
     .about-card {
-        padding: 2rem;
+        padding: 1.75rem;
     }
 
     .about-card h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
     }
 
     .about-card p {
-        font-size: 1rem;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: var(--color-text);
     }
 
     .organization-chart h2 {
@@ -224,7 +228,7 @@
     .chart-node {
         padding: 0.75rem 1.5rem;
         min-width: 120px;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 
     .chart-row {

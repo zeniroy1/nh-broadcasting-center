@@ -130,33 +130,43 @@ button {
   }
 
   body {
-    font-size: 15px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
   }
 
   .container {
-    padding: 0 1rem;
+    padding: 0 1.25rem;
   }
 
   /* Improve touch targets */
-  button, a {
+  button,
+  a {
     min-height: 44px;
     min-width: 44px;
   }
 
   /* Prevent horizontal scroll */
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
+  }
+
+  /* Better text rendering on mobile */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 /* Small mobile devices */
 @media (max-width: 480px) {
   body {
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.7;
   }
 
   .container {
-    padding: 0 0.75rem;
+    padding: 0 1rem;
   }
 }
