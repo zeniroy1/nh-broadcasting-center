@@ -16,11 +16,23 @@ const navItems = [
 const AnimatedNav = ({ currentPath }) => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const handleMouseEnter = () => {
+        if (window.innerWidth > 768) {
+            setIsOpen(true);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (window.innerWidth > 768) {
+            setIsOpen(false);
+        }
+    };
+
     return (
         <div
             className="animated-nav-container"
-            onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={() => setIsOpen(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
             <motion.div
                 className="nav-trigger menu-item"

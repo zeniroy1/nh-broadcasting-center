@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { facilities, buildings } from '../data/facilities';
 import FacilityCard from '../components/facilities/FacilityCard';
@@ -13,18 +13,34 @@ const Facilities = () => {
     const [selectedFacility, setSelectedFacility] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
 
+    // Sync modal with URL ?facility=...
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const type = params.get('type');
-        if (type) {
-            const facility = facilities.find(f => f.id === type);
+        const facilityId = params.get('facility') || params.get('type'); // Support 'type' for legacy or 'facility'
+
+        if (facilityId) {
+            const facility = facilities.find(f => f.id === facilityId);
             if (facility) {
                 setActiveBuilding(facility.building);
                 setSelectedFacility(facility);
+                return;
             }
         }
-    }, [location]);
+
+        setSelectedFacility(null);
+    }, [location.search]);
+
+    const handleSelectFacility = (facility) => {
+        // Update URL to open modal
+        navigate(`?facility=${facility.id}`);
+    };
+
+    const handleCloseModal = () => {
+        // Clear URL param to close modal
+        navigate('/facilities');
+    };
 
     const filteredFacilities = facilities.filter(f => {
         const matchesBuilding = f.building === activeBuilding;
@@ -104,7 +120,7 @@ const Facilities = () => {
                                 key={facility.id}
                                 facility={facility}
                                 index={index}
-                                onClick={setSelectedFacility}
+                                onClick={handleSelectFacility}
                             />
                         ))}
                     </AnimatePresence>
@@ -119,7 +135,7 @@ const Facilities = () => {
                 {selectedFacility && (
                     <FacilityModal
                         facility={selectedFacility}
-                        onClose={() => setSelectedFacility(null)}
+                        onClose={handleCloseModal}
                     />
                 )}
             </div>

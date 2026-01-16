@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, isToday, parseISO } from 'date-fns';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, isToday, parseISO, isValid } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import './Schedule.css';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, MapPin, Clock, X } from 'lucide-react';
@@ -14,6 +15,25 @@ const Schedule = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Sync modal with URL ?date=YYYY-MM-DD
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const dateStr = params.get('date');
+
+        if (dateStr) {
+            const parsedDate = parseISO(dateStr);
+            if (isValid(parsedDate)) {
+                setSelectedDate(parsedDate);
+                setIsModalOpen(true);
+                return;
+            }
+        }
+
+        setIsModalOpen(false);
+    }, [location.search]);
 
     // Korean Public Holidays (Fixed dates for demo)
     const getHolidays = (year) => {
@@ -60,12 +80,13 @@ const Schedule = () => {
     };
 
     const onDateClick = (day) => {
-        setSelectedDate(day);
-        setIsModalOpen(true);
+        // Update URL to open modal
+        navigate(`?date=${format(day, 'yyyy-MM-dd')}`);
     };
 
     const closeModal = () => {
-        setIsModalOpen(false);
+        // Clear URL param to close modal
+        navigate('/schedule');
     };
 
     const renderHeader = () => {

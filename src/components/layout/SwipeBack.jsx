@@ -16,14 +16,13 @@ const SwipeBack = () => {
   const isSwiping = useRef(false);
 
   useEffect(() => {
-    const EDGE_THRESHOLD = 30; // Starting swipe must be within 30px from left edge
-    const MIN_SWIPE_DISTANCE = 80; // Minimum swipe distance to trigger back
-    const MAX_VERTICAL_DISTANCE = 100; // Cancel if vertical movement is too much
+    const EDGE_THRESHOLD = 20; // Narrower edge start
+    const MIN_SWIPE_DISTANCE = 100; // More intentional swipe
+    const MAX_VERTICAL_RATIO = 0.5; // X must move more than Y
 
     const handleTouchStart = (e) => {
       const touch = e.touches[0];
-      
-      // Only detect swipe starting from left edge
+      // Only start if touch is near the left edge
       if (touch.clientX <= EDGE_THRESHOLD) {
         touchStartX.current = touch.clientX;
         touchStartY.current = touch.clientY;
@@ -32,8 +31,11 @@ const SwipeBack = () => {
     };
 
     const handleTouchMove = (e) => {
-      // Optional: Add visual feedback during swipe
-      // Could add an overlay or animation here
+      if (!isSwiping.current) return;
+      // Prevent horizontal scrolling when swiping back from edge
+      if (Math.abs(e.touches[0].clientX - touchStartX.current) > 10) {
+        // Optional: stop propagation if needed
+      }
     };
 
     const handleTouchEnd = (e) => {
@@ -43,18 +45,16 @@ const SwipeBack = () => {
       const deltaX = touch.clientX - touchStartX.current;
       const deltaY = Math.abs(touch.clientY - touchStartY.current);
 
-      // Check if swipe is valid (horizontal swipe to the right)
-      if (deltaX >= MIN_SWIPE_DISTANCE && deltaY < MAX_VERTICAL_DISTANCE) {
-        // Don't go back if we're on the home page
+      // Must be a horizontal-ish swipe with enough distance
+      if (deltaX >= MIN_SWIPE_DISTANCE && (deltaY / deltaX) < MAX_VERTICAL_RATIO) {
+        // Prevent going back from home page
         if (location.pathname !== '/') {
           navigate(-1);
         }
       }
-
       isSwiping.current = false;
     };
 
-    // Only add listeners on touch devices
     if ('ontouchstart' in window) {
       document.addEventListener('touchstart', handleTouchStart, { passive: true });
       document.addEventListener('touchmove', handleTouchMove, { passive: true });
@@ -68,7 +68,6 @@ const SwipeBack = () => {
     };
   }, [navigate, location.pathname]);
 
-  // This component doesn't render anything visible
   return null;
 };
 
