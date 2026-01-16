@@ -10,6 +10,10 @@
   /* Neon Green */
   --color-accent-hover: #00cc6a;
 
+  /* RGB Values for opacity */
+  --color-primary-rgb: 0, 53, 102;
+  --color-accent-rgb: 0, 255, 136;
+
   /* UI Colors */
   --color-bg: #f8f9fa;
   --color-bg-card: #ffffff;
@@ -46,6 +50,10 @@
   --color-text: #f8fafc;
   --color-text-muted: #94a3b8;
   --color-border: #334155;
+
+  /* RGB Values for dark mode */
+  --color-primary-rgb: 58, 134, 255;
+  --color-accent-rgb: 0, 255, 136;
 }
 
 * {
