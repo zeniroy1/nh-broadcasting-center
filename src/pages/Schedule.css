@@ -265,34 +265,98 @@
 /* Responsive */
 @media (max-width: 768px) {
     .calendar-container {
-        padding: 1rem;
+        padding: 0.75rem;
         min-height: auto;
+        border-radius: 16px;
+    }
+
+    .calendar-header {
+        margin-bottom: 1.5rem;
+        padding: 0;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
 
     .header-left h2 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+    }
+
+    .header-nav {
+        gap: 0.4rem;
+        padding: 0.2rem;
+    }
+
+    .today-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .nav-btn {
+        padding: 0.3rem;
+    }
+
+    .days-row {
+        padding: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .day-name {
+        font-size: 0.85rem;
+        text-align: center;
+        padding-left: 0;
     }
 
     .row {
-        min-height: 100px;
+        min-height: 80px;
     }
 
     .cell {
-        padding: 0.4rem;
+        padding: 0.3rem;
+        gap: 0.25rem;
     }
 
     .cell .number {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
     .holiday-name {
-        font-size: 0.6rem;
-        padding: 1px 3px;
+        display: none;
+        /* Hide holiday name text on very small screens, keep only red color */
+    }
+
+    .events-container {
+        gap: 2px;
     }
 
     .event-pill {
-        font-size: 0.7rem;
-        padding: 0.2rem 0.4rem;
+        font-size: 0.65rem;
+        padding: 1px 3px;
+        line-height: 1.1;
+        border-radius: 3px;
+        min-height: 12px;
+        text-indent: -999px;
+        /* Hide text, show as a bar on mobile */
+        height: 4px;
+        overflow: hidden;
+    }
+
+    .event-time-badge {
+        display: none;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .header-left h2 {
+        font-size: 1.3rem;
+    }
+
+    .row {
+        min-height: 60px;
+    }
+
+    .cell .number {
+        font-size: 0.75rem;
     }
 }
 
