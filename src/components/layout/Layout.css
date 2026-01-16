@@ -230,41 +230,39 @@
         transform: translateX(0);
     }
 
-    /* Mobile Footer Improvements - Matching PC Format */
+    /* Mobile Footer Improvements - Centered and Compact */
     .site-footer {
-        padding: 1rem 0;
-        margin-top: 1.5rem;
+        padding: 0.75rem 0;
+        margin-top: 1rem;
     }
 
     .footer-content {
-        flex-direction: row;
-        /* Force horizontal like PC */
-        justify-content: space-between;
+        flex-direction: column;
+        /* Stacked looks better for centering on mobile */
+        justify-content: center;
         align-items: center;
-        text-align: left;
-        gap: 1rem;
-        flex-wrap: wrap;
-        /* Safety for very narrow screens */
+        text-align: center;
+        gap: 0.5rem;
     }
 
     .footer-info h3 {
-        font-size: 1rem;
-        margin-bottom: 0px;
-        display: inline-block;
-        margin-right: 0.5rem;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+        margin-right: 0;
+        display: block;
     }
 
     .footer-info p {
-        font-size: 0.8rem;
-        display: inline-block;
+        font-size: 0.75rem;
+        display: block;
         opacity: 0.7;
     }
 
     .footer-links {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         border-top: none;
         padding-top: 0;
-        width: auto;
-        text-align: right;
+        width: 100%;
+        text-align: center;
     }
 }
