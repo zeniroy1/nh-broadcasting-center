@@ -332,4 +332,9 @@
         font-size: 0.85rem !important;
         border-radius: 15px !important;
     }
+
+    /* Ensure main content doesn't get covered by header */
+    .main-content {
+        padding-top: 60px !important;
+    }
 }

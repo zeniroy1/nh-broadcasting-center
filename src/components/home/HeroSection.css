@@ -299,10 +299,10 @@
 
 @media (max-width: 932px) and (orientation: landscape) {
     .hero-section {
-        padding-top: calc(var(--header-height) + 1rem);
+        padding-top: calc(60px + 2rem); /* Fixed header height + extra space */
         min-height: auto;
         height: auto;
-        padding-bottom: 4rem;
+        padding-bottom: 8rem; /* Increased to prevent button cutoff */
     }
 
     .hero-title {
@@ -316,6 +316,7 @@
     .hero-actions {
         flex-direction: row;
         width: auto;
+        margin-bottom: 2rem; /* Extra bottom margin for buttons */
     }
 
     .btn-primary,
