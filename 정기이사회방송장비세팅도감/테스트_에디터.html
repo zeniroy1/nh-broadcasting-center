@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>평면도 에디터 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            cursor: text;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        h1:hover {
+            background: #f5f5f5;
+        }
+
+        .floor-plan {
+            width: 1000px;
+            height: 700px;
+            background: #cbd5e0;
+            border: 3px solid #333;
+            border-radius: 10px;
+            position: relative;
+            margin: 20px auto;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(0, 0, 0, 0.15) 48px, rgba(0, 0, 0, 0.15) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(0, 0, 0, 0.15) 48px, rgba(0, 0, 0, 0.15) 50px);
+        }
+
+        .furniture {
+            position: absolute;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: grab;
+            user-select: none;
+        }
+
+        .furniture:active {
+            cursor: grabbing;
+        }
+
+        .furniture.selected {
+            outline: 3px solid red;
+            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .desk {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 2px solid #654321;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .chair {
+            background: #5D4037;
+            border: 2px solid #3E2723;
+        }
+
+        .table {
+            background: linear-gradient(135deg, #D4A574 0%, #C19A6B 100%);
+            border: 2px solid #8B7355;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .info {
+            text-align: center;
+            color: #666;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 contenteditable="true">🏢 평면도 에디터 (간단 테스트)</h1>
+        <div class="info">가구를 클릭하고 드래그하세요! (F12를 눌러 콘솔 확인)</div>
+
+        <div class="floor-plan" id="floorPlan">
+            <div class="furniture desk" style="top: 100px; left: 200px; width: 150px; height: 50px;">의장석</div>
+            <div class="furniture chair" style="top: 200px; left: 100px; width: 40px; height: 40px;"></div>
+            <div class="furniture chair" style="top: 250px; left: 100px; width: 40px; height: 40px;"></div>
+            <div class="furniture chair" style="top: 300px; left: 100px; width: 40px; height: 40px;"></div>
+            <div class="furniture table" style="bottom: 100px; left: 200px; width: 60px; height: 40px;"></div>
+            <div class="furniture table" style="bottom: 100px; left: 270px; width: 60px; height: 40px;"></div>
+        </div>
+
+        <div class="controls">
+            <button onclick="testClick()">테스트 클릭</button>
+            <button onclick="cloneSelected()">복제</button>
+            <button onclick="deleteSelected()">삭제</button>
+            <button onclick="location.reload()">초기화</button>
+        </div>
+
+        <div class="info" id="status">상태: 대기중...</div>
+    </div>
+
+    <script>
+        console.log('=== 평면도 에디터 시작 ===');
+
+        let selectedElement = null;
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        const floorPlan = document.getElementById('floorPlan');
+        const status = document.getElementById('status');
+
+        function updateStatus(msg) {
+            status.textContent = '상태: ' + msg;
+            console.log('[상태]', msg);
+        }
+
+        function testClick() {
+            updateStatus('테스트 버튼 클릭됨!');
+            alert('버튼이 작동합니다!');
+        }
+
+        // 이벤트 위임 방식
+        floorPlan.addEventListener('mousedown', function (e) {
+            console.log('mousedown 이벤트 발생:', e.target.className);
+
+            if (e.target.classList.contains('furniture')) {
+                e.preventDefault();
+                isDragging = true;
+                selectedElement = e.target;
+
+                // 선택 표시
+                document.querySelectorAll('.furniture').forEach(f => f.classList.remove('selected'));
+                selectedElement.classList.add('selected');
+
+                // 오프셋 계산
+                const rect = selectedElement.getBoundingClientRect();
+                const parentRect = floorPlan.getBoundingClientRect();
+
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+
+                updateStatus('드래그 시작: ' + (selectedElement.textContent || '가구'));
+                console.log('드래그 시작!', {
+                    element: selectedElement,
+                    offsetX: offsetX,
+                    offsetY: offsetY
+                });
+            }
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (!isDragging || !selectedElement) return;
+
+            const parentRect = floorPlan.getBoundingClientRect();
+            let newX = e.clientX - parentRect.left - offsetX;
+            let newY = e.clientY - parentRect.top - offsetY;
+
+            // 경계 제한
+            newX = Math.max(0, Math.min(newX, parentRect.width - selectedElement.offsetWidth));
+            newY = Math.max(0, Math.min(newY, parentRect.height - selectedElement.offsetHeight));
+
+            selectedElement.style.left = newX + 'px';
+            selectedElement.style.top = newY + 'px';
+            selectedElement.style.bottom = 'auto';
+            selectedElement.style.right = 'auto';
+
+            console.log('드래그 중:', newX, newY);
+        });
+
+        document.addEventListener('mouseup', function (e) {
+            if (isDragging) {
+                updateStatus('드래그 완료');
+                console.log('드래그 종료');
+                isDragging = false;
+            }
+        });
+
+        function cloneSelected() {
+            if (!selectedElement) {
+                alert('먼저 가구를 선택하세요!');
+                return;
+            }
+
+            const clone = selectedElement.cloneNode(true);
+            clone.classList.remove('selected');
+
+            const currentLeft = parseInt(selectedElement.style.left) || 0;
+            const currentTop = parseInt(selectedElement.style.top) || 0;
+
+            clone.style.left = (currentLeft + 30) + 'px';
+            clone.style.top = (currentTop + 30) + 'px';
+            clone.style.bottom = 'auto';
+            clone.style.right = 'auto';
+
+            floorPlan.appendChild(clone);
+            updateStatus('복제됨!');
+            console.log('복제 완료');
+        }
+
+        function deleteSelected() {
+            if (!selectedElement) {
+                alert('먼저 가구를 선택하세요!');
+                return;
+            }
+
+            if (confirm('이 항목을 삭제하시겠습니까?')) {
+                selectedElement.remove();
+                selectedElement = null;
+                updateStatus('삭제됨');
+                console.log('삭제 완료');
+            }
+        }
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function (e) {
+            console.log('키 입력:', e.key);
+
+            if (e.key === 'Delete' && selectedElement) {
+                deleteSelected();
+            } else if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                cloneSelected();
+            }
+        });
+
+        updateStatus('로드 완료! 가구를 드래그하세요.');
+        console.log('=== 초기화 완료 ===');
+    </script>
+</body>
+
+</html>

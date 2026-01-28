@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정기이사회 중회의실 평면도 에디터 (고급)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .editor-wrapper {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* 툴바 */
+        .toolbar {
+            width: 220px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #dee2e6;
+            height: fit-content;
+        }
+
+        .toolbar h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .tool-section {
+            margin-bottom: 20px;
+        }
+
+        .tool-section-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .tool-btn:hover {
+            background: #e9ecef;
+            border-color: #3498db;
+        }
+
+        .tool-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .color-picker,
+        .line-width-input {
+            width: 100%;
+            height: 35px;
+            border-radius: 6px;
+            cursor: pointer;
+            padding: 8px;
+            border: 2px solid #dee2e6;
+            font-size: 13px;
+        }
+
+        /* 캔버스 영역 */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .floor-plan {
+            width: 100%;
+            height: 900px;
+            background: linear-gradient(135deg, #cbd5e0 0%, #b8c5d0 100%);
+            border: 4px solid #34495e;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        /* 그리드 배경 - 더 선명하게 */
+        .floor-plan::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(0, 0, 0, 0.15) 48px, rgba(0, 0, 0, 0.15) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(0, 0, 0, 0.15) 48px, rgba(0, 0, 0, 0.15) 50px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* SVG 레이어 */
+        .drawing-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .drawing-svg line {
+            pointer-events: stroke;
+        }
+
+        /* 가구 요소 */
+        .furniture {
+            position: absolute;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            cursor: move;
+            z-index: 10;
+            user-select: none;
+        }
+
+        /* 선택된 요소 - 더 명확하게 */
+        .furniture.selected {
+            outline: 4px solid #e74c3c;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.3), 0 8px 25px rgba(0, 0, 0, 0.35);
+            z-index: 100;
+        }
+
+        .furniture:hover {
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        /* 크기 조절 핸들 */
+        .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #3498db;
+            border: 2px solid white;
+            border-radius: 50%;
+            z-index: 101;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .resize-handle.nw {
+            top: -6px;
+            left: -6px;
+            cursor: nw-resize;
+        }
+
+        .resize-handle.ne {
+            top: -6px;
+            right: -6px;
+            cursor: ne-resize;
+        }
+
+        .resize-handle.sw {
+            bottom: -6px;
+            left: -6px;
+            cursor: sw-resize;
+        }
+
+        .resize-handle.se {
+            bottom: -6px;
+            right: -6px;
+            cursor: se-resize;
+        }
+
+        /* 회전 핸들 */
+        .rotate-handle {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: #9b59b6;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: grab;
+            z-index: 101;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .rotate-handle::before {
+            content: '↻';
+        }
+
+        /* 텍스트 레이블 */
+        .text-label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #3498db;
+            cursor: move;
+            z-index: 20;
+            user-select: none;
+        }
+
+        .text-label.selected {
+            outline: 4px solid #e74c3c;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        /* 선 선택 시 강조 */
+        .drawn-line.selected {
+            stroke-width: 5 !important;
+            stroke-dasharray: 8, 4 !important;
+            filter: drop-shadow(0 0 4px rgba(231, 76, 60, 0.8));
+        }
+
+        /* 스타일 클래스들 */
+        .chairman-desk {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 3px solid #654321;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .chairman-chair {
+            background: #5D4037;
+            border: 2px solid #3E2723;
+        }
+
+        .board-table {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 3px solid #654321;
+        }
+
+        .chair {
+            background: #5D4037;
+            border: 2px solid #3E2723;
+        }
+
+        .podium {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: 3px solid #0f2540;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .small-table {
+            background: linear-gradient(135deg, #D4A574 0%, #C19A6B 100%);
+            border: 2px solid #8B7355;
+        }
+
+        .wall {
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .acoustic-wall {
+            background: linear-gradient(90deg, #8e9eab 0%, #707b88 100%);
+            border: 2px solid #606060;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .wood-wall {
+            background: repeating-linear-gradient(0deg, #CD853F, #CD853F 20px, #D2691E 20px, #D2691E 40px);
+            border: 2px solid #8B4513;
+        }
+
+        /* 컨트롤 버튼 */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .control-btn.danger {
+            background: #e74c3c;
+        }
+
+        .control-btn.danger:hover {
+            background: #c0392b;
+        }
+
+        .control-btn.success {
+            background: #27ae60;
+        }
+
+        .control-btn.success:hover {
+            background: #229954;
+        }
+
+        .control-btn.purple {
+            background: #9b59b6;
+        }
+
+        .control-btn.purple:hover {
+            background: #8e44ad;
+        }
+
+        /* 도움말 */
+        .help-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            border: 2px solid #2196f3;
+        }
+
+        .help-box h4 {
+            color: #1565c0;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .help-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .help-box li {
+            padding: 3px 0;
+            color: #1976d2;
+            font-size: 12px;
+        }
+
+        .help-box li::before {
+            content: '• ';
+            color: #2196f3;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏢 정기이사회 중회의실 평면도 에디터 (고급)</h1>
+        <p class="subtitle">드래그, 크기조절, 회전, 복제 모두 가능합니다!</p>
+
+        <div class="editor-wrapper">
+            <!-- 툴바 -->
+            <div class="toolbar">
+                <h3>🛠️ 도구</h3>
+
+                <div class="tool-section">
+                    <div class="tool-section-title">모드 선택</div>
+                    <button class="tool-btn active" onclick="setMode('move')">↔️ 이동/편집</button>
+                    <button class="tool-btn" onclick="setMode('draw')">✏️ 선 그리기</button>
+                    <button class="tool-btn" onclick="setMode('text')">📝 텍스트 추가</button>
+                </div>
+
+                <div class="tool-section">
+                    <div class="tool-section-title">선 색상</div>
+                    <input type="color" class="color-picker" id="lineColor" value="#e74c3c">
+                </div>
+
+                <div class="tool-section">
+                    <div class="tool-section-title">선 두께</div>
+                    <input type="number" class="line-width-input" id="lineWidth" value="3" min="1" max="10">
+                </div>
+
+                <div class="tool-section">
+                    <div class="tool-section-title">편집 도구</div>
+                    <button class="tool-btn purple" onclick="cloneSelected()">📋 복제하기</button>
+                    <button class="tool-btn danger" onclick="deleteSelected()">🗑️ 삭제하기</button>
+                </div>
+            </div>
+
+            <!-- 캔버스 -->
+            <div class="canvas-container">
+                <div class="floor-plan" id="floorPlan">
+                    <svg class="drawing-svg" id="drawingSvg"></svg>
+
+                    <!-- 배경 벽면 -->
+                    <div class="wall acoustic-wall" style="top: 20px; left: 20px; right: 20px; height: 30px;"></div>
+                    <div class="wall wood-wall" style="top: 80px; left: 10px; width: 20px; bottom: 80px;"></div>
+                    <div class="wall wood-wall" style="top: 80px; right: 10px; width: 20px; bottom: 80px;"></div>
+
+                    <!-- 의장석 -->
+                    <div class="furniture chairman-desk" data-name="의장석"
+                        style="top: 80px; left: 400px; width: 180px; height: 60px;">의장석</div>
+                    <div class="furniture chairman-chair" data-name="의장석 의자"
+                        style="top: 150px; left: 465px; width: 45px; height: 45px;"></div>
+
+                    <!-- 좌측 이사 테이블 -->
+                    <div class="furniture board-table" data-name="좌측 이사석"
+                        style="top: 220px; left: 80px; width: 80px; height: 470px;"></div>
+
+                    <!-- 우측 이사 테이블 -->
+                    <div class="furniture board-table" data-name="우측 이사석"
+                        style="top: 220px; right: 80px; width: 80px; height: 470px;"></div>
+
+                    <!-- 좌측 의자 -->
+                    <div class="furniture chair" style="top: 230px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 280px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 330px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 380px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 430px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 480px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 530px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 580px; left: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 630px; left: 170px; width: 40px; height: 40px;"></div>
+
+                    <!-- 우측 의자 -->
+                    <div class="furniture chair" style="top: 230px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 280px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 330px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 380px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 430px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 480px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 530px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 580px; right: 170px; width: 40px; height: 40px;"></div>
+                    <div class="furniture chair" style="top: 630px; right: 170px; width: 40px; height: 40px;"></div>
+
+                    <!-- NH 연단 -->
+                    <div class="furniture podium" data-name="NH 연단"
+                        style="bottom: 200px; left: 50%; margin-left: -35px; width: 70px; height: 90px;">NH</div>
+
+                    <!-- 소회의 테이블 -->
+                    <div class="furniture small-table" style="bottom: 110px; left: 200px; width: 60px; height: 40px;">
+                    </div>
+                    <div class="furniture small-table" style="bottom: 110px; left: 270px; width: 60px; height: 40px;">
+                    </div>
+                    <div class="furniture small-table" style="bottom: 110px; left: 340px; width: 60px; height: 40px;">
+                    </div>
+
+                    <!-- 초기 라벨 -->
+                    <div class="text-label" style="top: 200px; left: 60px;">← 이사석</div>
+                    <div class="text-label" style="top: 200px; right: 60px;">이사석 →</div>
+                </div>
+
+                <!-- 컨트롤 버튼 -->
+                <div class="controls">
+                    <button class="control-btn success" onclick="saveLayout()">💾 저장</button>
+                    <button class="control-btn" onclick="loadLayout()">📂 불러오기</button>
+                    <button class="control-btn purple" onclick="cloneSelected()">📋 선택 항목 복제</button>
+                    <button class="control-btn danger" onclick="resetLayout()">🔄 초기화</button>
+                </div>
+
+                <!-- 도움말 -->
+                <div class="help-box">
+                    <h4>💡 사용 방법</h4>
+                    <ul>
+                        <li><strong>이동:</strong> 가구 드래그</li>
+                        <li><strong>크기 조절:</strong> 선택 후 모서리 파란 점 드래그</li>
+                        <li><strong>회전:</strong> 선택 후 위쪽 보라색 버튼 드래그</li>
+                        <li><strong>복제:</strong> 선택 후 '복제하기' 버튼 또는 Ctrl+D</li>
+                        <li><strong>삭제:</strong> 선택 후 Delete 키 또는 삭제 버튼</li>
+                        <li><strong>선 그리기:</strong> 시작점→끝점 클릭</li>
+                        <li><strong>텍스트:</strong> 위치 클릭 후 입력, 더블클릭으로 수정</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'move';
+        let selectedElement = null;
+        let isDragging = false;
+        let isResizing = false;
+        let isRotating = false;
+        let dragOffset = { x: 0, y: 0 };
+        let drawingStartPoint = null;
+        let lines = [];
+        let resizeHandle = null;
+        let rotationCenter = { x: 0, y: 0 };
+        let initialAngle = 0;
+
+        const floorPlan = document.getElementById('floorPlan');
+        const svg = document.getElementById('drawingSvg');
+
+        // 모드 설정
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            floorPlan.style.cursor = mode === 'draw' ? 'crosshair' : (mode === 'text' ? 'text' : 'default');
+            clearSelection();
+        }
+
+        // 선택 해제
+        function clearSelection() {
+            if (selectedElement) {
+                selectedElement.classList.remove('selected');
+                removeHandles();
+                selectedElement = null;
+            }
+        }
+
+        // 핸들 추가
+        function addHandles(element) {
+            if (element.classList.contains('wall')) return;
+
+            removeHandles();
+
+            // 크기 조절 핸들
+            const corners = ['nw', 'ne', 'sw', 'se'];
+            corners.forEach(corner => {
+                const handle = document.createElement('div');
+                handle.className = `resize-handle ${corner}`;
+                handle.dataset.corner = corner;
+                handle.addEventListener('mousedown', startResize);
+                element.appendChild(handle);
+            });
+
+            // 회전 핸들
+            const rotateHandle = document.createElement('div');
+            rotateHandle.className = 'rotate-handle';
+            rotateHandle.addEventListener('mousedown', startRotate);
+            element.appendChild(rotateHandle);
+        }
+
+        // 핸들 제거
+        function removeHandles() {
+            document.querySelectorAll('.resize-handle, .rotate-handle').forEach(h => h.remove());
+        }
+
+        // 가구 선택 및 드래그
+        document.querySelectorAll('.furniture, .text-label').forEach(element => {
+            element.addEventListener('mousedown', startDrag);
+        });
+
+        function startDrag(e) {
+            if (currentMode !== 'move') return;
+            if (e.target.classList.contains('resize-handle') || e.target.classList.contains('rotate-handle')) return;
+
+            e.stopPropagation();
+            isDragging = true;
+            selectedElement = e.currentTarget;
+
+            clearSelection();
+            selectedElement.classList.add('selected');
+            addHandles(selectedElement);
+
+            const rect = selectedElement.getBoundingClientRect();
+            const parentRect = floorPlan.getBoundingClientRect();
+
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging || !selectedElement) return;
+
+            const parentRect = floorPlan.getBoundingClientRect();
+            let newX = e.clientX - parentRect.left - dragOffset.x;
+            let newY = e.clientY - parentRect.top - dragOffset.y;
+
+            newX = Math.max(0, Math.min(newX, parentRect.width - selectedElement.offsetWidth));
+            newY = Math.max(0, Math.min(newY, parentRect.height - selectedElement.offsetHeight));
+
+            selectedElement.style.left = newX + 'px';
+            selectedElement.style.top = newY + 'px';
+            selectedElement.style.right = 'auto';
+            selectedElement.style.bottom = 'auto';
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        // 크기 조절
+        function startResize(e) {
+            e.stopPropagation();
+            isResizing = true;
+            resizeHandle = e.target.dataset.corner;
+
+            const rect = selectedElement.getBoundingClientRect();
+            const parentRect = floorPlan.getBoundingClientRect();
+
+            dragOffset = {
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: selectedElement.offsetWidth,
+                startHeight: selectedElement.offsetHeight,
+                startLeft: rect.left - parentRect.left,
+                startTop: rect.top - parentRect.top
+            };
+
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        }
+
+        function resize(e) {
+            if (!isResizing) return;
+
+            const deltaX = e.clientX - dragOffset.startX;
+            const deltaY = e.clientY - dragOffset.startY;
+
+            let newWidth = dragOffset.startWidth;
+            let newHeight = dragOffset.startHeight;
+            let newLeft = dragOffset.startLeft;
+            let newTop = dragOffset.startTop;
+
+            if (resizeHandle.includes('e')) {
+                newWidth = Math.max(20, dragOffset.startWidth + deltaX);
+            }
+            if (resizeHandle.includes('w')) {
+                newWidth = Math.max(20, dragOffset.startWidth - deltaX);
+                newLeft = dragOffset.startLeft + deltaX;
+            }
+            if (resizeHandle.includes('s')) {
+                newHeight = Math.max(20, dragOffset.startHeight + deltaY);
+            }
+            if (resizeHandle.includes('n')) {
+                newHeight = Math.max(20, dragOffset.startHeight - deltaY);
+                newTop = dragOffset.startTop + deltaY;
+            }
+
+            selectedElement.style.width = newWidth + 'px';
+            selectedElement.style.height = newHeight + 'px';
+            selectedElement.style.left = newLeft + 'px';
+            selectedElement.style.top = newTop + 'px';
+        }
+
+        function stopResize() {
+            isResizing = false;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+
+        // 회전
+        function startRotate(e) {
+            e.stopPropagation();
+            isRotating = true;
+
+            const rect = selectedElement.getBoundingClientRect();
+            rotationCenter = {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2
+            };
+
+            const currentTransform = window.getComputedStyle(selectedElement).transform;
+            if (currentTransform !== 'none') {
+                const values = currentTransform.split('(')[1].split(')')[0].split(',');
+                initialAngle = Math.atan2(parseFloat(values[1]), parseFloat(values[0])) * (180 / Math.PI);
+            } else {
+                initialAngle = 0;
+            }
+
+            dragOffset.startAngle = Math.atan2(e.clientY - rotationCenter.y, e.clientX - rotationCenter.x) * (180 / Math.PI);
+
+            document.addEventListener('mousemove', rotate);
+            document.addEventListener('mouseup', stopRotate);
+        }
+
+        function rotate(e) {
+            if (!isRotating) return;
+
+            const currentAngle = Math.atan2(e.clientY - rotationCenter.y, e.clientX - rotationCenter.x) * (180 / Math.PI);
+            const angleDiff = currentAngle - dragOffset.startAngle;
+            const newAngle = initialAngle + angleDiff;
+
+            selectedElement.style.transform = `rotate(${newAngle}deg)`;
+        }
+
+        function stopRotate() {
+            isRotating = false;
+            document.removeEventListener('mousemove', rotate);
+            document.removeEventListener('mouseup', stopRotate);
+        }
+
+        // 복제
+        function cloneSelected() {
+            if (!selectedElement || selectedElement.classList.contains('wall')) {
+                alert('복제할 항목을 먼저 선택하세요.');
+                return;
+            }
+
+            const clone = selectedElement.cloneNode(true);
+            clone.classList.remove('selected');
+
+            // 위치 약간 이동
+            const currentLeft = parseInt(selectedElement.style.left) || 0;
+            const currentTop = parseInt(selectedElement.style.top) || 0;
+            clone.style.left = (currentLeft + 20) + 'px';
+            clone.style.top = (currentTop + 20) + 'px';
+
+            // 이벤트 리스너 추가
+            clone.addEventListener('mousedown', startDrag);
+            if (clone.classList.contains('text-label')) {
+                clone.addEventListener('dblclick', editText);
+            }
+
+            floorPlan.appendChild(clone);
+
+            // 새로 복제된 항목 선택
+            clearSelection();
+            selectedElement = clone;
+            selectedElement.classList.add('selected');
+            addHandles(selectedElement);
+        }
+
+        // 선 그리기
+        floorPlan.addEventListener('click', function (e) {
+            if (currentMode === 'draw') {
+                const rect = floorPlan.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                if (!drawingStartPoint) {
+                    drawingStartPoint = { x, y };
+                } else {
+                    const color = document.getElementById('lineColor').value;
+                    const width = document.getElementById('lineWidth').value;
+
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', drawingStartPoint.x);
+                    line.setAttribute('y1', drawingStartPoint.y);
+                    line.setAttribute('x2', x);
+                    line.setAttribute('y2', y);
+                    line.setAttribute('stroke', color);
+                    line.setAttribute('stroke-width', width);
+                    line.setAttribute('class', 'drawn-line');
+                    line.style.pointerEvents = 'stroke';
+                    line.style.cursor = 'pointer';
+
+                    line.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        if (currentMode === 'move') {
+                            clearSelection();
+                            selectedElement = this;
+                            this.classList.add('selected');
+                        }
+                    });
+
+                    svg.appendChild(line);
+                    lines.push(line);
+                    drawingStartPoint = null;
+                }
+            } else if (currentMode === 'text') {
+                const rect = floorPlan.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const text = prompt('텍스트를 입력하세요:');
+                if (text) {
+                    const label = document.createElement('div');
+                    label.className = ' text-label';
+                    label.textContent = text;
+                    label.style.left = x + 'px';
+                    label.style.top = y + 'px';
+
+                    label.addEventListener('mousedown', startDrag);
+                    label.addEventListener('dblclick', editText);
+
+                    floorPlan.appendChild(label);
+                }
+            }
+        });
+
+        function editText(e) {
+            const newText = prompt('텍스트 수정:', this.textContent);
+            if (newText) this.textContent = newText;
+        }
+
+        // 텍스트 편집
+        document.querySelectorAll('.text-label').forEach(label => {
+            label.addEventListener('dblclick', editText);
+        });
+
+        // 삭제
+        function deleteSelected() {
+            if (selectedElement) {
+                if (selectedElement.tagName === 'line') {
+                    selectedElement.remove();
+                    lines = lines.filter(l => l !== selectedElement);
+                } else if (confirm('이 항목을 삭제하시겠습니까?')) {
+                    selectedElement.remove();
+                }
+                selectedElement = null;
+                removeHandles();
+            }
+        }
+
+        // 저장
+        function saveLayout() {
+            const furniture = [];
+            document.querySelectorAll('.furniture:not(.wall), .text-label').forEach(el => {
+                furniture.push({
+                    className: el.className,
+                    style: el.style.cssText,
+                    content: el.textContent,
+                    dataName: el.dataset.name
+                });
+            });
+
+            const savedLines = Array.from(svg.querySelectorAll('line')).map(line => ({
+                x1: line.getAttribute('x1'),
+                y1: line.getAttribute('y1'),
+                x2: line.getAttribute('x2'),
+                y2: line.getAttribute('y2'),
+                stroke: line.getAttribute('stroke'),
+                strokeWidth: line.getAttribute('stroke-width')
+            }));
+
+            localStorage.setItem('floorPlanLayout', JSON.stringify({ furniture, lines: savedLines }));
+            alert('✅ 레이아웃이 저장되었습니다!');
+        }
+
+        // 불러오기
+        function loadLayout() {
+            const saved = localStorage.getItem('floorPlanLayout');
+            if (!saved) {
+                alert('저장된 레이아웃이 없습니다.');
+                return;
+            }
+
+            if (!confirm('현재 레이아웃을 덮어쓰시겠습니까?')) return;
+
+            document.querySelectorAll('.furniture:not(.wall), .text-label').forEach(el => el.remove());
+            svg.innerHTML = '';
+
+            const layout = JSON.parse(saved);
+
+            layout.furniture.forEach(item => {
+                const el = document.createElement('div');
+                el.className = item.className;
+                el.style.cssText = item.style;
+                el.textContent = item.content;
+                if (item.dataName) el.dataset.name = item.dataName;
+
+                el.addEventListener('mousedown', startDrag);
+                if (el.classList.contains('text-label')) {
+                    el.addEventListener('dblclick', editText);
+                }
+
+                floorPlan.appendChild(el);
+            });
+
+            layout.lines.forEach(lineData => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                Object.entries(lineData).forEach(([key, value]) => {
+                    if (key === 'strokeWidth') {
+                        line.setAttribute('stroke-width', value);
+                    } else {
+                        line.setAttribute(key, value);
+                    }
+                });
+                line.setAttribute('class', 'drawn-line');
+                line.style.pointerEvents = 'stroke';
+
+                line.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (currentMode === 'move') {
+                        clearSelection();
+                        selectedElement = this;
+                        this.classList.add('selected');
+                    }
+                });
+
+                svg.appendChild(line);
+            });
+
+            alert('✅ 레이아웃이 불러와졌습니다!');
+        }
+
+        // 초기화
+        function resetLayout() {
+            if (confirm('레이아웃을 초기 상태로 되돌리시겠습니까?')) {
+                location.reload();
+            }
+        }
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Delete' && selectedElement) {
+                deleteSelected();
+            } else if (e.key === 'Escape') {
+                clearSelection();
+                drawingStartPoint = null;
+            } else if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                cloneSelected();
+            }
+        });
+
+        // 배경 클릭 시 선택 해제
+        floorPlan.addEventListener('mousedown', function (e) {
+            if (e.target === floorPlan && currentMode === 'move') {
+                clearSelection();
+            }
+        });
+    </script>
+</body>
+
+</html>
