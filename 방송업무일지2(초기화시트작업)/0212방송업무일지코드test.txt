@@ -262,7 +262,8 @@ function onOpen() {
     .addSeparator()
     .addItem('인쇄영역 외 청소', 'cleanOutsidePrintArea')
     .addSeparator()
-    .addItem('시트 초기화 (본관5/신관5)', 'resetWeekdaySheets')
+    .addItem('시트 초기화 (전체 월~금)', 'resetWeekdaySheets')
+    .addItem('시트 초기화 (개별 선택)', 'resetSelectedSheets')
     .addSeparator()
     .addItem('월~4p PDF 저장 (통합)', 'exportPdfWithPreprocessing')
     .addSeparator()
@@ -330,17 +331,19 @@ function showUtilityHelp() {
     '  (셀 전체 선택 후 폰트 변경 시 개별 크기 초기화)',
     '───────────────────────────────────────────',
     '',
-    '## 🔄 시트 초기화 기능',
-    '월~금 시트를 본관 5줄, 신관 5줄 기본 폼으로 초기화',
-    '• 일정 내용 전체 삭제 (날짜/서식/데이터규약 유지)',
-    '• 행 수 자동 조정 및 병합 셀 재설정',
-    '───────────────────────────────────────────',
-    '',
     '## 🛠️ PDF 저장 기능',
     'PDF 파일로 월~금 시트 및 사진 저장',
     '사전 작업과 PDF 저장 작업 통합형 원클릭 PDF 변환',
     '• 사전작업: IMAGE 함수 → 오버레이 이미지로 치환(현재 시트)',
-    '• 월 시트~4p 사이 PDF 저장(파일명: 방송업무일지(MM.DD~MM.DD).pdf)'
+    '• 월 시트~4p 사이 PDF 저장(파일명: 방송업무일지(MM.DD~MM.DD).pdf)',
+    '───────────────────────────────────────────',
+    '',
+    '## 🛠️ 시트 초기화 기능',
+    '서식시트를 이용하여 월~금 시트를 초기화',
+    '• 전체 초기화: 월~금 5개 시트를 한 번에 초기화',
+    '• 개별 선택: 원하는 시트만 골라서 개별 초기화 (예: 월,수,금)',
+    '날짜 변환 함수 및 데이터 규약 유지(기존 코드 영향 X)',
+    '월~금 시트를 같은 규격의 사이즈로 초기화 하여 항상 시트의 일관성 유지',
   ];
 
   const message = [...intro, '', ...utilityMenu, '', ...autoInsert, '', ...autoFormat].join('\n');
@@ -2066,7 +2069,7 @@ function AutoBorderRows_paintRange_strongEdges_(
 }
 
 /* =========================
- * 시트 초기화 (본관5/신관5)
+ * 시트 초기화 (서식 시트 기준 복사)
  * ========================= */
 
 const RESET_CFG = {
@@ -2076,19 +2079,29 @@ const RESET_CFG = {
   CONTENT_START_COL: 2,
   CONTENT_END_COL: 8,
   GUBUN_COL: 1,
-  NUMBER_COL: 2
+  NUMBER_COL: 2,
+  FORMAT_SHEET_NAME: '서식시트',
+  COPY_END_ROW: 25,
+  PROTECTED_END_ROW: 5
 };
 
 function resetWeekdaySheets() {
   const ui = SpreadsheetApp.getUi();
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
+  /* 서식 시트 존재 확인 */
+  const formatSheet = ss.getSheetByName(RESET_CFG.FORMAT_SHEET_NAME);
+  if (!formatSheet) {
+    ui.alert('오류', "'" + RESET_CFG.FORMAT_SHEET_NAME + "' 시트를 찾을 수 없습니다.", ui.ButtonSet.OK);
+    return;
+  }
+
   const confirm = ui.alert(
     '시트 초기화',
-    '월~금 시트를 초기화합니다.\n\n' +
+    '월~금 시트를 서식 시트 기준으로 초기화합니다.\n\n' +
+    '• 서식 시트(A7:H25)의 값과 서식을 복사\n' +
     '• 본관 5줄, 신관 5줄로 조정\n' +
-    '• 일정 내용 전체 삭제\n' +
-    '• 날짜, 서식, 데이터 규약은 유지\n\n' +
+    '• 날짜(A1:H5), 데이터 규약은 유지\n\n' +
     '계속하시겠습니까?',
     ui.ButtonSet.OK_CANCEL
   );
@@ -2104,11 +2117,95 @@ function resetWeekdaySheets() {
       return;
     }
     try {
-      resetSingleSheet_(sheet, ss);
+      resetSingleSheet_(sheet, ss, formatSheet);
       results.push(day + ': ✅ 완료');
     } catch (e) {
       results.push(day + ': ❌ ' + e.message);
       Logger.log('resetWeekdaySheets 오류 (' + day + '): ' + (e.stack || e));
+    }
+  });
+
+  ui.alert('초기화 결과', results.join('\n'), ui.ButtonSet.OK);
+}
+
+function resetSelectedSheets() {
+  const ui = SpreadsheetApp.getUi();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  /* 서식 시트 존재 확인 */
+  const formatSheet = ss.getSheetByName(RESET_CFG.FORMAT_SHEET_NAME);
+  if (!formatSheet) {
+    ui.alert('오류', "'" + RESET_CFG.FORMAT_SHEET_NAME + "' 시트를 찾을 수 없습니다.", ui.ButtonSet.OK);
+    return;
+  }
+
+  const weekdays = ['월', '화', '수', '목', '금'];
+  const resp = ui.prompt(
+    '시트 초기화 (개별 선택)',
+    '초기화할 시트를 입력하세요.\n' +
+    '(콤마 또는 공백으로 구분)\n\n' +
+    '  1: 월\n  2: 화\n  3: 수\n  4: 목\n  5: 금\n\n' +
+    '예시: 월,수,금  또는  1 3 5',
+    ui.ButtonSet.OK_CANCEL
+  );
+  if (resp.getSelectedButton() !== ui.Button.OK) return;
+
+  const input = String(resp.getResponseText() || '').trim();
+  if (!input) {
+    ui.alert('알림', '시트 이름 또는 번호를 입력하세요.', ui.ButtonSet.OK);
+    return;
+  }
+
+  /* 번호↔이름 매핑 */
+  const numMap = { '1': '월', '2': '화', '3': '수', '4': '목', '5': '금' };
+  const tokens = input.split(/[,\s;　]+/).map(function(t) { return t.trim(); }).filter(function(t) { return t !== ''; });
+
+  const selected = [];
+  const invalid = [];
+  tokens.forEach(function(t) {
+    var name = numMap[t] || t;
+    if (weekdays.indexOf(name) !== -1) {
+      if (selected.indexOf(name) === -1) selected.push(name);
+    } else {
+      invalid.push(t);
+    }
+  });
+
+  if (invalid.length > 0) {
+    ui.alert('알림', '유효하지 않은 입력: ' + invalid.join(', ') + '\n\n월, 화, 수, 목, 금 또는 1~5 번호만 사용 가능합니다.', ui.ButtonSet.OK);
+    return;
+  }
+
+  if (selected.length === 0) {
+    ui.alert('알림', '초기화할 시트가 선택되지 않았습니다.', ui.ButtonSet.OK);
+    return;
+  }
+
+  const confirm = ui.alert(
+    '시트 초기화 확인',
+    '다음 시트를 초기화합니다:\n\n' +
+    '  → ' + selected.join(', ') + '\n\n' +
+    '• 서식 시트(A7:H25)의 값과 서식을 복사\n' +
+    '• 본관 5줄, 신관 5줄로 조정\n' +
+    '• 날짜(A1:H5), 데이터 규약은 유지\n\n' +
+    '계속하시겠습니까?',
+    ui.ButtonSet.OK_CANCEL
+  );
+  if (confirm !== ui.Button.OK) return;
+
+  const results = [];
+  selected.forEach(function(day) {
+    const sheet = ss.getSheetByName(day);
+    if (!sheet) {
+      results.push(day + ': 시트를 찾을 수 없음');
+      return;
+    }
+    try {
+      resetSingleSheet_(sheet, ss, formatSheet);
+      results.push(day + ': ✅ 완료');
+    } catch (e) {
+      results.push(day + ': ❌ ' + e.message);
+      Logger.log('resetSelectedSheets 오류 (' + day + '): ' + (e.stack || e));
     }
   });
 
@@ -2175,186 +2272,99 @@ function adjustSectionRowCount_(sheet, sectionStart, sectionEnd, targetRows) {
   }
 }
 
-function resetSingleSheet_(sheet, ss) {
+function resetSingleSheet_(sheet, ss, formatSheet) {
   var sections = findScheduleSections_(sheet);
   if (!sections) throw new Error('본관/신관 구간을 찾지 못했습니다.');
 
-  /* ── 1. 데이터 영역 전체 병합 해제 ── */
-  var totalDataRows = sections.singwan.end - sections.bongwan.start + 1;
-  var maxCol = Math.max(RESET_CFG.CONTENT_END_COL, sheet.getMaxColumns());
-  sheet.getRange(
-    sections.bongwan.start, 1,
-    totalDataRows,
-    maxCol
-  ).breakApart();
+  var copyStartRow = RESET_CFG.DATA_START_ROW;   // 7
+  var copyEndRow   = RESET_CFG.COPY_END_ROW;     // 24
+  var copyTotalRows = copyEndRow - copyStartRow + 1;  // 18
+  var numCols = RESET_CFG.CONTENT_END_COL;        // 8
+
+  /* ── 1. 7행 이후 전체 병합 해제 ── */
+  var sheetMaxRows = sheet.getMaxRows();
+  var maxCol = Math.max(numCols, sheet.getMaxColumns());
+  if (sheetMaxRows >= copyStartRow) {
+    sheet.getRange(
+      copyStartRow, 1,
+      sheetMaxRows - copyStartRow + 1,
+      maxCol
+    ).breakApart();
+  }
 
   /* ── 2. 행 수 조정 (아래→위: 신관 먼저) ── */
   adjustSectionRowCount_(sheet, sections.singwan.start, sections.singwan.end, RESET_CFG.TARGET_SINGWAN_ROWS);
   adjustSectionRowCount_(sheet, sections.bongwan.start, sections.bongwan.end, RESET_CFG.TARGET_BONGWAN_ROWS);
 
-  /* ── 3. 조정 후 고정 위치 계산 ── */
-  var bStart = RESET_CFG.DATA_START_ROW;
-  var bEnd   = bStart + RESET_CFG.TARGET_BONGWAN_ROWS - 1;
-  var sStart = bEnd + 1;
-  var sEnd   = sStart + RESET_CFG.TARGET_SINGWAN_ROWS - 1;
-  var totalRows = RESET_CFG.TARGET_BONGWAN_ROWS + RESET_CFG.TARGET_SINGWAN_ROWS;
+  /* ── 3. 조정 후 위치 확인: 본관7~11, 신관12~16, 17행=중요보고사항 ── */
+  var sEnd = copyStartRow + RESET_CFG.TARGET_BONGWAN_ROWS + RESET_CFG.TARGET_SINGWAN_ROWS - 1;  // 16
+  var expectedAnchorRow = sEnd + 1;  // 17
 
-  /* ── 4. 일정 내용 클리어 (A~마지막열, 서식·데이터규약 유지) ── */
-  var clearLastCol = Math.max(RESET_CFG.CONTENT_END_COL, sheet.getLastColumn());
-  sheet.getRange(bStart, 1, totalRows, clearLastCol).clearContent();
-
-  /* ── 5. 중요보고사항 아래 데이터 클리어 ── */
+  /* ── 4. 본관/신관 사이 또는 신관 이후 갭 행 처리 ── */
   var anchorRow = _findAnchorRowByText_(sheet, '중요보고사항');
-  if (anchorRow) {
-    var sheetLastRow = sheet.getLastRow();
-    if (sheetLastRow > anchorRow) {
-      sheet.getRange(
-        anchorRow + 1, 1,
-        sheetLastRow - anchorRow,
-        clearLastCol
-      ).clearContent();
-    }
+  if (anchorRow && anchorRow > expectedAnchorRow) {
+    /* 갭 행이 있으면 제거 */
+    sheet.deleteRows(expectedAnchorRow, anchorRow - expectedAnchorRow);
+  } else if (anchorRow && anchorRow < expectedAnchorRow) {
+    /* 행이 부족하면 삽입 */
+    sheet.insertRowsBefore(anchorRow, expectedAnchorRow - anchorRow);
   }
 
-  /* ── 6. 기존 테두리 전부 제거 (잔여 라인 방지) ── */
-  clearAllBordersInRange_(sheet, ss, bStart, sEnd, RESET_CFG.CONTENT_END_COL);
-
-  /* ── 7. 기준서식 패턴 테두리 적용 (병합 전에 적용!) ── */
-  var pattern = MasterBorders_fetchPatternGrid_(ss);
-  if (pattern) {
-    reapplyBordersToDataArea_(sheet, ss, bStart, sEnd, pattern);
+  /* ── 5. 24행 이상 확보 ── */
+  sheetMaxRows = sheet.getMaxRows();
+  if (sheetMaxRows < copyEndRow) {
+    sheet.insertRowsAfter(sheetMaxRows, copyEndRow - sheetMaxRows);
   }
 
-  /* ── 8. 구간 접선 테두리 보강 (본관↔신관 경계 등) ── */
+  /* ── 6. 7행 이후 전체 병합 다시 해제 (행 삽입/삭제 후 안전) ── */
+  sheetMaxRows = sheet.getMaxRows();
+  if (sheetMaxRows >= copyStartRow) {
+    sheet.getRange(
+      copyStartRow, 1,
+      sheetMaxRows - copyStartRow + 1,
+      maxCol
+    ).breakApart();
+  }
+
+  /* ── 7. 데이터 규약(Data Validation) 저장 ── */
+  var destRange = sheet.getRange(copyStartRow, 1, copyTotalRows, numCols);
+  var savedValidations = destRange.getDataValidations();
+
+  /* ── 8. 서식 시트에서 값+서식 복사 (A7:H24) ── */
+  var sourceRange = formatSheet.getRange(copyStartRow, 1, copyTotalRows, numCols);
+  sourceRange.copyTo(destRange, SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+
+  /* ── 9. 데이터 규약 복원 ── */
+  destRange.setDataValidations(savedValidations);
+
+  /* ── 10. 행 높이도 서식 시트 기준으로 맞추기 ── */
+  for (var r = copyStartRow; r <= copyEndRow; r++) {
+    sheet.setRowHeight(r, formatSheet.getRowHeight(r));
+  }
+
+  /* ── 10-1. 구간 경계 실선 테두리 보강 (copyTo로 유실될 수 있는 인접 실선 복원) ── */
+  var bStart = copyStartRow;  // 7
+  var bEnd = bStart + RESET_CFG.TARGET_BONGWAN_ROWS - 1;  // 11
+  var sStart = bEnd + 1;  // 12
   applySectionBoundaryBorders_(sheet, ss, bStart, bEnd, sStart, sEnd);
 
-  /* ── 9. 번호 재설정 (B열) ── */
-  for (var i = 0; i < RESET_CFG.TARGET_BONGWAN_ROWS; i++) {
-    sheet.getRange(bStart + i, RESET_CFG.NUMBER_COL).setValue(i + 1);
-  }
-  for (var j = 0; j < RESET_CFG.TARGET_SINGWAN_ROWS; j++) {
-    sheet.getRange(sStart + j, RESET_CFG.NUMBER_COL)
-      .setValue(RESET_CFG.TARGET_BONGWAN_ROWS + j + 1);
-  }
+  /* ── 11. 24행 이후 데이터 + 서식 초기화 ── */
+  sheetMaxRows = sheet.getMaxRows();
+  if (sheetMaxRows > copyEndRow) {
+    var belowCols = Math.max(numCols, sheet.getMaxColumns());
+    sheet.getRange(copyEndRow + 1, 1, sheetMaxRows - copyEndRow, belowCols)
+      .clear({ contentsOnly: true, formatOnly: true, commentsOnly: true, validationsOnly: true });
 
-  /* ── 10. 구분 열(A) 병합 + 텍스트 설정 (테두리 적용 후 병합!) ── */
-  var bMerge = sheet.getRange(bStart, RESET_CFG.GUBUN_COL, RESET_CFG.TARGET_BONGWAN_ROWS, 1);
-  bMerge.merge();
-  bMerge.setValue('본\n\n관');
-  bMerge.setVerticalAlignment('middle');
-  bMerge.setHorizontalAlignment('center');
-
-  var sMerge = sheet.getRange(sStart, RESET_CFG.GUBUN_COL, RESET_CFG.TARGET_SINGWAN_ROWS, 1);
-  sMerge.merge();
-  sMerge.setValue('신\n\n관');
-  sMerge.setVerticalAlignment('middle');
-  sMerge.setHorizontalAlignment('center');
-  /* ── 11. 하단 고정 레이아웃 (17~23행) ── */
-  /* 17~20: A~H 병합, 21: 사진(216px, A~H 병합), 22~23: A~H 병합 */
-  var footerEnd = 23;
-  var sheetTotalRows = sheet.getMaxRows();
-  var defaultRowHeight = 21;
-
-  /* 행 수 확보: 23행보다 적으면 추가 */
-  if (sheetTotalRows < footerEnd) {
-    sheet.insertRowsAfter(sheetTotalRows, footerEnd - sheetTotalRows);
-  }
-
-  /* 17행 이후 기존 병합 해제 */
-  var footerMaxCol = Math.max(RESET_CFG.CONTENT_END_COL, sheet.getMaxColumns());
-  var footerRows = sheet.getMaxRows() - 17 + 1;
-  if (footerRows > 0) {
-    sheet.getRange(17, 1, footerRows, footerMaxCol).breakApart();
-  }
-
-  /* 18행 이후 내용 클리어 */
-  var clearCols = Math.max(RESET_CFG.CONTENT_END_COL, sheet.getLastColumn());
-  if (clearCols > 0) {
-    sheet.getRange(18, 1, footerEnd - 18 + 1, clearCols).clearContent();
-  }
-
-  /* 23행 이후 잔여 데이터 클리어 */
-  var lastDataRow = sheet.getLastRow();
-  if (lastDataRow > footerEnd) {
-    sheet.getRange(footerEnd + 1, 1, lastDataRow - footerEnd, clearCols).clearContent();
-  }
-
-  /* 행 높이 초기화: 18~20행, 22~23행 → 기본 높이 */
-  [18, 19, 20, 22, 23].forEach(function(r) {
-    sheet.setRowHeight(r, defaultRowHeight);
-  });
-
-  /* 17~20행: 각 행 A~H 병합 + 세로 가운데 맞춤 */
-  for (var fr = 17; fr <= 20; fr++) {
-    var mergedRow = sheet.getRange(fr, 1, 1, RESET_CFG.CONTENT_END_COL);
-    mergedRow.merge();
-    mergedRow.setVerticalAlignment('middle');
-  }
-
-  /* 21행: 사진 영역 — 높이 216px, A~H 병합 */
-  sheet.setRowHeight(21, 216);
-  sheet.getRange(21, 1, 1, RESET_CFG.CONTENT_END_COL).merge();
-
-  /* 22~23행: A~H 병합 + 텍스트 설정 */
-  var row22 = sheet.getRange(22, 1, 1, RESET_CFG.CONTENT_END_COL);
-  row22.merge();
-  row22.setValue('전일 주요행 사진참조');
-  row22.setHorizontalAlignment('center');
-  row22.setVerticalAlignment('middle');
-
-  var row23 = sheet.getRange(23, 1, 1, RESET_CFG.CONTENT_END_COL);
-  row23.merge();
-  row23.setValue('↓');
-  row23.setHorizontalAlignment('center');
-  row23.setVerticalAlignment('middle');
-
-  /* ── 11.5. 하단 영역 기존 테두리 초기화 (18행 상단 ~ 23행 상단, 테두리만) ── */
-  clearAllBordersInRange_(sheet, ss, 18, 22, RESET_CFG.CONTENT_END_COL);
-
-  /* ── 12. 하단 영역 테두리 적용 (17~23행) ── */
-  var dottedBorder = {
-    style: 'DOTTED',
-    color: { red: 0.7, green: 0.7, blue: 0.7, alpha: 1 }
-  };
-  var solidBorderLine = {
-    style: 'SOLID',
-    color: { red: 0, green: 0, blue: 0, alpha: 1 }
-  };
-  var footerBorderRequests = [{
-    updateBorders: {
-      range: {
-        sheetId: sheet.getSheetId(),
-        startRowIndex: 16,
-        endRowIndex: 23,
-        startColumnIndex: 0,
-        endColumnIndex: RESET_CFG.CONTENT_END_COL
-      },
-      top: solidBorderLine,
-      bottom: dottedBorder,
-      left: dottedBorder,
-      right: dottedBorder,
-      innerHorizontal: dottedBorder
-    }
-  }];
-  Sheets.Spreadsheets.batchUpdate({ requests: footerBorderRequests }, ss.getId());
-
-  /* ── 13. 24행 이후 서식 초기화 (23행 하단선 보존) ── */
-  var maxRows = sheet.getMaxRows();
-  if (maxRows >= 24) {
-    var belowFooterCols = Math.max(RESET_CFG.CONTENT_END_COL, sheet.getMaxColumns());
-    sheet.getRange(24, 1, maxRows - 24 + 1, belowFooterCols)
-      .clear({ formatOnly: true });
-
-    /* top 생략 → 23행 하단선(= 24행 상단선) 보존 */
+    /* 테두리도 제거 (24행 하단선 보존: top 생략) */
     var noBdr = { style: 'NONE' };
     Sheets.Spreadsheets.batchUpdate({ requests: [{
       updateBorders: {
         range: {
           sheetId: sheet.getSheetId(),
-          startRowIndex: 23,
-          endRowIndex: maxRows,
+          startRowIndex: copyEndRow,
+          endRowIndex: sheetMaxRows,
           startColumnIndex: 0,
-          endColumnIndex: belowFooterCols
+          endColumnIndex: belowCols
         },
         bottom: noBdr,
         left: noBdr,
@@ -2363,6 +2373,20 @@ function resetSingleSheet_(sheet, ss) {
         innerVertical: noBdr
       }
     }] }, ss.getId());
+  }
+
+  /* ── 12. I열 이후 서식/데이터 초기화 (6행 이후, A1:H5 보호) ── */
+  var totalCols = sheet.getMaxColumns();
+  if (totalCols > numCols) {
+    var colClearStartRow = RESET_CFG.PROTECTED_END_ROW + 1;  // 6행부터
+    var colClearRows = sheetMaxRows - colClearStartRow + 1;
+    if (colClearRows > 0) {
+      sheet.getRange(
+        colClearStartRow, numCols + 1,
+        colClearRows,
+        totalCols - numCols
+      ).clear({ contentsOnly: true, formatOnly: true, commentsOnly: true, validationsOnly: true });
+    }
   }
 }
 
