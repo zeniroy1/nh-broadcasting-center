@@ -1,0 +1,180 @@
+/* Font import moved to index.html */
+
+:root {
+  /* Brand Colors */
+  --color-primary: #003566;
+  /* NH Navy */
+  --color-primary-light: #00509d;
+  --color-primary-dark: #001d3d;
+  --color-accent: #00ff88;
+  /* Neon Green */
+  --color-accent-hover: #00cc6a;
+
+  /* RGB Values for opacity */
+  --color-primary-rgb: 0, 53, 102;
+  --color-accent-rgb: 0, 255, 136;
+
+  /* UI Colors */
+  --color-bg: #f8f9fa;
+  --color-bg-card: #ffffff;
+  --color-bg-overlay: rgba(255, 255, 255, 0.8);
+  --color-text: #1a1a1a;
+  --color-text-muted: #6c757d;
+  --color-border: #e9ecef;
+
+  /* Typography */
+  --font-main: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+
+  /* Spacing & Layout */
+  --header-height: 80px;
+  --container-width: 1200px;
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+
+  /* Effects */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.1);
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+.dark {
+  --color-primary: #3a86ff;
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #2563eb;
+  --color-bg: #0f172a;
+  --color-bg-card: #1e293b;
+  --color-bg-overlay: rgba(30, 41, 59, 0.8);
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+
+  /* RGB Values for dark mode */
+  --color-primary-rgb: 58, 134, 255;
+  --color-accent-rgb: 0, 255, 136;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.7;
+  /* Increased for better readability */
+  font-size: 17px;
+  /* Slightly increased base size */
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  /* Crisp text rendering */
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Utilities */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE STYLES
+   ========================================== */
+
+/* Tablet and smaller */
+@media (max-width: 1024px) {
+  :root {
+    --header-height: 70px;
+    --container-width: 100%;
+  }
+
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 60px;
+  }
+
+  body {
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+
+  .container {
+    padding: 0 1.25rem;
+  }
+
+  /* Improve touch targets */
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent horizontal scroll */
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Better text rendering on mobile */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}

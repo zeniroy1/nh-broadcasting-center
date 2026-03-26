@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AI Sub Manager Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Custom Tailwind Config from User Request -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#6366F1", "primary-hover": "#4F46E5",
+            "background-dark": "#111827", "card-dark": "#1f2937", "text-light": "#FFFFFF",
+            "text-muted-dark": "#D1D5DB", "border-dark": "#374151",
+            // Light mode colors
+            "background-light": "#F9FAFB", "card-light": "#FFFFFF", "text-dark": "#111827",
+            "text-muted-light": "#6B7280", "border-light": "#E5E7EB",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"],
+            "sans": ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Dark mode (default) */
+    .dark body {
+      background-color: #111827;
+      color: #D1D5DB;
+    }
+
+    /* Light mode */
+    body:not(.dark) {
+      background-color: #F9FAFB;
+      color: #374151;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+    }
+
+    /* Custom Scrollbar - Dark mode */
+    .dark ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .dark ::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    /* Custom Scrollbar - Light mode */
+    :not(.dark) ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    :not(.dark) ::-webkit-scrollbar-track {
+      background: #F9FAFB;
+    }
+
+    :not(.dark) ::-webkit-scrollbar-thumb {
+      background: #D1D5DB;
+      border-radius: 4px;
+    }
+
+    :not(.dark) ::-webkit-scrollbar-thumb:hover {
+      background: #9CA3AF;
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+  <script>
+    // Runtime Environment Variables
+    window.ENV = {
+      GEMINI_API_KEY: "__GEMINI_API_KEY__"
+    };
+  </script>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-text-muted-light dark:text-text-muted-dark font-display min-h-screen flex flex-col transition-colors duration-200">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>

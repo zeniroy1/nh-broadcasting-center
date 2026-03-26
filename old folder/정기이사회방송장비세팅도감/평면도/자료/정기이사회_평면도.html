@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026년 정기이사회 중회의실 평면도 (수정판)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .floor-plan {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #cbd5e0 0%, #b8c5d0 100%);
+            border: 4px solid #34495e;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 그리드 배경 */
+        .floor-plan::before {
+            content: '';
+            position: absolute;
+            width: 100%%;
+            height: 100%;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0, 0, 0, 0.05) 49px, rgba(0, 0, 0, 0.05) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0, 0, 0, 0.05) 49px, rgba(0, 0, 0, 0.05) 50px);
+            border-radius: 11px;
+        }
+
+        /* 음향 패널 벽 */
+        .acoustic-wall {
+            position: absolute;
+            top: 2%;
+            left: 2%;
+            right: 2%;
+            height: 3%;
+            background: linear-gradient(90deg, #8e9eab 0%, #707b88 100%);
+            border: 2px solid #606060;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        /* 목재 벽면 */
+        .wood-wall-left {
+            position: absolute;
+            top: 8%;
+            left: 1%;
+            width: 2%;
+            height: 85%;
+            background: repeating-linear-gradient(0deg,
+                    #CD853F,
+                    #CD853F 20px,
+                    #D2691E 20px,
+                    #D2691E 40px);
+            border: 2px solid #8B4513;
+            border-radius: 4px;
+        }
+
+        .wood-wall-right {
+            position: absolute;
+            top: 8%;
+            right: 1%;
+            width: 2%;
+            height: 85%;
+            background: repeating-linear-gradient(0deg,
+                    #CD853F,
+                    #CD853F 20px,
+                    #D2691E 20px,
+                    #D2691E 40px);
+            border: 2px solid #8B4513;
+            border-radius: 4px;
+        }
+
+        /* 의장석 - 상단 뒤쪽 중앙 */
+        .chairman-desk {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 60px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            z-index: 15;
+        }
+
+        .chairman-desk::after {
+            content: '의장석';
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .chairman-chair {
+            position: absolute;
+            top: 14%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 45px;
+            height: 45px;
+            background: #5D4037;
+            border: 2px solid #3E2723;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 14;
+        }
+
+        /* 좌측 이사 테이블 - 긴 세로 테이블 */
+        .left-table {
+            position: absolute;
+            top: 22%;
+            left: 8%;
+            width: 8%;
+            height: 52%;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        /* 우측 이사 테이블 - 긴 세로 테이블 */
+        .right-table {
+            position: absolute;
+            top: 22%;
+            right: 8%;
+            width: 8%;
+            height: 52%;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        /* 의자 공통 스타일 */
+        .chair {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #5D4037;
+            border: 2px solid #3E2723;
+            border-radius: 6px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            z-index: 12;
+        }
+
+        /* 좌측 의자들 - 세로로 배치 (테이블 오른쪽, 중앙 통로쪽) */
+        .left-chair-1 {
+            top: 24%;
+            left: 17%;
+        }
+
+        .left-chair-2 {
+            top: 29%;
+            left: 17%;
+        }
+
+        .left-chair-3 {
+            top: 34%;
+            left: 17%;
+        }
+
+        .left-chair-4 {
+            top: 39%;
+            left: 17%;
+        }
+
+        .left-chair-5 {
+            top: 44%;
+            left: 17%;
+        }
+
+        .left-chair-6 {
+            top: 49%;
+            left: 17%;
+        }
+
+        .left-chair-7 {
+            top: 54%;
+            left: 17%;
+        }
+
+        .left-chair-8 {
+            top: 59%;
+            left: 17%;
+        }
+
+        .left-chair-9 {
+            top: 64%;
+            left: 17%;
+        }
+
+        /* 우측 의자들 - 세로로 배치 (테이블 왼쪽, 중앙 통로쪽) */
+        .right-chair-1 {
+            top: 24%;
+            right: 17%;
+        }
+
+        .right-chair-2 {
+            top: 29%;
+            right: 17%;
+        }
+
+        .right-chair-3 {
+            top: 34%;
+            right: 17%;
+        }
+
+        .right-chair-4 {
+            top: 39%;
+            right: 17%;
+        }
+
+        .right-chair-5 {
+            top: 44%;
+            right: 17%;
+        }
+
+        .right-chair-6 {
+            top: 49%;
+            right: 17%;
+        }
+
+        .right-chair-7 {
+            top: 54%;
+            right: 17%;
+        }
+
+        .right-chair-8 {
+            top: 59%;
+            right: 17%;
+        }
+
+        .right-chair-9 {
+            top: 64%;
+            right: 17%;
+        }
+
+        /* NH 연단 */
+        .podium {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 90px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: 3px solid #0f2540;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        .podium::before {
+            content: 'NH';
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        /* 소회의 테이블 영역 */
+        .small-tables-area {
+            position: absolute;
+            bottom: 10%;
+            left: 20%;
+            width: 25%;
+            height: 12%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px dashed #95a5a6;
+            border-radius: 8px;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            align-items: center;
+            justify-content: center;
+            z-index: 11;
+        }
+
+        .small-table {
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(135deg, #D4A574 0%, #C19A6B 100%);
+            border: 2px solid #8B7355;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 출입구 */
+        .door {
+            position: absolute;
+            bottom: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 12px;
+            background: #34495e;
+            border: 2px solid #2c3e50;
+            border-radius: 4px;
+            z-index: 25;
+        }
+
+        .door::after {
+            content: '출입구';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #2c3e50;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* 라벨 */
+        .label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid #3498db;
+            z-index: 30;
+        }
+
+        .label-left {
+            top: 20%;
+            left: 5%;
+        }
+
+        .label-right {
+            top: 20%;
+            right: 5%;
+        }
+
+        .label-podium {
+            bottom: 32%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .label-small {
+            bottom: 23%;
+            left: 23%;
+        }
+
+        /* 범례 */
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+        }
+
+        .legend h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmin(180px, 1fr));
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .legend-color.brown {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        }
+
+        .legend-color.dark-brown {
+            background: #5D4037;
+        }
+
+        .legend-color.blue {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .legend-color.beige {
+            background: linear-gradient(135deg, #D4A574 0%, #C19A6B 100%);
+        }
+
+        .legend-color.gray {
+            background: linear-gradient(90deg, #8e9eab 0%, #707b88 100%);
+        }
+
+        .legend-color.wood {
+            background: repeating-linear-gradient(0deg, #CD853F, #CD853F 10px, #D2691E 10px, #D2691E 20px);
+        }
+
+        /* 호버 효과 */
+        .chair:hover {
+            transform: scale(1.1);
+            transition: transform 0.2s ease;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 10px;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏢 2026년 제1차 정기이사회</h1>
+        <p class="subtitle">중회의실 정확한 평면도 (도면 기준 수정판)</p>
+
+        <div class="floor-plan">
+            <!-- 음향 패널 벽 -->
+            <div class="acoustic-wall"></div>
+
+            <!-- 목재 벽면 -->
+            <div class="wood-wall-left"></div>
+            <div class="wood-wall-right"></div>
+
+            <!-- 의장석 -->
+            <div class="chairman-desk"></div>
+            <div class="chairman-chair"></div>
+
+            <!-- 좌측 이사 테이블 (긴 세로 테이블) -->
+            <div class="left-table"></div>
+            <div class="label label-left">← 이사석 (세로 배치)</div>
+
+            <!-- 우측 이사 테이블 (긴 세로 테이블) -->
+            <div class="right-table"></div>
+            <div class="label label-right">이사석 (세로 배치) →</div>
+
+            <!-- 좌측 의자들 (세로 배치) -->
+            <div class="chair left-chair-1"></div>
+            <div class="chair left-chair-2"></div>
+            <div class="chair left-chair-3"></div>
+            <div class="chair left-chair-4"></div>
+            <div class="chair left-chair-5"></div>
+            <div class="chair left-chair-6"></div>
+            <div class="chair left-chair-7"></div>
+            <div class="chair left-chair-8"></div>
+            <div class="chair left-chair-9"></div>
+
+            <!-- 우측 의자들 (세로 배치) -->
+            <div class="chair right-chair-1"></div>
+            <div class="chair right-chair-2"></div>
+            <div class="chair right-chair-3"></div>
+            <div class="chair right-chair-4"></div>
+            <div class="chair right-chair-5"></div>
+            <div class="chair right-chair-6"></div>
+            <div class="chair right-chair-7"></div>
+            <div class="chair right-chair-8"></div>
+            <div class="chair right-chair-9"></div>
+
+            <!-- NH 연단 -->
+            <div class="podium"></div>
+            <div class="label label-podium">NH 연단</div>
+
+            <!-- 소회의 테이블 -->
+            <div class="small-tables-area">
+                <div class="small-table"></div>
+                <div class="small-table"></div>
+                <div class="small-table"></div>
+            </div>
+            <div class="label label-small">소회의 테이블</div>
+
+            <!-- 출입구 -->
+            <div class="door"></div>
+        </div>
+
+        <!-- 범례 -->
+        <div class="legend">
+            <h3>📋 범례 (Legend)</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color brown"></div>
+                    <span>회의 테이블</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color dark-brown"></div>
+                    <span>의자</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color blue"></div>
+                    <span>NH 연단</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color beige"></div>
+                    <span>소회의 테이블</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color gray"></div>
+                    <span>음향 패널</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color wood"></div>
+                    <span>목재 벽면</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

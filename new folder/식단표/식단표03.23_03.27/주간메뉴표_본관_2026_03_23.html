@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주간메뉴표 (본관) 2026.03.23 ~ 2026.03.27</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .menu-container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #fff;
+            border: 2px solid #333;
+            padding: 25px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 3px;
+        }
+
+        .date-range {
+            text-align: right;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .notice {
+            text-align: center;
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 12px;
+            padding: 6px;
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 7px 5px;
+            text-align: center;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        th {
+            background: #e8e8e8;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        td.category {
+            background: #f5f5f5;
+            font-weight: 600;
+            vertical-align: middle;
+            width: 7%;
+            font-size: 13px;
+        }
+
+        td.menu-cell {
+            text-align: left;
+            padding: 6px 8px;
+            font-size: 12.5px;
+            width: 18.6%;
+        }
+
+        td.holiday-cell {
+            background: #fff0f0;
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-weight: 700;
+            color: #c00;
+            font-size: 15px;
+        }
+
+        .event-text {
+            text-align: center !important;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .section-title {
+            display: block;
+            text-align: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #555;
+            background: #f0f0f0;
+            padding: 3px 4px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .notice-box {
+            margin-top: 10px;
+            padding: 8px;
+            border: 1px solid #999;
+            text-align: center;
+            font-size: 12px;
+            background: #fafafa;
+        }
+
+        .b-corner-notice {
+            margin-top: 12px;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #c00;
+            border: 1px solid #c00;
+            background: #fff8f8;
+        }
+
+        .time-info {
+            margin-top: 12px;
+            padding: 10px;
+            font-size: 12px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .time-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .origin-info {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.6;
+            border-top: 1px solid #ccc;
+            padding-top: 8px;
+        }
+
+        .origin-note {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: #fff;
+            }
+
+            .menu-container {
+                border: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu-container">
+        <h1>주간메뉴표(본관)</h1>
+        <p class="subtitle">&lt; 농협중앙회 본관 &gt;</p>
+        <p class="date-range">2026.03.23 - 2026.03.27</p>
+        <p class="notice">천원으로 즐기는 구내식당 아침밥 먹기 운동에 동참해 주세요!!</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:7%;">구분</th>
+                    <th>03월 23일<br>월</th>
+                    <th>03월 24일<br>화</th>
+                    <th>03월 25일<br>수</th>
+                    <th>03월 26일<br>목</th>
+                    <th>03월 27일<br>금</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 아침 -->
+                <tr>
+                    <td class="category">아<br>침</td>
+                    <td class="menu-cell">
+                        매콤훈제오리볶음<br>
+                        쌀밥/숭늉<br>
+                        콩가루배춧국<br>
+                        치커리유자무침<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell">
+                        두부구이*양념장<br>
+                        쌀밥/숭늉<br>
+                        모듬햄고추장찌개<br>
+                        메추리알장조림<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell">
+                        등뼈감자탕<br>
+                        쌀밥/숭늉<br>
+                        토마토달걀볶음<br>
+                        꼬막야채무침<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell">
+                        임연수구이<br>
+                        쌀밥/숭늉<br>
+                        콩비지김치찌개<br>
+                        호박버섯볶음<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        닭살간장조림<br>
+                        쌀밥/숭늉<br>
+                        소고기미역국<br>
+                        부추오이무침<br>
+                        포기김치
+                    </td>
+                </tr>
+                <!-- 두레 A -->
+                <tr>
+                    <td class="category">두<br>레<br>A</td>
+                    <td class="menu-cell">
+                        <span class="section-title">A코너 자율배식</span>
+                        두부김치<br>
+                        잡곡밥<br>
+                        올갱이국<br>
+                        우엉채조림<br>
+                        들기름막국수<br>
+                        총각김치
+                    </td>
+                    <td class="menu-cell">
+                        코다리무조림<br>
+                        잡곡밥<br>
+                        달래된장찌개<br>
+                        떡갈비데리야끼조림<br>
+                        쑥갓두부범벅<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell">
+                        <span class="section-title">A코너 자율배식</span>
+                        참나물제육볶음<br>
+                        잡곡밥<br>
+                        짬뽕순두부찌개<br>
+                        감자채카레볶음<br>
+                        브로콜리땅콩무침<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell">
+                        <span class="section-title">&lt;특식먹는 날&gt;</span>
+                        전복삼계탕<br>
+                        녹두밥<br>
+                        메밀전병<br>
+                        마늘쫑무침<br>
+                        컵과일<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        <span class="section-title">A코너 자율배식</span>
+                        바베큐폭찹<br>
+                        잡곡밥<br>
+                        어묵쑥갓국<br>
+                        스크램블에그<br>
+                        세발나물무침<br>
+                        포기김치
+                    </td>
+                </tr>
+                <!-- 두레 B -->
+                <tr>
+                    <td class="category">두<br>레<br>B</td>
+                    <td class="menu-cell">
+                        새우계란볶음밥<br>
+                        꿔바로우<br>
+                        미니쌀국수*고수<br>
+                        마라상궈<br>
+                        요쿠르트<br>
+                        단무지/포기김치
+                    </td>
+                    <td class="menu-cell">
+                        봄나물비빔밥*초고추장<br>
+                        계란후라이<br>
+                        팽이장국<br>
+                        간장닭강정<br>
+                        삼색목무침<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell holiday-cell">
+                        &lt; 행 사 &gt;<br>
+                        농촌복지추진팀<br>
+                        농협 장례식장전국협의회<br>
+                        정기총회
+                    </td>
+                    <td class="menu-cell holiday-cell">
+                        감사기간 애써주신<br>
+                        직원분들을 위해<br>
+                        특식을 준비하였으니,<br>
+                        맛있게 드시고<br>
+                        기운내시기 바랍니다!
+                    </td>
+                    <td class="menu-cell holiday-cell">
+                        &lt; 행 사 &gt;<br>
+                        양곡부<br>
+                        농협RPC전국협의회<br>
+                        운영위원회
+                    </td>
+                </tr>
+                <!-- 신토불이 -->
+                <tr>
+                    <td class="category">신<br>토<br>불<br>이</td>
+                    <td class="menu-cell">
+                        두부김치<br>
+                        잡곡밥<br>
+                        올갱이국<br>
+                        우엉채조림<br>
+                        들기름막국수<br>
+                        총각김치
+                    </td>
+                    <td class="menu-cell">
+                        코다리무조림<br>
+                        잡곡밥<br>
+                        달래된장찌개<br>
+                        떡갈비데리야끼조림<br>
+                        쑥갓두부범벅<br>
+                        포기김치
+                    </td>
+                    <td class="menu-cell"></td>
+                    <td class="menu-cell"></td>
+                    <td class="menu-cell"></td>
+                </tr>
+                <!-- 샐러드바 -->
+                <tr>
+                    <td class="category">샐<br>러<br>드<br>바</td>
+                    <td class="menu-cell">
+                        그린샐러드<br>
+                        수정과
+                    </td>
+                    <td class="menu-cell">
+                        그린샐러드<br>
+                        망고에이드
+                    </td>
+                    <td class="menu-cell">
+                        상추쌈*쌈장<br>
+                        아이스크림
+                    </td>
+                    <td class="menu-cell">
+                        모듬야채스틱<br>
+                        쌈장
+                    </td>
+                    <td class="menu-cell">
+                        그린샐러드<br>
+                        나박김치
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="b-corner-notice">
+            * 중식 B코너는 12시부터 배식 가능하오니 이용에 참고 바랍니다.
+        </div>
+
+        <div class="time-info">
+            <h3>&lt; 식당 운영 시간 안내 &gt;</h3>
+            <p>* 조식 - 07:30 ~ 08:40</p>
+            <p>* 중식 A코너 - 11:30 ~ 01:00</p>
+            <p>* 중식 B코너 - 12:00 ~ 소진시까지</p>
+        </div>
+
+        <div class="origin-info">
+            <p>원산지 &nbsp; *쌀,찹쌀,흑미,현미 : 국내산 &nbsp;&nbsp; *소고기 : 국내산(육우) &nbsp;&nbsp; *돼지 : 국내산</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *김치(배추,고춧가루) : 국내산 &nbsp;&nbsp; *닭,오리 : 국내산 &nbsp;&nbsp;
+                *판두부 : 국내산</p>
+            <p class="origin-note">* 식자재 수급 현황에 따라 메뉴 및 원산지 정보는 변경 될 수 있습니다..*</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    background-color: #f0f0f0;
+    font-family: "Malgun Gothic", sans-serif;
+    margin: 50px;
+    display: flex;
+    justify-content: center;
+  }
+  .window {
+    width: 800px;
+    height: 520px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+    box-sizing: border-box;
+  }
+  .title-bar {
+    height: 30px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 13px;
+    color: #333;
+    font-weight: normal;
+  }
+  .content {
+    padding: 20px;
+    position: relative;
+  }
+  .bold { font-weight: bold; }
+  .label { font-size: 10pt; color: #000; position: absolute; }
+  .textbox { font-family: "Malgun Gothic"; font-size: 12pt; position: absolute; border: 1px solid #7a7a7a; padding: 2px 4px; }
+  .button { font-family: "Malgun Gothic"; font-size: 9pt; font-weight: bold; cursor: pointer; position: absolute; border: 1px solid #7a7a7a; background-color: #e1e1e1; border-radius: 2px; }
+  .button:hover { background-color: #e5f1fb; border-color: #0078d7; }
+  .listbox { font-family: "Malgun Gothic"; font-size: 11pt; position: absolute; border: 1px solid #7a7a7a; background-color: #fff; overflow-y: scroll; padding: 2px; }
+  .listbox-item { padding: 2px 5px; cursor: default; }
+  .listbox-item.selected { background-color: #0078d7; color: white; }
+  .combobox { font-family: "Malgun Gothic"; font-size: 10pt; position: absolute; border: 1px solid #7a7a7a; background-color: #fff; padding: 2px 4px; display: flex; align-items: center; justify-content: space-between; }
+  .combobox span.arrow { display: inline-block; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #000; margin-left: auto; }
+  .btn-export { font-family: "Malgun Gothic"; font-size: 12pt; font-weight: bold; position: absolute; background-color: DodgerBlue; color: white; border: none; cursor: pointer; border-radius: 2px; }
+  .btn-export:hover { background-color: #1a7fe0; }
+  .progress { position: absolute; border: 1px solid #bcbcbc; background-color: #e6e6e6; }
+  .progress-fill { width: 0%; height: 100%; background-color: #06b025; }
+  .status { position: absolute; font-size: 10.5pt; color: DimGray; }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="title-bar">농협 방송실 녹음녹화파일 반출 도구 v1.0 [UI 프로토타입]</div>
+  <div class="content">
+    
+    <!-- Row 1: Search -->
+    <div class="label bold" style="top: 20px; left: 20px;">🔍 실시간 검색어 입력 (이전/폐기 자료 자동 포함):</div>
+    <input type="text" class="textbox" style="top: 45px; left: 20px; width: 620px;" placeholder="2025.04.10 [본관] 조합장 이취임식">
+    <button class="button" style="top: 44px; left: 660px; width: 100px; height: 29px;">🔄 목록 갱신</button>
+    
+    <!-- Row 2: ListBoxes -->
+    <div class="label bold" style="top: 85px; left: 20px;">📂 검색 결과 선택 (폴더):</div>
+    <div class="listbox" style="top: 110px; left: 20px; width: 350px; height: 150px;">
+      <div class="listbox-item">2021.03.11 [NH타워] 정기 조회</div>
+      <div class="listbox-item">#지난자료\2022\2022.05.01 [본관] 행장 간담회</div>
+      <div class="listbox-item selected">2025.04.10 [본관] 조합장 이취임식</div>
+      <div class="listbox-item">2025.04.12 [본관] 이사회 설명회</div>
+    </div>
+
+    <!-- NEW UI ELEMENT -->
+    <div class="label bold" style="top: 85px; left: 390px; color: #d32f2f;">📄 폴더 내 파일 (더블클릭 시 재생/열기):</div>
+    <div class="listbox" style="top: 110px; left: 390px; width: 370px; height: 150px;">
+      <div class="listbox-item">조합장 이취임식_원본_카메라1.mp4</div>
+      <div class="listbox-item">조합장 이취임식_원본_카메라2.mp4</div>
+      <div class="listbox-item selected" style="background-color: #e5f1fb; color: #000;">🎤 식순 전체 고음질 녹음.wav</div>
+      <div class="listbox-item" style="color: #666; font-size: 9pt;">(이곳의 항목을 더블클릭하면 즉시 영상/음성을 확인합니다)</div>
+    </div>
+
+    <!-- Row 3: USB Selection -->
+    <div class="label bold" style="top: 280px; left: 20px;">💾 반출할 대상 USB:</div>
+    <div class="combobox" style="top: 277px; left: 200px; width: 550px; height: 22px;">
+      E:\ (SAMSUNG_USB) <span class="arrow"></span>
+    </div>
+    
+    <!-- Row 4: Action -->
+    <button class="btn-export" style="top: 320px; left: 20px; width: 740px; height: 50px;">USB로 내보내기 (복사 시작)</button>
+    
+    <!-- Status -->
+    <div class="progress" style="top: 385px; left: 20px; width: 740px; height: 25px;">
+        <div class="progress-fill"></div>
+    </div>
+    <div class="status" style="top: 420px; left: 20px; width: 740px;">대기 중... 검색어를 입력하고 폴더를 선택하세요.</div>
+
+  </div>
+</div>
+
+<script>
+  // Simple interactivity mock
+  document.querySelectorAll('.listbox-item').forEach(item => {
+    item.addEventListener('click', () => {
+      let siblings = item.parentElement.children;
+      for (let s of siblings) { s.classList.remove('selected'); s.style.backgroundColor = ''; s.style.color = ''; }
+      item.classList.add('selected');
+    });
+    item.addEventListener('dblclick', () => {
+      if(item.innerText.includes('wav') || item.innerText.includes('mp4')) {
+        alert("선택하신 파일 [" + item.innerText + "] 을 윈도우 기본 플레이어로 실행(재생)합니다!");
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

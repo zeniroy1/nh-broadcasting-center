@@ -1,0 +1,89 @@
+/* 기본 설정 (라이트 모드) */
+.wave-container {
+    /* NH 브랜드 블루 톤 - Softened (Toned Down) */
+    --wave-color: #60a5fa;
+    /* Was #3b82f6 - Lighter/Softer Blue */
+    --wave-bg: #f8f9fa;
+
+    position: relative;
+    width: 100%;
+    height: 150px;
+    background: transparent;
+    overflow: hidden;
+    margin-top: 50px;
+}
+
+/* 다크 모드 설정 */
+.dark .wave-container {
+    /* 다크모드 배경(#1a1f35)보다 살짝 밝거나 어두운 톤 */
+    --wave-color: #2a304a;
+    --wave-bg: #1a1f35;
+}
+
+/* SVG 기본 스타일 */
+.waves {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+    max-height: 150px;
+    color: var(--wave-color);
+}
+
+/* 애니메이션 동작 - Calmer (Slower) */
+.parallax>use {
+    animation: move-forever 60s cubic-bezier(.55, .5, .45, .5) infinite;
+    /* 25s -> 60s */
+}
+
+/* Toned down opacities for smoother blending */
+.parallax>use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 15s;
+    /* Slower individual duration */
+    opacity: 0.5;
+    /* 0.7 -> 0.5 */
+}
+
+.parallax>use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 25s;
+    /* Slower */
+    opacity: 0.3;
+    /* 0.5 -> 0.3 */
+}
+
+.parallax>use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 35s;
+    /* Slower */
+    opacity: 0.2;
+    /* 0.3 -> 0.2 */
+}
+
+.parallax>use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 60s;
+    /* Slower */
+    opacity: 0.8;
+    /* 1.0 -> 0.8 (Softer front wave) */
+}
+
+/* 파도 움직임 키프레임 */
+@keyframes move-forever {
+    0% {
+        transform: translate3d(-90px, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(85px, 0, 0);
+    }
+}
+
+@media (max-width: 768px) {
+    .waves {
+        height: 80px;
+        min-height: 80px;
+    }
+}

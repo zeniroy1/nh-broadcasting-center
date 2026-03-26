@@ -1,0 +1,624 @@
+11	提升
+34	본계(Main Elem)最小
+35	본계(Main Elem)最大
+36	외계(Other Elem)1最小
+37	외계(Other Elem)1最大
+38	외계(Other Elem)2最小
+39	외계(Other Elem)2最大
+40	외계(Other Elem)3最小
+41	외계(Other Elem)3最大
+82	枪Q
+88	천공(Heaven Work)火
+89	기본(Basic)和옵션(Affix)
+91	옵션(Affix)和기본(Basic)
+96	무명(Nameless)심법(Mind Method)2蓄
+98	무명(Nameless)3第1발(hit)
+100	무명검(Nameless Sword)低진기(Chi)期望
+104	剑气*5
+105	무명(Nameless)3吃满
+110	剑气*4
+117	剑气
+120	全武增
+123	本武增
+126	最高기술(Mystic)增
+128	수령(Boss)增
+130	剑气*2
+131	취소(Flute)吹满
+132	剑Q1
+134	吹满箫
+142	剑气정음(Attune)
+146	剑증상(DMG Boost)
+148	단석(Stone Break)比例
+150	기갈(Exhaustion)比例
+158	징인(Warrior)归
+166	힐산(Heal Umbrella)比例
+168	팔창(Eight Spear)~比例
+177	外小1
+180	武库
+186	기갈(Exhaustion)前윤회(Reincarnation)
+187	극락(Paradise)泣혈(HP)
+188	特殊백자(White Text)
+189	천공(Heaven Work)火dot
+193	쥐쥐(Rat)之독립(Independent)
+195	折算소공(Min ATK)
+196	折算대공(Max ATK)
+198	折算회심(Crit)
+199	折算회의(Affinity)
+210	伞Q*3
+211	花上1
+212	없음(None)人机
+214	一단(hit)火
+215	분화(Fire Breath)1下
+216	5拳
+217	前4拳
+218	扇特殊
+219	第5拳
+220	拳5
+221	酒气爆炸
+222	청선(Blue Fan)特殊技~
+223	伞Q*2
+225	없음(None)人机정음(Attune)
+228	伞증상(DMG Boost)
+229	청선(Blue Fan)浮空추격(Chase)
+230	浮空连회심피해(Crit DMG)
+238	次三纵
+240	剑Q
+243	枪蓄5下
+244	구창(Nine Spear)Q满
+246	二단(hit)火
+247	구창(Nine Spear)重1蓄快枪
+248	强效강류(River Flow)
+250	枪Q打满
+252	次三종횡(Cross)卸*4
+253	惊神
+255	구창(Nine Spear)천부(Talent)3持续伤害회의피해(Affinity DMG)
+257	~종횡(Cross)剑
+262	구검(Nine Sword)천부(Talent)3鸣金穿
+266	枪증상(DMG Boost)
+271	特殊必회의(Affinity)
+272	特殊必爆
+274	摇吹招摇
+277	鼠Q
+279	贴脸취소(Flute)
+280	白4白4
+281	白12
+284	白1迷踪开红
+285	红3전찬(Drill)
+286	백도(White Blade)轻1
+287	红3不打满전찬(Drill)
+292	红2闪迷踪
+293	红3解控
+294	红4
+298	绳标增
+299	白2闪迷踪
+300	쌍도(Twin Blade)增
+301	白4迷踪
+303	红4闪避
+305	红5전찬(Drill)
+309	白4
+312	老鼠정음(Attune)
+313	白1
+314	红5解控
+316	绳子증상(DMG Boost)
+318	红5
+320	红3
+321	解控
+323	미종보(Phantom Step)残影
+325	25초(sec)5刀1箫
+329	3蓄파생(Follow-up)
+330	2战意三蓄
+336	2战意파생(Follow-up)
+337	开盾
+344	易经
+346	VV不단석(Stone Break)
+350	2방반(Parry)3蓄3派
+351	3방반(Parry)5蓄3派
+352	1방반(Parry)3蓄2派
+353	0방반(Parry)2蓄2派1기룡(Ride Dragon)
+356	중격(Heavy ATK)奶
+358	중격(Heavy ATK)奶천부(Talent)
+359	시즌(Season)总기갈(Exhaustion)
+360	힐산(Heal Umbrella)后台奶
+361	吊瓶회심피해(Crit DMG)
+362	玩家增
+364	중격(Heavy ATK)奶정음(Attune)
+367	扇子增疗
+369	80레벨(Lv)常见유파(School)养成计算
+377	九九
+379	18초(sec)십자(Cross)连
+380	기룡(Ride Dragon)民工连
+381	极限로테(Rotation)
+382	竞速模拟
+383	后台奶量
+387	易水6、이어(Mudfish)6
+극락(Paradise)6、단석(Stone Break)6
+388	易水6、징인(Warrior)6
+무명(Nameless)6、단석(Stone Break)6
+389	易水6、징인(Warrior)6
+극락(Paradise)6、단석(Stone Break)6
+390	易水6、항조(Resilience)6
+산하(Mountain River)6、단석(Stone Break)6
+391	易水6、위맹(Might)6
+무명(Nameless)6、단석(Stone Break)6
+392	易水6、낭두(Wolf Head)6
+종횡(Cross)6、단석(Stone Break)6
+393	군신(Lord Minister)、행화(Apricot)
+견사(Silk Thread)、指玄/易水
+401	飞天차지(Charge)
+404	有啥用啥
+405	主武增
+413	剑增
+419	막도(Mo Blade)增
+446	소공(Min ATK)/绳镖增
+449	소공(Min ATK)/伞增
+451	민(Agility)/外小
+452	40外优先레벨(Lv)
+453	소공(Min ATK)>绳增>全增
+455	소공(Min ATK)>伞增>外小
+456	소공(Min ATK)>外小
+457	剑增>근(Power)
+458	剑增>外小>소공(Min ATK)
+459	大小견사(Silk Thread)≈扇疗>伞疗
+460	感谢群友Violetta帮忙测试，原贴
+462	적용피해(Final DMG) = 원시피해(Raw DMG) * 회심구(Crit Zone) * 회의구(Affinity Zone) * 증상(DMG Boost)(debuff区) * 독립구(Indep Zone) * 감상구(Reduce Zone) * 관통구(Pen Zone) * 정음구(Attune Zone) * 피해심화구(DMG Deepen Zone)
+463	一、원시피해(Raw DMG)
+464	원시피해(Raw DMG) = （ 외공(Phys ATK) - 외공방어(Phys DEF) ） * 외공배율(ATK Ratio) +固定伤害 + （ 본계(Main Elem)元素공격(ATK) + 숨겨진(Hidden)본계(Main Elem)元素공격(ATK) ） * 본계(Main Elem)元素배율(Multiplier) + 외계(Other Elem)元素공격(ATK) * 외계(Other Elem)元素배율(Multiplier)
+465	因为有最大最소공(Min ATK)击，所以伤害会有浮动。当最小大于最大时，所有伤害都用最小结算，包括회의(Affinity)，然后最终伤害数值会+1、+2
+466	음식(Food)不吃비준(Falcon)
+467	二、회심피해(Crit DMG)
+469	三、회의피해(Affinity DMG)
+470	회의피해(Affinity DMG) = 원시피해(Raw DMG)（ 取最대공(Max ATK)击 ） * （ 1 + 기본(Basic)회의피해(Affinity DMG)+회의피해(Affinity DMG)가성(Bonus) ）
+471	四、증상구(DMG Boost Zone)/Debuff区
+472	증상(DMG Boost)和debuff共用一个승구(Multi Zone)，全都加算，比如기갈(Exhaustion)증상(DMG Boost)、기교증상(Trick DMG Boost)、역수가(Yishui Song)증상(DMG Boost)、위맹가(Might Song)的차지증상(Charge DMG Boost)，구창(Nine Spear)的惊神，팔창(Eight Spear)的易伤，这些都예(Yes)一个승구(Multi Zone)，只예(Yes)발동(Trigger)条件不一样
+473	감상(DMG Reduce)예(Yes)乘算
+474	五、독립구(Indep Zone)
+475	쥐쥐(Rat)的이어(Mudfish)3
+476	六、감상(DMG Reduce)
+477	伤害예(Yes)减法公式，伤害=攻-방(DEF)
+479	七、관통(Penetration)/抗性
+480	관통구(Pen Zone) = （관통(Penetration)-抗性）/ 200      如果减完예(Yes)正数，那就예(Yes) / 100
+481	외공관통(Phys Penetration)也对고정피해(Fixed DMG)生效
+482	八、정확(Precision)/회심(Crit)/회의(Affinity)/찰상(Graze)（都예(Yes)黄字）
+483	默认先判定정확(Precision)，当정확(Precision)命中时，会出现회심(Crit)、백자(White Text)、회의(Affinity)；未정확(Precision)命中时，会出现회의(Affinity)、찰상(Graze)。
+484	当（회심(Crit)+회의(Affinity)）＜=100%时：
+485	实际회의률(Affinity Rate) = 정확률(Precision) * 회의률(Affinity Rate) + （ 1 - 정확률(Precision) ）* 회의률(Affinity Rate) =  회의률(Affinity Rate)
+486	实际회심률(Crit Rate) = 정확률(Precision) * 회심률(Crit Rate)
+487	찰상(Graze)率 = （ 1 - 정확률(Precision) ）* （ 1 - 회의률(Affinity Rate) ）
+488	当회심(Crit)+회의(Affinity)＞100%时，회의(Affinity)挤회심(Crit)：
+489	实际회심(Crit) = 정확(Precision) *（ 1 - 회의(Affinity) ）    （B站 小音痴）
+490	九、피해심화(DMG Deepen)
+491	무학(Martial Art)的천부(Talent)被动，외공(Phys ATK)/元素피해심화(DMG Deepen)XX%，可以看做针对某个속성(Attribute)的독립증상(Indep DMG Boost)
+492	十、治疗相关
+493	정확(Precision)、찰상(Graze)、회의(Affinity)없음(None)效，默认100%정확(Precision)，只有회심(Crit)和非회심(Crit)
+494	低레벨(Lv)던전(Dungeon)有100%奶增，범용증상구(General DMG Zone)
+495	외계(Other Elem)속공(Attri ATK)없음(None)效，0收益，只吃외공(Phys ATK)和견사(Silk Thread)
+496	有+-10%독립(Independent)治疗浮动
+497	十一、판정저항(Judgment Resist)
+498	정확(Precision) = 65% + 其他정확(Precision) / ( 1 + 판정저항(Judgment Resist) )
+499	패널(Panel)회심(Crit) = 普通회심(Crit) / 1.15
+500	회의(Affinity)同理
+501	（作废）只有패널(Panel)속성(Attribute)才吃抗性，천부(Talent)、스킬(Skill)给的속성(Attribute)大확률(Probability)不吃
+502	除了막도(Mo Blade)차지(Charge)천부(Talent)，估计其他都吃抗性
+503	十二、五维
+504	1体 = 60혈(HP)、1御 = 17혈(HP) + 0.5방(DEF)、1민(Agility) = 0.9最소공(Min ATK) + 0.076%회심(Crit)、1세(Momentum) = 0.9最대공(Max ATK) + 0.038%회의(Affinity)、1근(Power)=0.225最소공(Min ATK) + 1.36最대공(Max ATK)
+505	쥐쥐(Rat)（속자(Chestnut)游尘）
+506	1、Q的증상(DMG Boost)예(Yes)독립(Independent)
+507	2、이어(Mudfish)三重的30%伤害예(Yes)Q结束后结算
+508	3、自动鼠（공속(ATK Speed)1/s）和协同鼠可以同时存在
+510	2、单人boss기갈(Exhaustion)시간(Time)7초(sec)，던전(Dungeon)boss기갈(Exhaustion)10초(sec)
+511	1、자(Thrust)伤200%배율(Multiplier)，没고정피해(Fixed DMG)、没속성(Attribute)
+512	2、DOT不발동(Trigger)극락(Paradise)泣혈(HP)，천공(Heaven Work)毒、吐火不行。
+513	6重극락(Paradise)泣혈(HP)
+517	下面발동(Trigger)情况예(Yes)代码模拟的
+519	可以增加判断단(hit)数，叠飞套，dot不발동(Trigger)소한연년(Bitter Years)
+521	1、DOT없음(None)法발동(Trigger)응신장(Focus Seal)
+522	2、没가속(Speed Up)的时候，大概5、6次회의(Affinity)叠满
+523	3、6重不가성(Bonus)구검(Nine Sword)혈폭(Blood Burst)
+525	1、非战斗一초(sec)回15
+526	2、战斗一초(sec)回10，停止消耗내력(Stamina)0.7초(sec)后开始내력회복(Stamina Regen)
+527	3、내력(Stamina)上限：기본(Basic)100，무명창(Nameless Spear)20，虫子20，泡澡20，내력(Stamina)分界线固定예(Yes)60내력(Stamina)
+529	기술(Mystic)的속성배율(Attri Ratio)和무학(Martial Art)的속성배율(Attri Ratio)计算方式一样
+530	当前带的예(Yes)什么속성(Attribute)的무기(Weapon)，额외증(Phys Boost)加的50%속성(Attribute)就예(Yes)什么속성(Attribute)
+536	1、世界突破、人物레벨업(Upgrade)（攻방(DEF)혈(HP)，每레벨(Lv)2공격(ATK)）、장비(Equipment)、옵션(Affix)、중음(Overtone)、기교(Trick)、무학(Martial Art)천부(Talent)、武库、심법(Mind Method)被动、人物천부(Talent)
+537	2、人物레벨업(Upgrade)+2大소공(Min ATK)，若干혈(HP)；85레벨(Lv)之后，1레벨(Lv)4소공(Min ATK)，7대공(Max ATK)
+538	3、非百分比속성(Attribute)的小数位不예(Yes)四舍五入，向上进位
+539	4、1体 = 60혈(HP)、1御 = 17혈(HP) + 0.5방(DEF)、1민(Agility) = 0.9最소공(Min ATK) + 0.076%회심(Crit)、1세(Momentum) = 0.9最대공(Max ATK) + 0.038%회의(Affinity)、1근(Power)=0.225最소공(Min ATK) + 1.36最대공(Max ATK)
+540	차부(JieFu)刀法
+541	2、천부(Talent)的차지(Charge)必命中，不예(Yes)정확(Precision)100%的意思，只예(Yes)찰상(Graze)转化率100%，把찰상(Graze)转化成了백자(White Text)，但不会회심(Crit)회의(Affinity)
+542	3、최고(Drum)和파진(Formation Break)都能被항조(Resilience)大法加时，然后合并成一个42%차지증상(Charge DMG Boost)的Buff
+543	4、战意10초(sec)恢复1点，但예(Yes)방어(Defense)挨打也能回复。
+545	무학(Martial Art)스킬(Skill)在计算본계(Main Elem)속성(Attribute)伤害时，会白送数值等同于“大世界레벨(Level)+무학(Martial Art)레벨(Level)”的본계(Main Elem)속성(Attribute)공격(ATK)，70레벨(Lv)这个阶단(hit)送了80본계(Main Elem)大小속공(Attri ATK)
+546	所有정음(Attune)都예(Yes)독립증상(Indep DMG Boost)，比如무명(Nameless)的차지증상(Charge DMG Boost)
+548	DOT没有고정피해(Fixed DMG)、没有본계(Main Elem)속성(Attribute)50%的가성(Bonus)（吐火、천공(Heaven Work)毒火、酒气爆炸、구검(Nine Sword)유혈(Bleed)、혈폭(Blood Burst)）
+550	공격(ATK)回复정원(Essence)有内置2초(sec)CD
+552	1、第一个기술(Mystic)不回，所以要用个免费기술(Mystic)启动
+553	악산(Mountain Peak)套测算
+555	自带증상(DMG Boost)
+556	大致等效증상(DMG Boost)
+557	实际值
+558	计算值
+559	像素下
+560	像素上
+561	区间下
+562	区间上
+564	期望증상(DMG Boost)
+565	玉玉（现在有了）
+566	백자(White Text)黄字没고정피해(Fixed DMG)
+567	能가성(Bonus)천공(Heaven Work)和역수가(Yishui Song)
+569	吐火
+570	1、一단(hit)火、二단(hit)火、二단(hit)火附加、타권(Punch)，各会叠加1중(Stack)폭연(Combustion)状态
+571	2、每중(Stack)폭연(Combustion)1.5초(sec)，也就예(Yes)3跳
+572	3、将폭연(Combustion)叠到2중(Stack)的那个伤害，只会叠加2/3중(Stack)폭연(Combustion)，也就예(Yes)只会발동(Trigger)2跳火
+573	4、当目标没폭연(Combustion)时，添加폭연(Combustion)会额外添加6.5초(sec)폭연(Combustion)状态，也就예(Yes)13跳火
+574	5、一단(hit)火、二단(hit)火、타권(Punch)，有고정피해(Fixed DMG)、有突破독립(Independent)、有50%본속(Main Attri)가성(Bonus)，폭연(Combustion)、二단(hit)火附加、酒气爆炸，没有50%본속(Main Attri)가성(Bonus)，其他都有
+575	蛤蟆
+576	1、撞会添加初레벨(Lv)蟾毒，初레벨(Lv)蟾毒爆炸之后会添加次레벨(Lv)蟾毒
+577	2、已有蟾毒再继续添加蟾毒时，会立即발동(Trigger)次레벨(Lv)蟾毒
+578	3、地震，撞，有고정피해(Fixed DMG)有突破有본속(Main Attri)50%，初레벨(Lv)蟾毒和自动炸的次레벨(Lv)蟾毒有고정피해(Fixed DMG)有突破，没본속(Main Attri)50%，多次撞발동(Trigger)的次레벨(Lv)蟾毒没고정피해(Fixed DMG)没突破没본속(Main Attri)50%
+579	1、吹卸会卸掉第1个유성(Meteor)，开不开战都会
+580	2、贴脸2%증상(DMG Boost)，구검(Nine Sword)~7.5%，长的近战무기(Weapon)3%
+605	换무기(Weapon)
+606	叶龙
+607	예(Yes)自己低혈(HP)才증상(DMG Boost)
+611	狗嘴夺食
+612	自在없음(None)碍
+613	蛤蟆震撞2毒
+614	毒会被队友顶掉
+615	蛤蟆地震
+616	地震+撞+허세(Unload)，1.6초(sec)
+617	蛤蟆撞1毒
+618	蛤蟆初레벨(Lv)毒
+619	有고정피해(Fixed DMG)、有突破2025.10.24
+620	蛤蟆次레벨(Lv)毒
+621	没고정피해(Fixed DMG)没突破（2025.11.2有了）
+622	蛤蟆撞
+623	蛤蟆撞3毒
+624	二단(hit)扑间隔不到0.8초(sec)，二扑的毒没突破
+625	喝酒1초(sec)，过0.5초(sec)喷第1次火，再过1초(sec)第2次
+如果有火：喷1下加1중(Stack)，喷2下叠1+1+1=3중(Stack)，
+如果没火：新火会额外送6.5초(sec)灼烧，也就예(Yes)13烧
+626	분화(Fire Breath)1下2烧
+627	偷火
+628	분화(Fire Breath)2下4烧
+629	非직접피해(Direct DMG)，第2중(Stack)加시간(Time)，但会少一跳，没고정피해(Fixed DMG)（有突破有고정피해(Fixed DMG)2025.10.24）
+630	二단(hit)火额外那下，火，没고정피해(Fixed DMG)，没突破的독립(Independent)（现在两个都有了2025.10.24）
+631	분화(Fire Breath)1下16烧
+632	喝酒新火
+633	분화(Fire Breath)2단(hit)21烧
+634	新火
+635	喝酒火2.5초(sec)，免酒火2초(sec)，因为免酒不能马上取消
+636	5拳卸15烧
+637	1、第1拳打进기갈(Exhaustion)，后14拳能吃到기갈(Exhaustion)，前四拳平分70.6%，最后一拳29.4%
+2、要타권(Punch)的职业的타권(Punch)증상(DMG Boost)，一般都有56%
+638	5拳卸
+639	有突破，有고정피해(Fixed DMG)，2025.10.24
+640	药叉
+641	多2초(sec)
+642	吹满
+643	吹满要多2초(sec)
+645	第1下才有고정피해(Fixed DMG)，后面5下没有，也没突破（现在后面5个跟第1个一样2025.10.24）
+646	1초(sec)就可以허세(Unload)了，整套大概1.5초(sec)
+648	高空증상(DMG Boost)예(Yes)독립(Independent)
+651	可以叠飞
+652	10초(sec)1次，按12초(sec)1次算
+654	구창(Nine Spear)重2蓄
+655	1蓄8+1단(hit)，2蓄14+1단(hit)，723、1446，383.3%；628、2369，625%
+656	구창(Nine Spear)重1蓄
+657	없음(None)论几蓄，最后一枪都비율(Ratio)20%
+660	Q五下1.3초(sec)左右
+661	구창(Nine Spear)Q一下
+662	0.8초(sec)左右
+664	없음(None)고정피해(Fixed DMG)，10跳
+665	次三종횡(Cross)=2유혈(Bleed)1次
+667	次三차지(Charge)=2유혈(Bleed)1次+5유혈(Bleed)1次
+669	없음(None)고정피해(Fixed DMG)，외공(Phys ATK)속성(Attribute)同배율(Multiplier)，10跳
+670	없음(None)고정피해(Fixed DMG)，외공(Phys ATK)속성(Attribute)同배율(Multiplier)
+671	구검(Nine Sword)1蓄
+673	구검(Nine Sword)2蓄
+675	구검(Nine Sword)1蓄3단(hit)
+677	次三纵一共1.8
+678	Q종횡(Cross)剑
+680	차지(Charge)종횡(Cross)剑
+681	会吞掉最后一단(hit)
+682	쥐쥐(Rat)Q1卸
+683	차지(Charge)1.55초(sec)，10초(sec)buff，선딜(Pre-Cast)0.6초(sec)，以前1.2초(sec)
+685	第四단(hit)分两部分，第一下33%
+686	속자(Chestnut)轻1
+687	속자(Chestnut)轻2
+693	무명검(Nameless Sword)2蓄
+695	甩剑气1초(sec)
+698	空卸0.25초(sec)，打到怪卸0.3
+699	대풍차(Windmill)快
+700	대풍차(Windmill)慢
+701	대풍차(Windmill)收尾
+703	차부(JieFu)重三蓄
+704	차지(Charge)2초(sec)，차지(Charge)加허세(Unload)，3초(sec)20帧，实为重一蓄的1.7倍，有战意就예(Yes)2倍，这里예(Yes)1战意
+705	차부(JieFu)重二蓄
+706	차지(Charge)1.3초(sec)，实为重一蓄的1.4倍
+707	차부(JieFu)重파생(Follow-up)
+708	不허세(Unload)，5.47초(sec)，허세(Unload)5.03초(sec)
+711	차부(JieFu)感知Q
+720	伞R파생(Follow-up)
+721	要用기술(Mystic)打断取消후딜(After-Cast)，不取消就예(Yes)1.9
+722	구산(Nine Umbrella)轻蓄
+723	每초(sec)10耐、공속(ATK Speed)6，백자(White Text)회심(Crit)没元素的고정피해(Fixed DMG)
+726	重新拿回伞可以用허세(Unload)打断
+727	起飞시간(Time)
+728	下地시간(Time)
+729	업데이트(Update)前动作시간(Time)0.9
+730	구산(Nine Umbrella)역무(Weapon Swap)技
+733	공격(ATK)단(hit)数2
+735	구산(Nine Umbrella)경격(Light ATK)总
+742	구산(Nine Umbrella)중격(Heavy ATK)总
+747	15耐
+748	구산(Nine Umbrella)중격(Heavy ATK)차지(Charge)2满
+749	50耐
+751	청선(Blue Fan)역무(Weapon Swap)技
+756	청선(Blue Fan)경격(Light ATK)总
+757	单独打（후딜(After-Cast)长）차지(Charge)0.8초(sec) 释放0.9초(sec) 후딜(After-Cast)0.7초(sec)
+759	轻蓄连打（없음(None)후딜(After-Cast)） 차지(Charge)0.8초(sec) 释放0.9초(sec) 25내력(Stamina)
+
+760	청선(Blue Fan)4轻蓄
+761	청선(Blue Fan)Q（MISS）+4轻蓄
+764	공격(ATK)단(hit)数3
+766	청선(Blue Fan)중격(Heavy ATK)总
+769	청선(Blue Fan)4重蓄
+770	청선(Blue Fan)强化추격(Chase)
+771	청선(Blue Fan)轻蓄
+773	25能量
+774	백도(White Blade)轻2
+776	~십자(Cross)斩
+777	转刀6단(hit)伤害，십자(Cross)斩2단(hit)，25能量
+779	举手1초(sec)
+780	2下
+781	8下
+782	7下
+783	5下
+784	파생(Follow-up)要等0.5초(sec)，홍도(Red Blade)12345打一套接파생(Follow-up)345
+785	홍도(Red Blade)경격(Light ATK)丢刀
+786	홍도(Red Blade)1丢刀
+787	홍도(Red Blade)2丢刀
+788	丢1下
+789	홍도(Red Blade)3丢刀
+790	홍도(Red Blade)4丢刀
+791	丢2下
+792	홍도(Red Blade)5丢刀
+793	12345345丢刀
+794	345丢刀
+795	천공(Heaven Work)毒
+796	천공(Heaven Work)毒dot
+797	纯외공(Phys ATK)，能吃증상(DMG Boost)
+801	完美醉伞Q
+802	13伞大概13.3초(sec)
+803	完美丢伞
+804	完美=普通，游戏写的完美배율(Multiplier)예(Yes)假的
+805	完美回伞
+807	吃外伤천부(Talent)，吃당인(Tang People)，不吃정음(Attune)，吃双倍伞增
+808	속자(Chestnut)行云
+809	尘绳Q
+810	三단(hit)
+811	尘绳차지(Charge)2能量
+812	整套탄지(Snap)猴戏4초(sec)，不탄지(Snap)打满차지(Charge)+0.136초(sec)
+813	尘绳차지(Charge)0
+814	尘绳차지(Charge)1
+815	尘绳차지(Charge)2
+817	钧-막도(Mo Blade)
+818	JJ3蓄
+819	从비홍답설(Flying Snow)开始，到出伤结束要10.534초(sec)；
+从막도(Mo Blade)차지(Charge)开始，三刀出伤结束7.096초(sec)；
+차지(Charge)2초(sec)，动作1.3초(sec)，가속(Speed Up)1초(sec)。
+820	JJ2蓄
+821	막도(Mo Blade)特殊1.3초(sec)
+822	막도(Mo Blade)小人2
+823	막도(Mo Blade)小人1
+825	能出两个막도(Mo Blade)小人1
+826	막도(Mo Blade)慢Q
+827	钧-횡도(Cross Blade)
+828	횡도(Cross Blade)小人
+829	횡도(Cross Blade)轻蓄
+830	要차지(Charge)的话就예(Yes)1.97초(sec)
+831	횡도(Cross Blade)重파생(Follow-up)
+832	吃套装
+837	0开始，차지(Charge)0.866초(sec)，1.808초(sec)男娘，2.2초(sec)담한(Fear)
+839	횡도(Cross Blade)复读
+840	轻蓄+파생(Follow-up)，애니메이션(Animation)시간(Time)예(Yes)快慢的均值
+848	易水1
+855	年年1
+857	年年6
+866	最소공(Min ATK)击
+870	음식(Food)最소공(Min ATK)
+871	음식(Food)最대공(Max ATK)
+872	음식(Food)소공(Min ATK)-飞
+873	음식(Food)不知道什么时候开始不吃비준(Falcon)了
+874	음식(Food)대공(Max ATK)-飞
+875	易水2最소공(Min ATK)
+876	易水2最대공(Max ATK)
+877	蓝심법(Mind Method)2공격(ATK)
+879	紫심법(Mind Method)2공격(ATK)
+880	单一공격(ATK)
+881	紫심법(Mind Method)2攻1
+882	소공(Min ATK)那一半
+883	紫심법(Mind Method)2攻2
+884	대공(Max ATK)那一半
+885	紫심법(Mind Method)2회의(Affinity)
+886	紫심법(Mind Method)2회심(Crit)
+887	紫심법(Mind Method)2정확(Precision)
+888	紫심법(Mind Method)2속공(Attri ATK)
+890	单一속공(Attri ATK)
+891	紫심법(Mind Method)2본소(Main Min)
+892	본소(Main Min)那一半
+893	紫심법(Mind Method)2본대(Main Max)
+894	본대(Main Max)那一半
+895	紫심법(Mind Method)5속관통(Attri Pen)
+897	紫심법(Mind Method)5외관통(Phys Pen)
+898	紫심법(Mind Method)5외증(Phys Boost)
+900	金심법(Mind Method)2공격(ATK)
+901	金심법(Mind Method)2회의(Affinity)
+902	金심법(Mind Method)2회심(Crit)
+904	最大最小都有
+913	鸣金穿
+918	5次叠满，第6次발동(Trigger)，0회의(Affinity)옵션(Affix)。Q纵발동(Trigger)能留1중(Stack)
+922	吃满
+923	第1발(hit)
+925	증상(DMG Boost)，按6剑气折算的
+927	증상(DMG Boost)，按9剑气折算的
+938	保守一点
+943	鸣金관통(Penetration)
+944	吃满예(Yes)12%，기본(Basic)회의(Affinity)低，按9%算
+945	算50%吧，有기갈(Exhaustion)的시간(Time)
+955	挂在自己身上的buff，队友挂标记不影响，跟Q一个승구(Multi Zone)
+957	燕归증상(DMG Boost)
+958	燕归본속(Main Attri)增
+962	会带一部分최고(Drum)的가성(Bonus)
+963	易伤
+964	항조(Resilience)2小裂
+965	裂石공격(ATK)
+966	항조(Resilience)2大裂
+969	裂石관통(Penetration)
+970	시우(Timely Rain)4没盾
+971	没盾
+973	按吃满算
+976	차지(Charge)时，可以看做直接增加的最대공(Max ATK)击
+978	악산(Mountain Peak)倾
+979	期望（满혈(HP)只有10%）
+980	花上Q가속(Speed Up)
+988	弹道회심피해(Crit DMG)
+989	扇子神秘
+990	30黄字
+993	对单人镇守生效，对多人던전(Dungeon)不生效
+1000	회심(Crit)奶가성(Bonus)
+1001	通用奶增
+1003	던전(Dungeon)奶增
+1005	醉伞천부(Talent)2
+1006	醉伞천부(Talent)3
+1007	绳子회심피해(Crit DMG)
+1008	失魂落魄
+1018	5.5米，脑测17%，也可能18%，吃满20%
+1029	破竹穿
+1033	행주(Sailing)结算
+1036	0~20%随机
+1037	10米
+1038	贴脸
+1040	~的距离예(Yes)7.5%，但예(Yes)应该吃不满
+1041	后闪취소(Flute)
+1042	5.5米，绳子后闪，直接扔伞的情况
+1050	구인(Blade Fear)拟合
+1051	刀세(Momentum)회심피해(Crit DMG)
+1058	단악(Mountain Cut)通用
+1059	단악(Mountain Cut)特殊
+1060	시우(Timely Rain)比단악(Mountain Cut)好0.4%
+1062	천후(Throat Pierce)减抗
+1064	막도(Mo Blade)易经
+1065	10천후(Throat Pierce)减抗
+1067	神秘차지(Charge)增
+1068	8.8日公告加强了20%독립(Independent)，游戏里没写，
+实际没那么多，2.116/1.8-1=17.55555555%
+1071	神秘파생(Follow-up)增
+1073	8.8日公告里写的，游戏里没有
+1075	小人취소(Flute)
+1077	100下
+1078	100上
+1079	95下
+1080	95上
+1082	右边上边两件
+1084	右边下面两件
+1092	怪
+1105	佩중음(Overtone)대공(Max ATK)
+1114	1刀
+1116	3刀
+1117	特殊
+1118	2刀
+1120	3蓄
+1121	비홍(Flying Swan)蛤蟆자(Thrust)
+1122	4刀
+1125	蛤蟆毒
+1126	易水6、고충(Lone Loyalty)6、징인(Warrior)6、명회(Light Dark)6/易经
+1129	기술(Mystic)增
+1133	箫蛤2轮로테(Rotation)
+1137	막도(Mo Blade)特殊
+1138	易水、고충(Lone Loyalty)、징인(Warrior)、（ 명회(Light Dark) > 易经 > 위맹(Might) ）
+1141	0옵션 향상（십자(Cross)白412345345기룡(Ride Dragon)）
+1142	白8进红기룡(Ride Dragon)收尾（最简单、伤害也高）
+1144	加上옵션(Affix)
+1146	鸣金最小
+1147	鸣金最大
+1148	裂石最小
+1149	裂石最大
+1150	견사(Silk Thread)最小
+1151	견사(Silk Thread)最大
+1152	鸣金
+1153	裂石
+1157	易水5
+1163	외계(Other Elem)最小
+1164	외계(Other Elem)最大
+1165	십자(Cross)白4红12345345기룡(Ride Dragon)
+1169	配置：역수가(Yishui Song)5、이어(Mudfish)6、징인(Warrior)6、단석(Stone Break)5、비준(Falcon)套
+1170	如需对比哪个장비(Equipment)好，复制一页这个表，然后在D列填对比的속성(Attribute)
+1171	쥐쥐(Rat)M列函数做了特殊处理，乘了两个독립구(Indep Zone)
+1172	십자(Cross)白4红5전찬(Drill)红4기룡(Ride Dragon)
+1173	破竹人循고리(Ring)对比
+1174	注意：없음(None)buff기룡(Ride Dragon)对DPS几乎没提升，懒得算没기룡(Ride Dragon)的了
+1175	总伤
+1177	白8红123453기룡(Ride Dragon)
+1178	白4전찬(Drill)白3红12345전찬(Drill)12기룡(Ride Dragon)
+1179	십자(Cross)전찬(Drill)白3红12345345기룡(Ride Dragon)
+1180	십자(Cross)白5红12345전찬(Drill)1234기룡(Ride Dragon)
+1181	십자(Cross)斩*2홍도(Red Blade)허세(Unload)连（必丢大伤害）
+1182	십자(Cross)斩白4进红3전찬(Drill)连（丢伤害）
+1183	백도(White Blade)轻3
+1184	십자(Cross)*2홍도(Red Blade)허세(Unload)连（算的丢伤害，实际会丢很多）
+1185	십자(Cross)白4（红123전찬(Drill)）*3红1기룡(Ride Dragon)
+1190	백도(White Blade)（없음(None)缝기룡(Ride Dragon)）
+1192	백도(White Blade)（砍满기룡(Ride Dragon)）
+1193	홍도(Red Blade)（없음(None)缝기룡(Ride Dragon)）
+1194	홍도(Red Blade)（없음(None)기술(Mystic)砍满）
+1195	홍도(Red Blade)（红기룡(Ride Dragon)）
+1196	홍도(Red Blade)（砍满기룡(Ride Dragon)）
+1197	백도(White Blade)（없음(None)기술(Mystic)없음(None)缝自动鼠）
+1198	홍도(Red Blade)（없음(None)기술(Mystic)없음(None)缝自动鼠）
+1199	白7进红기룡(Ride Dragon)收尾
+1200	bug 白8进红기룡(Ride Dragon)收尾（最简单、伤害也高）
+1203	bug 홍도(Red Blade)（없음(None)기술(Mystic)砍满）
+1205	bug 白7进红기룡(Ride Dragon)收尾
+1210	bug홍도(Red Blade)（砍满기룡(Ride Dragon)）
+1221	体、세(Momentum)、민(Agility)、근(Power)、御
+1239	注：
+各个옵션(Affix)品阶속성(Attribute)值如下（以最大기혈(HP)值为例：满值1285）：
+1.该옵션(Affix)数值在满值的90%-100%的为金色옵션(Affix)（1157-1285）
+2.该옵션(Affix)数值在满值的75%-90%的为紫色옵션(Affix)（964-1156）
+3.该옵션(Affix)数值在满值的50%-75%的为蓝色옵션(Affix)（644-963）
+4.该옵션(Affix)的최소값(Min)不会小于满值的50%为绿色옵션(Affix)（643）
+上述品阶判断标准不包括외공저항(Phys Resist)及외공관통(Phys Penetration)
+1241	注：
+各个옵션(Affix)品阶속성(Attribute)值如下（以最大기혈(HP)值为例：满值1504）：
+1.该옵션(Affix)数值在满值的90%-100%的为金色옵션(Affix)（1354-1504）
+2.该옵션(Affix)数值在满值的75%-90%的为紫色옵션(Affix)（1128-1356）
+3.该옵션(Affix)数值在满值的50%-75%的为蓝色옵션(Affix)（753-1127）
+4.该옵션(Affix)的최소값(Min)不会小于满值的50%为绿色옵션(Affix)（752）
+5.前代장비(Equipment)和下代장비(Equipment)的数值关系为：下一阶为上一阶的N+1/N倍（61레벨(Lv)为6阶장비(Equipment)）
+上述品阶判断标准不包括외공저항(Phys Resist)和관통(Penetration)、속성(Attribute)공격(ATK)和관통(Penetration)
+1245	修了쥐쥐(Rat)、유혈(Bleed)计算bug、尝试开발(hit)막도(Mo Blade)당인(Tang People)新로테(Rotation)，有点意义但不多
+1246	*宣
+1248	업데이트(Update)100레벨(Lv)（下）레벨(Level)模板、DIY옵션(Affix)、历史레벨(Level)配置
+1251	쌍도(Twin Blade)로테(Rotation)加了个미종보(Phantom Step)，多了2%左右
+1254	把역수가(Yishui Song)2的속성(Attribute)改成最新的，之前的예(Yes)100-1的
+1255	*彻
+1258	*囟
+1259	*智
+1260	*霁
+1261	*亚斯
+1262	水鬼燕云版
+1263	消失在拂晓
+1265	*丞
+1267	*马
+1268	实际찰상(Graze)
+1269	实际회의(Affinity)
+1270	实际比例
+1273	고정피해(Fixed DMG)换算比例
+1274	속성(Attribute)\类目
+1275	小
+1276	大
+1279	计算찰상(Graze)
+1280	计算회의(Affinity)
+1281	计算比例
+1283	类

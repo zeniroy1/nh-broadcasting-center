@@ -1,0 +1,9 @@
+**/build/
+**/dist/
+*.pkg
+*.exe
+ffmpeg.exe
+ffprobe.exe
+node_modules/
+credentials.json
+token.json

@@ -1,0 +1,190 @@
+.facilities-page {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.header-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    background: var(--color-bg-card);
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Kinetic Typography Animation */
+.kinetic-title {
+    display: flex;
+    justify-content: center;
+    perspective: 500px;
+}
+
+.kinetic-title span {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-header p {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+}
+
+.facilities-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.building-tabs {
+    display: flex;
+    background: var(--color-bg-card);
+    padding: 0.5rem;
+    border-radius: 999px;
+    /* Clean 3D depth effect */
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.12),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.6);
+    position: relative;
+}
+
+/* Dark mode clean depth */
+.dark .building-tabs {
+    background: #1e293b;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.building-tab {
+    position: relative;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1;
+    border-radius: 999px;
+}
+
+.building-tab:hover:not(.active) {
+    color: var(--color-primary);
+    background: rgba(0, 53, 148, 0.05);
+}
+
+.dark .building-tab:hover:not(.active) {
+    color: var(--color-primary-light);
+    background: rgba(58, 134, 255, 0.1);
+}
+
+.building-tab.active {
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.active-tab-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    border-radius: 999px;
+    z-index: -1;
+    box-shadow:
+        0 4px 15px rgba(0, 53, 148, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark .active-tab-indicator {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    box-shadow:
+        0 4px 20px rgba(58, 134, 255, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(0, 53, 148, 0.1);
+}
+
+.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.no-results {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .building-tab {
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+    }
+}

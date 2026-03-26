@@ -1,0 +1,5 @@
+{
+  "name": "AI Subscription Manager",
+  "description": "A smart dashboard to track monthly subscriptions, calculate expenses, and receive AI-powered optimization advice.",
+  "requestFramePermissions": []
+}
