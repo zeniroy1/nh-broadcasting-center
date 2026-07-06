@@ -21,11 +21,17 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { createInterface } from 'readline';
 import { execSync } from 'child_process';
 
-const PROJECT_ROOT = 'c:\\Users\\hamcoding\\Desktop\\codding';
-const BASE_DIR = path.join(PROJECT_ROOT, 'new folder', '식단표');
+// ===== 포터블 경로 설정 (하드코딩 없음) =====
+// 스크립트 위치: [루트]/new folder/식단표/process-menu.mjs
+// 루트(PROJECT_ROOT) = 스크립트 기준 2단계 상위
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const BASE_DIR = __dirname;                          // new folder/식단표/
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');  // 루트 (credentials.json 위치)
 
 // ===== readline 유틸 =====
 function ask(question) {
@@ -152,6 +158,23 @@ function calendarDelete(folderName) {
     }
 }
 
+// ===== 최신 폴더 감지 유틸 =====
+function getLatestFolder() {
+    const dirs = fs.readdirSync(BASE_DIR)
+        .filter(f => {
+            try {
+                const full = path.join(BASE_DIR, f);
+                return fs.statSync(full).isDirectory() && /^식단표\d{2}\.\d{2}_\d{2}\.\d{2}$/.test(f);
+            } catch { return false; }
+        })
+        .sort((a, b) => {
+            const mA = fs.statSync(path.join(BASE_DIR, a)).mtimeMs;
+            const mB = fs.statSync(path.join(BASE_DIR, b)).mtimeMs;
+            return mB - mA; // 최신 순
+        });
+    return dirs.length > 0 ? dirs[0] : null;
+}
+
 // ===== 메인 =====
 async function main() {
     const args = process.argv.slice(2);
@@ -160,7 +183,9 @@ async function main() {
         console.log('사용법:');
         console.log('  node process-menu.mjs --setup                         (폴더 생성 + 이미지 이동)');
         console.log('  node process-menu.mjs --calendar "식단표03.02_03.06"   (캘린더 등록)');
+        console.log('  node process-menu.mjs --calendar-latest               (최신 폴더 자동 등록)');
         console.log('  node process-menu.mjs --delete "식단표03.02_03.06"     (캘린더 삭제)');
+        console.log('  node process-menu.mjs --delete-latest                 (최신 폴더 자동 삭제)');
         process.exit(0);
     }
 
@@ -175,6 +200,14 @@ async function main() {
             process.exit(1);
         }
         calendarRegister(folder);
+    } else if (mode === '--calendar-latest') {
+        const folder = getLatestFolder();
+        if (!folder) {
+            console.log('❌ 최신 식단표 폴더를 찾을 수 없습니다.');
+            process.exit(1);
+        }
+        console.log(`[감지] 최신 폴더: ${folder}`);
+        calendarRegister(folder);
     } else if (mode === '--delete') {
         const folder = args[1];
         if (!folder) {
@@ -182,9 +215,17 @@ async function main() {
             process.exit(1);
         }
         calendarDelete(folder);
+    } else if (mode === '--delete-latest') {
+        const folder = getLatestFolder();
+        if (!folder) {
+            console.log('❌ 최신 식단표 폴더를 찾을 수 없습니다.');
+            process.exit(1);
+        }
+        console.log(`[대상] 최신 폴더: ${folder}`);
+        calendarDelete(folder);
     } else {
         console.log(`❌ 알 수 없는 옵션: ${mode}`);
-        console.log('   --setup, --calendar, --delete 중 하나를 사용하세요.');
+        console.log('   --setup, --calendar, --calendar-latest, --delete, --delete-latest 중 하나를 사용하세요.');
         process.exit(1);
     }
 }

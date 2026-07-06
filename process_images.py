@@ -3,8 +3,9 @@ from PIL import Image
 import glob
 
 TARGET_SIZE = (1920, 1080)
-TARGET_DIR = r"c:\Users\hamcoding\Desktop\codding\public\assets"
-SOURCE_ROOT = r"c:\Users\hamcoding\Desktop\codding\전달사진"
+_BASE = os.path.dirname(os.path.abspath(__file__))
+TARGET_DIR = os.path.join(_BASE, "public", "assets")
+SOURCE_ROOT = os.path.join(_BASE, "전달사진")
 
 def resize_and_crop(img, target_size):
     target_ratio = target_size[0] / target_size[1]

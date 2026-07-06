@@ -1,0 +1,293 @@
+{
+  "version": 1,
+  "description": "LH/HUG/SH/GH 수집 데이터의 공통 지표 풀입니다. 새 사이트나 공고 유형은 aliases 또는 source_aliases에 원본 컬럼명을 추가해서 확장합니다.",
+  "required_sets": {
+    "competition_core": [
+      "supply_count",
+      "application_count"
+    ],
+    "competition_with_waitlist": [
+      "supply_count",
+      "waitlist_count",
+      "application_count"
+    ],
+    "rent_cost": [
+      "deposit"
+    ],
+    "location_access": [
+      "address"
+    ]
+  },
+  "metrics": {
+    "source": {
+      "label": "기관",
+      "type": "text",
+      "aliases": ["기관", "출처", "source"],
+      "source_aliases": {}
+    },
+    "notice_title": {
+      "label": "공고명",
+      "type": "text",
+      "aliases": ["공고명", "공고 제목", "모집공고명", "title"],
+      "source_aliases": {
+        "lh": ["공고명", "공고제목", "panNm"],
+        "hug": ["공고명"],
+        "sh": ["공고명", "제목"],
+        "gh": ["공고명", "경쟁률공고명"]
+      }
+    },
+    "notice_region": {
+      "label": "공고지역",
+      "type": "text",
+      "aliases": ["공고지역", "지역", "시도", "권역"],
+      "source_aliases": {
+        "lh": ["지역", "지역명", "시도"],
+        "hug": ["시도"],
+        "sh": ["공고지역", "요청지역", "지역"],
+        "gh": ["지역"]
+      }
+    },
+    "district": {
+      "label": "시군구",
+      "type": "text",
+      "aliases": ["시군구", "구군", "구/군", "상세지역"],
+      "source_aliases": {
+        "hug": ["시군구"],
+        "lh": ["상세지역"],
+        "sh": ["구", "자치구", "시군구"]
+      }
+    },
+    "notice_date": {
+      "label": "공고일자",
+      "type": "date",
+      "aliases": ["공고일자", "공고일", "등록일", "게시일"],
+      "source_aliases": {
+        "hug": ["공고일자"],
+        "lh": ["공고일"],
+        "sh": ["등록일", "게시일"],
+        "gh": ["게시일", "공고일"]
+      }
+    },
+    "apply_period": {
+      "label": "접수기간",
+      "type": "period",
+      "aliases": ["접수기간", "신청기간", "청약접수기간", "인터넷청약 접수기간"],
+      "source_aliases": {
+        "lh": ["접수기간"],
+        "hug": ["접수기간"],
+        "sh": ["접수기간", "신청기간", "청약접수"],
+        "gh": ["온라인접수기간", "현장접수기간", "접수기간"]
+      }
+    },
+    "apply_start_at": {
+      "label": "접수시작일시",
+      "type": "datetime",
+      "aliases": ["접수시작일시", "접수시작", "신청시작", "청약시작"],
+      "source_aliases": {
+        "lh": ["sbscAcpStDt", "sbscAcpStHm"],
+        "sh": ["접수시작", "신청시작"]
+      }
+    },
+    "apply_end_at": {
+      "label": "접수마감일시",
+      "type": "datetime",
+      "aliases": ["접수마감일시", "접수마감", "신청마감", "청약마감"],
+      "source_aliases": {
+        "lh": ["sbscAcpClsgDt", "sbscAcpClsgHm"],
+        "sh": ["접수마감", "신청마감"]
+      }
+    },
+    "apply_status": {
+      "label": "청약상태",
+      "type": "status",
+      "aliases": ["청약상태", "접수상태", "신청상태", "인터넷청약"],
+      "source_aliases": {
+        "lh": ["청약상태", "인터넷청약"],
+        "hug": [],
+        "sh": ["접수상태", "공고상태"],
+        "gh": ["상태", "공고상태", "시기구분"]
+      }
+    },
+    "housing_name": {
+      "label": "주택정보",
+      "type": "text",
+      "aliases": ["주택정보", "주택명", "단지명", "공급주택", "모집지역"],
+      "source_aliases": {
+        "lh": ["주택정보", "모집지역", "단지명"],
+        "hug": ["주소"],
+        "sh": ["주택명", "단지명", "공급주택"],
+        "gh": ["주택정보", "공고명"]
+      }
+    },
+    "housing_type": {
+      "label": "주택형",
+      "type": "text",
+      "aliases": ["주택형", "형", "타입", "평형"],
+      "source_aliases": {
+        "lh": ["주택형"],
+        "hug": ["주택유형"],
+        "sh": ["주택형", "공급형"],
+        "gh": ["주택유형"]
+      }
+    },
+    "rent_type": {
+      "label": "공급유형",
+      "type": "text",
+      "aliases": ["공급유형", "임대유형", "주택유형", "매입유형"],
+      "source_aliases": {
+        "hug": ["주택유형", "매입유형"],
+        "lh": ["주택유형"],
+        "sh": ["공급유형", "임대유형", "주택유형"],
+        "gh": ["공급유형", "유형"]
+      }
+    },
+    "household_type": {
+      "label": "가구원수",
+      "type": "text",
+      "aliases": ["가구원수", "가구원 수", "가구유형", "세대구성"],
+      "source_aliases": {
+        "lh": ["가구원 수", "가구원수"]
+      }
+    },
+    "priority_type": {
+      "label": "모집순위",
+      "type": "text",
+      "aliases": ["모집순위", "순위", "우선/일반", "공급구분", "우선공급", "일반공급"],
+      "source_aliases": {
+        "lh": ["순위", "공급구분"],
+        "sh": ["순위", "공급구분", "우선공급", "일반공급"],
+        "gh": ["공급유형", "공급대상"]
+      }
+    },
+    "exclusive_area": {
+      "label": "전용면적",
+      "type": "area",
+      "aliases": ["전용면적", "전용면적(㎡)", "전용면적(m2)", "면적"],
+      "source_aliases": {
+        "lh": ["전용면적", "전용면적(㎡)"],
+        "hug": ["전용면적"],
+        "sh": ["전용면적", "전용면적(㎡)"]
+      }
+    },
+    "address": {
+      "label": "주소",
+      "type": "text",
+      "aliases": ["주소", "소재지", "위치", "상세주소"],
+      "source_aliases": {
+        "lh": ["주소", "소재지"],
+        "hug": ["주소"],
+        "sh": ["주소", "소재지", "위치"]
+      }
+    },
+    "latitude": {
+      "label": "위도",
+      "type": "number",
+      "aliases": ["위도", "lat", "latitude"],
+      "source_aliases": {}
+    },
+    "longitude": {
+      "label": "경도",
+      "type": "number",
+      "aliases": ["경도", "lon", "lng", "longitude"],
+      "source_aliases": {}
+    },
+    "supply_count": {
+      "label": "공급호수",
+      "type": "number",
+      "aliases": ["공급호수", "공급세대수", "모집호수", "금회공급 세대수", "금회공급 세대수 (예비자 포함)", "당첨자수", "공급수"],
+      "required_for": ["competition"],
+      "source_aliases": {
+        "lh": ["공급호수", "공급호수(당첨자)", "금회공급 세대수", "금회공급 세대수 (예비자 포함)", "당첨자수"],
+        "hug": [],
+        "sh": ["공급호수", "공급세대수", "모집세대", "모집호수"],
+        "gh": ["모집호수", "공급호수"]
+      }
+    },
+    "waitlist_count": {
+      "label": "예비자 모집인원",
+      "type": "number",
+      "aliases": ["예비자 모집인원", "모집인원", "예비자", "예비자수", "대기자수"],
+      "source_aliases": {
+        "lh": ["모집인원", "모집인원(예비자)", "예비자 모집인원"],
+        "sh": ["예비자", "예비자 모집인원", "모집인원"]
+      }
+    },
+    "application_count": {
+      "label": "신청건수",
+      "type": "number",
+      "aliases": ["신청건수", "신청자수", "접수건수", "청약자수", "인터넷청약 신청건수", "신청수"],
+      "required_for": ["competition"],
+      "source_aliases": {
+        "lh": ["신청건수", "인터넷청약 신청건수"],
+        "hug": ["신청자수"],
+        "sh": ["신청건수", "신청자수", "접수건수", "청약자수"],
+        "gh": ["청약접수", "신청건수", "접수건수"]
+      }
+    },
+    "competition_rate": {
+      "label": "경쟁률",
+      "type": "ratio",
+      "aliases": ["경쟁률", "당첨 경쟁률", "청약경쟁률", "예비 포함 경쟁률"],
+      "source_aliases": {
+        "lh": ["당첨 경쟁률", "예비 포함 경쟁률"],
+        "sh": ["경쟁률", "청약경쟁률"],
+        "gh": ["경쟁률"]
+      }
+    },
+    "deposit": {
+      "label": "임대보증금",
+      "type": "money",
+      "aliases": ["임대보증금", "보증금", "임대보증금(원)"],
+      "source_aliases": {
+        "lh": ["임대보증금", "임대보증금(원)"],
+        "hug": ["임대보증금"],
+        "sh": ["임대보증금", "보증금"]
+      }
+    },
+    "monthly_rent": {
+      "label": "월임대료",
+      "type": "money",
+      "aliases": ["월임대료", "월 임대료", "임대료", "월임대료(원)"],
+      "source_aliases": {
+        "lh": ["월임대료", "월임대료(원)"],
+        "sh": ["월임대료", "월 임대료", "임대료"]
+      }
+    },
+    "distance_to_target": {
+      "label": "기준지점거리",
+      "type": "number",
+      "aliases": ["기준지점거리", "서대문역 5번출구 직선거리(km)", "서대문역5번출구_추정거리_km", "거리"],
+      "source_aliases": {
+        "lh": ["서대문역 5번출구 직선거리(km)"],
+        "hug": ["서대문역5번출구_추정거리_km"]
+      }
+    },
+    "transit_time": {
+      "label": "예상소요시간",
+      "type": "duration",
+      "aliases": ["예상소요시간", "최단 지하철 예상시간", "서대문역_최단지하철예상시간", "출구까지 총 예상"],
+      "source_aliases": {
+        "lh": ["출구까지 총 예상", "지하철 구간 예상"],
+        "hug": ["서대문역_최단지하철예상시간"]
+      }
+    },
+    "score": {
+      "label": "종합점수",
+      "type": "number",
+      "aliases": ["종합점수", "점수", "score"],
+      "source_aliases": {
+        "hug": ["종합점수"]
+      }
+    }
+  },
+  "future_sources": {
+    "sh": {
+      "enabled": true,
+      "description": "SH 공고 목록/상세/첨부 메타 수집기에서 사용하는 원본 컬럼명을 source_aliases.sh에 연결합니다."
+    },
+    "gh": {
+      "enabled": true,
+      "description": "GH 상태별 공고/일정/경쟁률 수집기에서 사용하는 원본 컬럼명을 source_aliases.gh에 연결합니다."
+    }
+  }
+}

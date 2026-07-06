@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Step 02 Public Signal Catalog Status</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --ink: #15171a;
+        --muted: #626976;
+        --line: #d8dee8;
+        --direct: #0f766e;
+        --direct-soft: #d9f3ee;
+        --refined: #4338ca;
+        --refined-soft: #e0e7ff;
+        --inferred: #a16207;
+        --inferred-soft: #fef3c7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Arial, "Malgun Gothic", sans-serif;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      header,
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      header {
+        display: grid;
+        gap: 10px;
+        padding: 22px;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        font-size: 28px;
+        line-height: 1.25;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 6px;
+      }
+
+      .metric strong {
+        font-size: 32px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        min-height: 28px;
+        padding: 0 10px;
+        border-radius: 999px;
+        color: var(--direct);
+        background: var(--direct-soft);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+        font-size: 14px;
+      }
+
+      th {
+        background: #eef2f7;
+      }
+
+      .section {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .direct {
+        color: var(--direct);
+        background: var(--direct-soft);
+      }
+
+      .refined {
+        color: var(--refined);
+        background: var(--refined-soft);
+      }
+
+      .inferred {
+        color: var(--inferred);
+        background: var(--inferred-soft);
+      }
+
+      code,
+      pre {
+        font-family: Consolas, monospace;
+      }
+
+      pre {
+        overflow: auto;
+        margin: 0;
+        padding: 14px;
+        border-radius: 8px;
+        background: #202124;
+        color: #f5f5f5;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 820px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="badge">Step 02 완료</span>
+        <h1>무신사 공개 데이터 구조와 지표 카탈로그</h1>
+        <p>
+          무신사에서 추출 가능한 공개 자료를 직접 지표, 정제 지표, 추정 지표로 나누고
+          추정 지표에는 신뢰도 퍼센트 정책을 필수로 적용했습니다.
+        </p>
+      </header>
+
+      <section class="grid" aria-label="구현 요약">
+        <div class="panel metric">
+          <span>구현 정도</span>
+          <strong>100%</strong>
+          <p>2단계 정의 범위 기준 완료</p>
+        </div>
+        <div class="panel metric">
+          <span>데이터 소스</span>
+          <strong>6</strong>
+          <p>랭킹, 검색, 카테고리, 상세, 리뷰, 브랜드</p>
+        </div>
+        <div class="panel metric">
+          <span>지표 수</span>
+          <strong>23</strong>
+          <p>직접 12 / 정제 6 / 추정 5</p>
+        </div>
+        <div class="panel metric">
+          <span>추정 신뢰도</span>
+          <strong>100%</strong>
+          <p>모든 추정 지표에 confidence 정책 적용</p>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>지표 분류</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>분류</th>
+              <th>개수</th>
+              <th>예시</th>
+              <th>신뢰도 처리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge direct">직접 지표</span></td>
+              <td>12</td>
+              <td>가격, 리뷰 수, 평점, 랭킹 순위, 배송 정보</td>
+              <td>공개 값 자체는 100%에 가깝게 취급</td>
+            </tr>
+            <tr>
+              <td><span class="badge refined">정제 지표</span></td>
+              <td>6</td>
+              <td>색상, 스타일, 핏, 소재/착용감, 재구매 언급</td>
+              <td>키워드와 텍스트 근거 강도에 따라 산정</td>
+            </tr>
+            <tr>
+              <td><span class="badge inferred">추정 지표</span></td>
+              <td>5</td>
+              <td>목적 적합도, 40대 남성 적합도, 구매 신뢰도, 반품 리스크</td>
+              <td>score와 confidence_percent를 함께 출력</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section panel">
+        <h2>수집 계획 시뮬레이션</h2>
+        <pre>{
+  "target_sources": [
+    "search_results_page",
+    "ranking_page",
+    "product_detail_page",
+    "review_area"
+  ],
+  "target_signals": [
+    "product_id",
+    "product_name",
+    "brand_name",
+    "price",
+    "discount_rate",
+    "ranking_position",
+    "review_count",
+    "review_score",
+    "color_signal",
+    "style_signal",
+    "purpose_fit_score",
+    "purchase_trust_score",
+    "age_male_40s_fit_score"
+  ],
+  "inference_rule": "추정 지표는 score와 confidence_percent를 함께 출력해야 합니다."
+}</pre>
+      </section>
+
+      <section class="section panel">
+        <h2>검수 결과</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th>결과</th>
+              <th>확인 내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>정적 검사</td>
+              <td><span class="badge">통과</span></td>
+              <td><code>python -m py_compile</code> 성공</td>
+            </tr>
+            <tr>
+              <td>단위 테스트</td>
+              <td><span class="badge">4/4 통과</span></td>
+              <td>카탈로그 유효성, 계층 분류, 추정 신뢰도 정책, 수집 계획 검증</td>
+            </tr>
+            <tr>
+              <td>카탈로그 검증</td>
+              <td><span class="badge">통과</span></td>
+              <td>중복 키, 알 수 없는 소스, 신뢰도 누락 없음</td>
+            </tr>
+            <tr>
+              <td>코드 충돌 여부</td>
+              <td><span class="badge">없음</span></td>
+              <td>1단계 파서를 참조하고 신규 카탈로그 모듈만 추가</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

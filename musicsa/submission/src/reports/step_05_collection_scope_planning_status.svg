@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Step 05 Collection Scope Planning</title>
+  <desc id="desc">Musinsa product roadmap step 5 status diagram showing collection jobs, source scope, policies, and validation results.</desc>
+  <rect width="1200" height="760" fill="#f7f8fb"/>
+  <rect x="40" y="36" width="1120" height="688" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="72" y="88" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="#1d2430">5단계 상품 목록 수집 범위 설계</text>
+  <text x="72" y="120" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#697386">검색어 후보를 목록형 공개 소스의 수집 작업으로 바꾸고, 후보 수와 중복 제거 정책을 확정합니다.</text>
+  <rect x="1014" y="64" width="104" height="34" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="1038" y="86" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="700" fill="#166534">검수 통과</text>
+
+  <g>
+    <rect x="72" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d8dee8"/>
+    <text x="96" y="195" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1d2430">14</text>
+    <text x="96" y="222" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#697386">수집 작업 수</text>
+    <rect x="336" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d8dee8"/>
+    <text x="360" y="195" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1d2430">444</text>
+    <text x="360" y="222" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#697386">중복 제거 전 최대 후보</text>
+    <rect x="600" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d8dee8"/>
+    <text x="624" y="195" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1d2430">3</text>
+    <text x="624" y="222" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#697386">목록형 공개 소스</text>
+    <rect x="864" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d8dee8"/>
+    <text x="888" y="195" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1d2430">35</text>
+    <text x="888" y="222" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#697386">누적 자동 테스트</text>
+  </g>
+
+  <text x="72" y="300" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#1d2430">수집 흐름</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="324" width="180" height="92" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="96" y="354" font-size="15" font-weight="700" fill="#1d2430">Intent</text>
+    <text x="96" y="380" font-size="13" fill="#697386">조건 구조화</text>
+    <line x1="252" y1="370" x2="284" y2="370" stroke="#697386"/>
+    <polygon points="284,370 274,364 274,376" fill="#697386"/>
+
+    <rect x="284" y="324" width="180" height="92" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="308" y="354" font-size="15" font-weight="700" fill="#1d2430">Query</text>
+    <text x="308" y="380" font-size="13" fill="#697386">11개 후보 생성</text>
+    <line x1="464" y1="370" x2="496" y2="370" stroke="#697386"/>
+    <polygon points="496,370 486,364 486,376" fill="#697386"/>
+
+    <rect x="496" y="324" width="180" height="92" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="520" y="354" font-size="15" font-weight="700" fill="#1d2430">Scope</text>
+    <text x="520" y="380" font-size="13" fill="#697386">14개 수집 작업</text>
+    <line x1="676" y1="370" x2="708" y2="370" stroke="#697386"/>
+    <polygon points="708,370 698,364 698,376" fill="#697386"/>
+
+    <rect x="708" y="324" width="180" height="92" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="732" y="354" font-size="15" font-weight="700" fill="#1d2430">Policy</text>
+    <text x="732" y="380" font-size="13" fill="#697386">광고·품절·중복 정책</text>
+    <line x1="888" y1="370" x2="920" y2="370" stroke="#697386"/>
+    <polygon points="920,370 910,364 910,376" fill="#697386"/>
+
+    <rect x="920" y="324" width="180" height="92" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="944" y="354" font-size="15" font-weight="700" fill="#1d2430">Next</text>
+    <text x="944" y="380" font-size="13" fill="#697386">실제 수집기 연결</text>
+  </g>
+
+  <text x="72" y="470" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#1d2430">대표 작업</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif" font-size="14">
+    <rect x="72" y="496" width="1056" height="48" fill="#fbfcfe" stroke="#d8dee8"/>
+    <text x="96" y="526" font-weight="700" fill="#697386">Job</text>
+    <text x="190" y="526" font-weight="700" fill="#697386">검색어</text>
+    <text x="524" y="526" font-weight="700" fill="#697386">소스</text>
+    <text x="790" y="526" font-weight="700" fill="#697386">최대 수집</text>
+    <text x="940" y="526" font-weight="700" fill="#697386">필터</text>
+
+    <text x="96" y="574" fill="#1d2430">job-001</text>
+    <text x="190" y="574" fill="#1d2430">남성 블랙 무지 반팔 티셔츠</text>
+    <rect x="524" y="552" width="178" height="28" fill="#2563eb"/>
+    <text x="546" y="571" fill="#ffffff" font-weight="700">search_results</text>
+    <text x="790" y="574" fill="#1d2430">30개 / 2쪽</text>
+    <text x="940" y="574" fill="#1d2430">가격, 성별</text>
+
+    <text x="96" y="622" fill="#1d2430">job-005</text>
+    <text x="190" y="622" fill="#1d2430">남성 블랙 반소매 티셔츠</text>
+    <rect x="524" y="600" width="178" height="28" fill="#15803d"/>
+    <text x="568" y="619" fill="#ffffff" font-weight="700">ranking</text>
+    <text x="790" y="622" fill="#1d2430">50개 / 2쪽</text>
+    <text x="940" y="622" fill="#1d2430">가격, 성별</text>
+
+    <text x="96" y="670" fill="#1d2430">job-008</text>
+    <text x="190" y="670" fill="#1d2430">남성 블랙 반소매 티셔츠</text>
+    <rect x="524" y="648" width="178" height="28" fill="#b45309"/>
+    <text x="560" y="667" fill="#ffffff" font-weight="700">category</text>
+    <text x="790" y="670" fill="#1d2430">40개 / 2쪽</text>
+    <text x="940" y="670" fill="#1d2430">가격, 성별</text>
+  </g>
+</svg>

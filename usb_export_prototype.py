@@ -2,7 +2,7 @@ import os
 import shutil
 import time
 
-WORK_DIR = r"C:\Users\hamcoding\Desktop\codding\usb_sim_env"
+WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "usb_sim_env")
 NET_DIR = os.path.join(WORK_DIR, "BSS-DATA_MOCK", "07. 녹음녹화파일")
 USB_DIR = os.path.join(WORK_DIR, "USB_MOCK")
 

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-label="알 수 없는 앱 설치 허용 그림">
+  <rect width="900" height="420" fill="#f6f8fb"/>
+  <rect x="90" y="55" width="300" height="300" rx="30" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <text x="240" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2d3d">설정 화면</text>
+  <rect x="130" y="145" width="220" height="58" rx="16" fill="#eef5fb"/>
+  <text x="240" y="181" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#1f2d3d">이 출처 허용</text>
+  <rect x="250" y="230" width="82" height="42" rx="22" fill="#18a058"/>
+  <circle cx="310" cy="251" r="18" fill="#ffffff"/>
+  <text x="240" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#116b3a">켜기</text>
+  <rect x="545" y="120" width="230" height="170" rx="20" fill="#ffffff" stroke="#f59f00" stroke-width="5"/>
+  <path d="M660 155 L720 255 H600 Z" fill="#fff4db" stroke="#f59f00" stroke-width="5"/>
+  <text x="660" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#f59f00">!</text>
+  <text x="660" y="338" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#1f2d3d">처음 한 번만 허용</text>
+  <text x="450" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f2d3d">설치 허용 화면이 나오면 켜기</text>
+</svg>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Buyer App Status</title>
+  <style>
+    :root {
+      --ink: #182230;
+      --muted: #667085;
+      --line: #d0d5dd;
+      --soft: #f8fafc;
+      --green: #167647;
+      --blue: #175cd3;
+      --amber: #b54708;
+      --violet: #7a5af8;
+      --rose: #c11574;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); font-family: Arial, "Noto Sans KR", sans-serif; background: #ffffff; }
+    main { max-width: 1120px; margin: 0 auto; padding: 28px 18px 44px; }
+    header { display: flex; justify-content: space-between; gap: 16px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+    h1 { margin: 0; font-size: 25px; letter-spacing: 0; }
+    .status { color: #ffffff; background: var(--green); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .panel { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: #ffffff; }
+    .panel h2 { margin: 0 0 10px; font-size: 16px; }
+    .panel p, li { color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .flow { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .step { min-height: 64px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: var(--soft); color: var(--muted); font-size: 12px; }
+    .bars { height: 220px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: end; border-bottom: 1px solid var(--line); padding: 16px 10px 0; }
+    .bar { width: 46px; margin: 0 auto; border-radius: 8px 8px 0 0; }
+    .barLabel { text-align: center; color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: left; }
+    th { color: var(--muted); background: var(--soft); }
+    .link { display: inline-block; margin-top: 10px; color: var(--blue); font-weight: 700; text-decoration: none; }
+    @media (max-width: 860px) {
+      header, .grid, .flow, .split { grid-template-columns: 1fr; display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>실사용 수집기 + 구매자 UI</h1>
+        <p style="margin:8px 0 0;color:#667085;font-size:13px">무신사 공개 신호 수집, 후보 점수화, 구매자 비교 화면</p>
+      </div>
+      <div class="status">IMPLEMENTED</div>
+    </header>
+
+    <section class="flow">
+      <div class="step">1. 구매 의도 입력</div>
+      <div class="step">2. 검색어 후보</div>
+      <div class="step">3. 공개 HTML/JSON</div>
+      <div class="step">4. 상품 정규화</div>
+      <div class="step">5. 지표 점수화</div>
+      <div class="step">6. 5개 비교</div>
+      <div class="step">7. 3개 세부 비교</div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>수집기</h2>
+        <p>`musinsa_live_buyer_app.py`가 공개 HTML 안의 JSON 스크립트를 파싱하고 상품 후보를 정규화합니다.</p>
+      </article>
+      <article class="panel">
+        <h2>구매자 UI</h2>
+        <p>`musinsa_buyer_app.html`에서 검색어, 5개 후보 비교, 3개 shortlist 세부 지표를 확인합니다.</p>
+      </article>
+      <article class="panel">
+        <h2>데이터 경계</h2>
+        <p>실제 구매자 수, 실제 판매량, 내부 랭킹 알고리즘은 사용하지 않습니다.</p>
+      </article>
+    </section>
+
+    <section class="split">
+      <article class="panel">
+        <h2>세로 막대 비교</h2>
+        <div class="bars">
+          <div><div class="bar" style="height:96%;background:#167647"></div><div class="barLabel">베이직 96</div></div>
+          <div><div class="bar" style="height:87%;background:#175cd3"></div><div class="barLabel">코튼 87</div></div>
+          <div><div class="bar" style="height:81%;background:#b54708"></div><div class="barLabel">데일리 81</div></div>
+          <div><div class="bar" style="height:81%;background:#7a5af8"></div><div class="barLabel">쿨링 81</div></div>
+          <div><div class="bar" style="height:68%;background:#c11574"></div><div class="barLabel">그래픽 68</div></div>
+        </div>
+      </article>
+      <article class="panel">
+        <h2>검수 상태</h2>
+        <table>
+          <tbody>
+            <tr><th>HTML fixture 파싱</th><td>PASS</td></tr>
+            <tr><th>5개 후보 비교</th><td>PASS</td></tr>
+            <tr><th>3개 shortlist</th><td>PASS</td></tr>
+            <tr><th>공개 데이터 경계</th><td>PASS</td></tr>
+          </tbody>
+        </table>
+        <a class="link" href="../app/musinsa_buyer_app.html">앱 UI 열기</a>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

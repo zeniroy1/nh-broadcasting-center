@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Step 06 Detail Data Schema</title>
+  <desc id="desc">Musinsa product roadmap step 6 status diagram showing detail schema fields, configuration openness, and validation results.</desc>
+  <rect width="1200" height="760" fill="#f5f7fa"/>
+  <rect x="40" y="36" width="1120" height="688" fill="#ffffff" stroke="#d7dde8"/>
+  <text x="72" y="88" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="#172033">6단계 상품 상세 데이터 수집 설계</text>
+  <text x="72" y="120" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#667085">목록 후보에서 상세 페이지 공개 지표를 보강하는 필드 스키마와 작업 청사진을 정의합니다.</text>
+  <rect x="1014" y="64" width="104" height="34" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="1038" y="86" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="700" fill="#166534">검수 통과</text>
+
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="96" y="195" font-size="32" font-weight="700" fill="#172033">23</text>
+    <text x="96" y="222" font-size="14" fill="#667085">상세 필드 수</text>
+    <rect x="336" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="360" y="195" font-size="32" font-weight="700" fill="#172033">2</text>
+    <text x="360" y="222" font-size="14" fill="#667085">추정 필드 수</text>
+    <rect x="600" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="624" y="195" font-size="32" font-weight="700" fill="#172033">5</text>
+    <text x="624" y="222" font-size="14" fill="#667085">기본 상세 작업 수</text>
+    <rect x="864" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="888" y="195" font-size="32" font-weight="700" fill="#172033">35</text>
+    <text x="888" y="222" font-size="14" fill="#667085">누적 자동 테스트</text>
+  </g>
+
+  <text x="72" y="300" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#172033">상세 수집 흐름</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="96" y="354" font-size="15" font-weight="700" fill="#172033">Collection</text>
+    <text x="96" y="380" font-size="13" fill="#667085">product_id/url</text>
+    <line x1="252" y1="370" x2="284" y2="370" stroke="#667085"/>
+    <polygon points="284,370 274,364 274,376" fill="#667085"/>
+
+    <rect x="284" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="308" y="354" font-size="15" font-weight="700" fill="#172033">Detail Task</text>
+    <text x="308" y="380" font-size="13" fill="#667085">상세 작업 생성</text>
+    <line x1="464" y1="370" x2="496" y2="370" stroke="#667085"/>
+    <polygon points="496,370 486,364 486,376" fill="#667085"/>
+
+    <rect x="496" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="520" y="354" font-size="15" font-weight="700" fill="#172033">Direct</text>
+    <text x="520" y="380" font-size="13" fill="#667085">공개값 보존</text>
+    <line x1="676" y1="370" x2="708" y2="370" stroke="#667085"/>
+    <polygon points="708,370 698,364 698,376" fill="#667085"/>
+
+    <rect x="708" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="732" y="354" font-size="15" font-weight="700" fill="#172033">Refined</text>
+    <text x="732" y="380" font-size="13" fill="#667085">공개 문구 정제</text>
+    <line x1="888" y1="370" x2="920" y2="370" stroke="#667085"/>
+    <polygon points="920,370 910,364 910,376" fill="#667085"/>
+
+    <rect x="920" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="944" y="354" font-size="15" font-weight="700" fill="#172033">Inferred</text>
+    <text x="944" y="380" font-size="13" fill="#667085">신뢰도 포함</text>
+  </g>
+
+  <text x="72" y="470" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#172033">대표 필드</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif" font-size="14">
+    <rect x="72" y="496" width="1056" height="48" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="96" y="526" font-weight="700" fill="#667085">필드</text>
+    <text x="328" y="526" font-weight="700" fill="#667085">구분</text>
+    <text x="520" y="526" font-weight="700" fill="#667085">소스</text>
+    <text x="760" y="526" font-weight="700" fill="#667085">신뢰도</text>
+    <text x="900" y="526" font-weight="700" fill="#667085">의미</text>
+
+    <text x="96" y="574" fill="#172033">product_name</text>
+    <rect x="328" y="552" width="96" height="28" fill="#0f766e"/>
+    <text x="355" y="571" fill="#ffffff" font-weight="700">direct</text>
+    <text x="520" y="574" fill="#172033">product_header</text>
+    <text x="760" y="574" fill="#172033">100%</text>
+    <text x="900" y="574" fill="#172033">상품명 공개값</text>
+
+    <text x="96" y="622" fill="#172033">material_keywords</text>
+    <rect x="328" y="600" width="96" height="28" fill="#2563eb"/>
+    <text x="350" y="619" fill="#ffffff" font-weight="700">refined</text>
+    <text x="520" y="622" fill="#172033">description</text>
+    <text x="760" y="622" fill="#172033">88%</text>
+    <text x="900" y="622" fill="#172033">소재 문구 정제</text>
+
+    <text x="96" y="670" fill="#172033">age_40s_context_fit</text>
+    <rect x="328" y="648" width="96" height="28" fill="#c2410c"/>
+    <text x="344" y="667" fill="#ffffff" font-weight="700">inferred</text>
+    <text x="520" y="670" fill="#172033">description/review</text>
+    <text x="760" y="670" fill="#172033">72%</text>
+    <text x="900" y="670" fill="#172033">40대 구매자 수 아님</text>
+  </g>
+</svg>

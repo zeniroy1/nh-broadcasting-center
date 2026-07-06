@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-label="내 파일에서 APK를 누르는 그림">
+  <rect width="900" height="420" fill="#f6f8fb"/>
+  <rect x="105" y="45" width="280" height="330" rx="36" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <rect x="135" y="92" width="220" height="230" rx="14" fill="#eef5fb"/>
+  <rect x="165" y="130" width="160" height="42" rx="10" fill="#ffffff" stroke="#d0dae6" stroke-width="3"/>
+  <rect x="165" y="195" width="160" height="42" rx="10" fill="#ffffff" stroke="#18a058" stroke-width="5"/>
+  <text x="245" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#116b3a">app-release.apk</text>
+  <rect x="165" y="260" width="160" height="42" rx="10" fill="#ffffff" stroke="#d0dae6" stroke-width="3"/>
+  <circle cx="245" cy="350" r="11" fill="#2f5f9f"/>
+  <path d="M560 95 C615 95 650 140 640 190 C630 242 580 250 555 223" fill="none" stroke="#f59f00" stroke-width="14" stroke-linecap="round"/>
+  <path d="M555 223 L558 170 L600 204 Z" fill="#f59f00"/>
+  <circle cx="560" cy="222" r="24" fill="#ffffff" stroke="#f59f00" stroke-width="6"/>
+  <text x="570" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#1f2d3d">APK 파일을 한 번 누르기</text>
+  <text x="450" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f2d3d">내 파일 또는 다운로드 폴더 열기</text>
+</svg>

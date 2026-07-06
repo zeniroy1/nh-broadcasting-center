@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>무신사 제품 검색기</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --ink: #182230;
+      --muted: #667085;
+      --line: #d0d5dd;
+      --soft: #f8fafc;
+      --button-bg: #182230;
+      --secondary-bg: #344054;
+      --status-line: #b2ddff;
+      --status-ink: #175cd3;
+      --status-bg: #eff8ff;
+      --green: #167647;
+      --blue: #175cd3;
+      --amber: #b54708;
+      --violet: #7a5af8;
+      --rose: #c11574;
+      --red: #b42318;
+    }
+    body[data-theme="dark"] {
+      --bg: #101828;
+      --surface: #182230;
+      --ink: #f2f4f7;
+      --muted: #cfd4dc;
+      --line: #344054;
+      --soft: #1d2939;
+      --button-bg: #f2f4f7;
+      --secondary-bg: #475467;
+      --status-line: #2e90fa;
+      --status-ink: #d1e9ff;
+      --status-bg: #102a43;
+      --blue: #84caff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      transition: background 180ms ease, color 180ms ease;
+    }
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+      animation: pageIn 360ms ease both;
+    }
+    .topbar {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+    h1 { margin: 0; font-size: 22px; letter-spacing: 0; text-align: center; }
+    .search {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      margin: 18px 0 10px;
+    }
+    input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 15px;
+      color: var(--ink);
+      background: var(--surface);
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+    input:focus {
+      outline: 0;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 18%, transparent);
+    }
+    button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 16px;
+      color: var(--bg);
+      background: var(--button-bg);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+    }
+    button.secondary { background: var(--secondary-bg); color: #ffffff; }
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(16, 24, 40, 0.14);
+    }
+    button:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    button:disabled { opacity: 0.56; cursor: wait; }
+    .inputGuide {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+      padding: 12px;
+      margin: 0 0 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .guideTop {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .guideTitle {
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .guideScore {
+      min-width: 96px;
+      text-align: right;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .guideMeter {
+      height: 8px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--line) 72%, transparent);
+      overflow: hidden;
+    }
+    .guideMeterFill {
+      width: var(--guide-width, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width 180ms ease;
+    }
+    .guideChips, .exampleChips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .guideChip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 10px;
+      color: var(--muted);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .guideChip.done {
+      color: #ffffff;
+      border-color: transparent;
+      background: var(--green);
+    }
+    .guideExample {
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 10px;
+      color: var(--ink);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .guideExample:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: none;
+    }
+    .guideNote {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .themeToggle {
+      width: 44px;
+      min-width: 44px;
+      padding: 0;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      display: inline-grid;
+      place-items: center;
+    }
+    .themeToggle svg {
+      width: 19px;
+      height: 19px;
+      stroke: currentColor;
+      transition: transform 180ms ease;
+    }
+    .themeToggle:hover svg { transform: rotate(16deg); }
+    .themeToggle .moonIcon { display: none; }
+    body[data-theme="dark"] .themeToggle .sunIcon { display: none; }
+    body[data-theme="dark"] .themeToggle .moonIcon { display: block; }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .grid > * { min-width: 0; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px;
+      min-width: 0;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+      animation: sectionIn 300ms ease both;
+    }
+    .panel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(16, 24, 40, 0.08);
+    }
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(86px, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .step {
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--soft);
+      animation: itemRise 280ms ease both;
+      animation-delay: calc(var(--i, 0) * 36ms);
+    }
+    .bars {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      height: 320px;
+      align-items: end;
+      padding: 22px 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .barWrap {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 28px 210px 38px;
+      gap: 8px;
+      align-items: end;
+      text-align: center;
+      animation: itemRise 320ms ease both;
+      animation-delay: calc(var(--i, 0) * 58ms);
+    }
+    .score { font-weight: 800; font-size: 15px; }
+    .barTrack {
+      height: 210px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .bar {
+      width: 56%;
+      min-width: 26px;
+      max-width: 54px;
+      margin: 0 auto;
+      border-radius: 8px 8px 0 0;
+      box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+      height: var(--bar-height);
+      transform-origin: bottom;
+      animation: barGrow 560ms cubic-bezier(.2, .7, .2, 1) both;
+      animation-delay: calc(var(--i, 0) * 70ms);
+      transition: filter 160ms ease, transform 160ms ease;
+    }
+    .barWrap:hover .bar {
+      filter: saturate(1.18) brightness(1.05);
+      transform: scaleX(1.08);
+    }
+    .short {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 14px; }
+    .table th, .table td { border-bottom: 1px solid var(--line); padding: 12px 9px; text-align: left; }
+    .table th { color: var(--muted); background: var(--soft); }
+    .table tbody tr {
+      animation: rowIn 260ms ease both;
+      animation-delay: calc(var(--i, 0) * 42ms);
+      transition: background 150ms ease, transform 150ms ease;
+    }
+    .table tbody tr:hover {
+      background: var(--soft);
+      transform: translateX(2px);
+    }
+    .thumb {
+      width: 58px;
+      height: 74px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--soft);
+      display: block;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    tr:hover .thumb { transform: scale(1.04); box-shadow: 0 8px 16px rgba(16, 24, 40, 0.14); }
+    .productLink {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .productLink:hover { text-decoration: underline; }
+    .rank { font-weight: 800; }
+    .checkrow {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      transition: background 150ms ease, padding 150ms ease;
+      animation: itemRise 260ms ease both;
+      animation-delay: calc(var(--i, 0) * 44ms);
+    }
+    .checkrow:last-child { border-bottom: 0; }
+    .checkrow:hover {
+      background: var(--soft);
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    .checkrow:has(input:checked) .pill {
+      color: #ffffff;
+      background: var(--green);
+    }
+    .trendPanel {
+      margin-top: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .trendHeader {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .trendHeader h3 {
+      margin: 0;
+      flex: 0 0 auto;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+    .trendStatus {
+      color: var(--muted);
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 68%;
+      overflow: hidden;
+      text-align: right;
+      text-overflow: ellipsis;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .trendGrid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      min-width: 0;
+    }
+    .trendGroup {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+      padding: 10px;
+      min-width: 0;
+      animation: cardIn 320ms ease both;
+    }
+    .trendGroupTitle {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .trendGroupTitle b { font-size: 13px; }
+    .trendGroupTitle span {
+      color: var(--muted);
+      font-size: 11px;
+      min-width: 0;
+      overflow: hidden;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .trendList {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .trendItem {
+      min-width: 0;
+      animation: itemRise 260ms ease both;
+      animation-delay: calc(var(--i, 0) * 28ms);
+    }
+    .trendButton {
+      width: 100%;
+      min-width: 0;
+      min-height: 30px;
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr) auto;
+      gap: 6px;
+      align-items: center;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      padding: 5px 7px;
+      color: var(--ink);
+      background: var(--surface);
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .trendButton:hover {
+      border-color: var(--blue);
+      box-shadow: 0 8px 18px rgba(16, 24, 40, 0.1);
+    }
+    .trendRank { color: var(--blue); font-weight: 800; }
+    .trendText {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .trendMove {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .trendMove.up { color: var(--red); }
+    .trendMove.down { color: var(--blue); }
+    .checkrow input { min-height: auto; width: 18px; height: 18px; }
+    .name { font-weight: 800; font-size: 15px; }
+    .meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .pill {
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--muted);
+      padding: 6px 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      line-height: 1.5;
+      padding: 18px;
+      text-align: center;
+    }
+    .diagnostics {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .diagnosticHeader {
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+    .diagnosticHeader h2 { margin: 0; }
+    .collapseButton {
+      align-items: center;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--fg);
+      cursor: pointer;
+      display: inline-grid;
+      font-size: 15px;
+      font-weight: 900;
+      height: 32px;
+      line-height: 1;
+      place-items: center;
+      transition: background 160ms ease, transform 160ms ease;
+      width: 32px;
+    }
+    .collapseButton:hover {
+      background: var(--surface);
+      transform: translateY(-1px);
+    }
+    .diagnostics.isCollapsed #diagnostics {
+      display: none;
+    }
+    .diagnosticStats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .diagnosticStat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+      padding: 10px;
+    }
+    .diagnosticStat span {
+      color: var(--muted);
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .diagnosticStat b {
+      font-size: 18px;
+    }
+    .issueList {
+      display: grid;
+      gap: 8px;
+    }
+    .issueItem {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 10px;
+      animation: itemRise 260ms ease both;
+      animation-delay: calc(var(--i, 0) * 44ms);
+    }
+    .issueItem strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .issueItem p {
+      color: var(--muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .sampleRejected {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .bars .empty {
+      align-self: center;
+      grid-column: 1 / -1;
+    }
+    .detailGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: var(--surface);
+      min-width: 0;
+      animation: cardIn 320ms ease both;
+      animation-delay: calc(var(--i, 0) * 58ms);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 26px rgba(16, 24, 40, 0.1);
+    }
+    .donut {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      margin: 10px auto;
+      position: relative;
+      animation: donutIn 520ms ease both;
+    }
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+    .legend { display: grid; gap: 6px; margin-top: 8px; }
+    .legendRow { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; font-size: 12px; }
+    .swatch { width: 10px; height: 10px; border-radius: 3px; }
+    .boundary {
+      margin-top: 16px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      background: var(--soft);
+    }
+    .runStatus {
+      margin: 0 0 16px;
+      border-color: var(--status-line);
+      color: var(--status-ink);
+      background: var(--status-bg);
+      position: relative;
+      overflow: hidden;
+    }
+    body.is-loading .runStatus::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+      transform: translateX(-100%);
+      animation: statusSweep 1.1s ease-in-out infinite;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes sectionIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes itemRise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateX(-6px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes barGrow {
+      from { transform: scaleY(0); opacity: 0.35; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
+    @keyframes donutIn {
+      from { opacity: 0; transform: rotate(-18deg) scale(0.92); }
+      to { opacity: 1; transform: rotate(0) scale(1); }
+    }
+    @keyframes statusSweep {
+      to { transform: translateX(100%); }
+    }
+    @media (max-width: 860px) {
+      .search, .grid, .detailGrid, .diagnosticStats { grid-template-columns: 1fr; }
+      .topbar { grid-template-columns: minmax(0, 1fr) 44px; }
+      .topbar > span { display: none; }
+      h1 { text-align: left; }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .bars { height: 230px; }
+      .trendList { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="topbar">
+      <span aria-hidden="true"></span>
+      <h1>무신사 제품 검색기</h1>
+      <button class="themeToggle" id="themeToggle" type="button" aria-label="다크 모드로 변경" title="테마 변경">
+        <svg class="sunIcon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg class="moonIcon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.99 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 20.99 12.79z"></path>
+        </svg>
+      </button>
+    </section>
+
+    <section class="search">
+      <input id="queryInput" value="검은색 반팔 무지티를 2~3만원대에서 40대 남성이 입기 좋은 제품으로 찾아줘">
+      <button id="runBtn">분석</button>
+      <button class="secondary" id="rerollBtn">리롤</button>
+    </section>
+    <section class="inputGuide" aria-label="입력 가이드">
+      <div class="guideTop">
+        <div class="guideTitle">입력 가이드</div>
+        <div class="guideScore" id="guideScore">0/6</div>
+      </div>
+      <div class="guideMeter" aria-hidden="true"><div class="guideMeterFill" id="guideMeterFill"></div></div>
+      <div class="guideChips" id="guideChips"></div>
+      <div class="exampleChips">
+        <button class="guideExample" type="button" data-example="23살 여자이고 수영복을 찾고있어, 가격은 10만원이하의 제품을 찾아줘">수영복 예시</button>
+        <button class="guideExample" type="button" data-example="33살 남자이고 올리브 바람막이를 7만원대에서 찾고있어">아우터 예시</button>
+        <button class="guideExample" type="button" data-example="아이보리 드레스 5만원대 여자">원피스 예시</button>
+      </div>
+      <div class="guideNote" id="guideNote">성별, 나이, 색상, 제품유형, 가격대가 많을수록 목적 적합도와 후보 비교 신뢰도가 높아집니다.</div>
+    </section>
+    <section class="boundary runStatus" id="runStatus">로컬 서버에서 열면 분석 버튼으로 라이브 수집을 실행합니다.</section>
+
+    <section class="steps" id="steps"></section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>5개 후보 비교</h2>
+        <div class="bars" id="bars"></div>
+        <table class="table">
+          <thead><tr><th>순위</th><th>이미지</th><th>브랜드/상품</th><th>가격</th><th>점수</th><th>신뢰도</th><th>보기</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </article>
+
+      <aside class="panel">
+        <h2>3개 후보 선택</h2>
+        <div id="checks"></div>
+        <section class="trendPanel" aria-label="무신사 검색어 트렌드">
+          <div class="trendHeader">
+            <h3>무신사 검색어</h3>
+            <span class="trendStatus" id="trendStatus">불러오는 중</span>
+          </div>
+          <div class="trendGrid" id="trendGrid"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <h2>세부 지표</h2>
+      <div class="detailGrid" id="details"></div>
+    </section>
+
+    <section class="panel diagnostics" id="diagnosticsPanel">
+      <div class="diagnosticHeader">
+        <h2>검색 진단</h2>
+        <button class="collapseButton" id="diagnosticsToggle" type="button" aria-controls="diagnostics" aria-expanded="true" title="검색 진단 접기">⌃</button>
+      </div>
+      <div id="diagnostics"></div>
+    </section>
+
+    <section class="boundary" id="boundaries"></section>
+  </main>
+
+  <script>
+    const savedTheme = localStorage.getItem("musinsaBuyerTheme") || "light";
+    document.body.dataset.theme = savedTheme === "dark" ? "dark" : "light";
+
+    const COLORS = ["#167647", "#175cd3", "#b54708", "#7a5af8", "#c11574"];
+    const SEGMENT_COLORS = ["#167647", "#175cd3", "#b54708", "#7a5af8", "#b42318"];
+    let model = {
+      collection_mode: "sample_fallback",
+      workflow: ["구매 의도 입력", "검색어 후보 생성", "공개 HTML/JSON 수집", "상품 후보 정규화", "지표 점수화", "5개 후보 비교", "3개 세부 비교"],
+      boundaries: [
+        "공개 HTML/JSON의 상품명, 브랜드, 가격, 리뷰 수, 평점, 랭킹 위치만 사용",
+        "실제 구매자 수, 실제 판매량, 내부 랭킹 알고리즘은 수집 대상 아님",
+        "confidence_percent는 공개 근거 충실도"
+      ],
+      products: [
+        { id: "sample-black-tee", brand: "샘플 브랜드", name: "베이직 무지 반팔 티셔츠 블랙", short: "베이직", price: "29,900원", score: 96, confidence: 82, fit: "강한 추천 후보", url: "", image: "" },
+        { id: "sample-premium-tee", brand: "샘플 코튼", name: "프리미엄 코튼 무지 반팔 티셔츠 블랙", short: "코튼", price: "38,900원", score: 87, confidence: 82, fit: "강한 추천 후보", url: "", image: "" },
+        { id: "sample-budget-tee", brand: "샘플 데일리", name: "데일리 무지 반팔 티셔츠 블랙", short: "데일리", price: "20,900원", score: 81, confidence: 82, fit: "비교 검토 후보", url: "", image: "" },
+        { id: "sample-athletic-tee", brand: "샘플 액티브", name: "쿨링 기능성 반팔 티셔츠 블랙", short: "쿨링", price: "27,900원", score: 81, confidence: 81, fit: "비교 검토 후보", url: "", image: "" },
+        { id: "sample-logo-tee", brand: "샘플 그래픽", name: "그래픽 로고 반팔 티셔츠 블랙", short: "그래픽", price: "32,900원", score: 68, confidence: 76, fit: "조건 일부 충족 후보", url: "", image: "" }
+      ],
+      details: {
+        "sample-black-tee": [100, 98, 100, 77, 34],
+        "sample-premium-tee": [93, 84, 93, 77, 34],
+        "sample-budget-tee": [100, 69, 100, 77, 34],
+        "sample-athletic-tee": [100, 62, 100, 77, 34],
+        "sample-logo-tee": [97, 55, 97, 77, 34]
+      },
+      labels: ["목적", "리뷰", "가격", "타겟", "리스크"],
+      diagnostics: {
+        status: "sample",
+        counts: { collected: 5, filtered: 5, scored: 5, brand_only_matches: 0, spacing_adjusted_matches: 0, price_filtered: 0 },
+        issues: [
+          { title: "샘플 진단", detail: "로컬 서버로 실행하면 실제 무신사 공개 검색 결과 기준으로 탈락 원인을 분석합니다.", suggestion: "분석 버튼을 눌러 라이브 진단을 확인하세요." }
+        ],
+        sample_rejected: []
+      }
+    };
+    let selected = ["sample-black-tee", "sample-premium-tee", "sample-budget-tee"];
+    let seenExcludeTokens = new Set();
+    let trendRefreshTimer = null;
+    let trendRefreshSeconds = 60;
+    let diagnosticsCollapsed = false;
+    const GUIDE_COLOR_TERMS = [
+      "검은색", "검정색", "검정", "블랙", "black",
+      "흰색", "화이트", "하얀색", "백색", "white",
+      "회색", "그레이", "라이트그레이", "애쉬", "멜란지", "gray", "grey",
+      "차콜", "챠콜", "먹색", "다크그레이", "charcoal",
+      "네이비", "남색", "곤색", "navy",
+      "파란색", "파랑", "블루", "청색", "blue",
+      "하늘색", "소라색", "소라", "스카이블루", "라이트블루", "sky blue", "skyblue",
+      "빨간색", "빨강", "레드", "red",
+      "버건디", "와인색", "와인", "burgundy", "wine",
+      "분홍색", "분홍", "핑크", "연핑크", "pink",
+      "주황색", "주황", "오렌지", "orange",
+      "노란색", "노랑", "옐로우", "yellow",
+      "초록색", "초록", "그린", "민트", "민트색", "green", "mint",
+      "카키", "올리브", "올리브그린", "olive", "khaki",
+      "베이지", "아이보리", "크림", "오트밀", "샌드", "beige", "ivory", "cream", "oatmeal", "sand",
+      "갈색", "브라운", "초코", "초콜릿", "카멜", "camel", "brown", "chocolate",
+      "보라색", "보라", "퍼플", "라벤더", "purple", "lavender",
+      "실버", "silver", "골드", "금색", "gold"
+    ];
+    const GUIDE_FIELDS = [
+      {
+        key: "gender",
+        label: "성별",
+        pattern: /(남자|남성|여자|여성|공용|유니섹스|남녀공용)/,
+        examples: "남자, 여성, 공용"
+      },
+      {
+        key: "age",
+        label: "나이",
+        pattern: /([2-6]\d\s*(살|세)|(20|30|40|50|60)\s*대|이십\s*대|삼십\s*대|사십\s*대|오십\s*대|육십\s*대)/,
+        examples: "23살, 40대, 삼십대, 60대. 10대는 현재 체크 대상이 아닙니다."
+      },
+      {
+        key: "color",
+        label: "색상",
+        terms: GUIDE_COLOR_TERMS,
+        examples: "블랙, 화이트, 그레이, 차콜, 네이비, 소라, 카키, 베이지, 아이보리, 브라운"
+      },
+      {
+        key: "product",
+        label: "제품유형",
+        pattern: /(반팔|티셔츠|셔츠|블라우스|맨투맨|후드|니트|원피스|드레스|스커트|치마|바지|팬츠|반바지|쇼츠|레깅스|운동화|스니커즈|러닝화|가방|백팩|벨트|수영복|비키니|래시가드|아우터|자켓|재킷|바람막이|코트|패딩|샌들|슬리퍼)/,
+        examples: "반팔티, 반바지, 벨트, 수영복, 원피스"
+      },
+      {
+        key: "price",
+        label: "가격대",
+        pattern: /(\d+\s*(만원대|만원|원대|원)|만원대|이하|미만|이상|부터|까지|~|-)/,
+        examples: "1만원대, 2~3만원, 10만원 이하"
+      },
+      {
+        key: "detail",
+        label: "상세조건",
+        pattern: /(무지|로고|프린트|오버핏|정핏|레귤러핏|크롭|쿨링|냉감|방수|가죽|레더|코튼|린넨|여름|겨울|데일리|베이직|미니멀)/,
+        examples: "무지, 여름용, 냉감, 가죽"
+      }
+    ];
+
+    function normalizeGuideText(value) {
+      return String(value || "").toLowerCase().replace(/\s+/g, "");
+    }
+
+    function hasGuideTerm(query, terms) {
+      const compactQuery = normalizeGuideText(query);
+      return terms.some(term => compactQuery.includes(normalizeGuideText(term)));
+    }
+
+    function guideFieldDone(field, query) {
+      return field.terms ? hasGuideTerm(query, field.terms) : field.pattern.test(query);
+    }
+
+    function hasTeenGuideContext(query) {
+      return /(10\s*대|십\s*대|1\d\s*(살|세)|청소년|중학생|고등학생)/.test(query);
+    }
+
+    function updateThemeButton() {
+      const isDark = document.body.dataset.theme === "dark";
+      const button = document.getElementById("themeToggle");
+      button.setAttribute("aria-label", isDark ? "화이트 모드로 변경" : "다크 모드로 변경");
+      button.title = isDark ? "화이트 모드" : "다크 모드";
+    }
+
+    function toggleTheme() {
+      const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+      document.body.dataset.theme = nextTheme;
+      localStorage.setItem("musinsaBuyerTheme", nextTheme);
+      updateThemeButton();
+    }
+
+    function updateInputGuide() {
+      const query = document.getElementById("queryInput").value.trim();
+      const hits = GUIDE_FIELDS.map(field => ({ ...field, done: guideFieldDone(field, query) }));
+      const doneCount = hits.filter(field => field.done).length;
+      document.getElementById("guideScore").textContent = `${doneCount}/${GUIDE_FIELDS.length}`;
+      document.getElementById("guideMeterFill").style.setProperty("--guide-width", `${Math.round((doneCount / GUIDE_FIELDS.length) * 100)}%`);
+      document.getElementById("guideChips").innerHTML = hits.map(field => (
+        `<span class="guideChip ${field.done ? "done" : ""}" title="${escapeHtml(field.examples || "")}">${field.done ? "✓ " : ""}${field.label}</span>`
+      )).join("");
+      const missing = hits.filter(field => !field.done).map(field => field.label);
+      const teenNote = hasTeenGuideContext(query)
+        ? " 10대/청소년은 현재 나이 체크 대상이 아니라 추후 확장 가능한 보조 맥락으로만 기록합니다."
+        : "";
+      document.getElementById("guideNote").textContent = missing.length
+        ? `추가하면 좋은 지표: ${missing.join(", ")}. 색상 예시: 블랙, 화이트, 그레이, 차콜, 네이비, 소라, 카키, 베이지, 아이보리, 브라운.`
+          + teenNote
+        : "주요 지표가 모두 들어왔습니다. 분석하면 목적/리뷰/가격/타겟/리스크 점수로 비교합니다." + teenNote;
+    }
+
+    function cleanName(value) {
+      return String(value || "").replace(/\[[^\]]+\]\s*/g, "").replace(/\s+/g, " ").trim();
+    }
+
+    function productExcludeKey(product) {
+      return `name:${cleanName(product.brand).toLowerCase()}:${cleanName(product.name).toLowerCase()}`;
+    }
+
+    function productTokens(product) {
+      return [product.id, productExcludeKey(product)].filter(Boolean);
+    }
+
+    function addSeenProducts(products) {
+      products.forEach(product => productTokens(product).forEach(token => seenExcludeTokens.add(token)));
+    }
+
+    function sameProduct(left, right) {
+      const rightTokens = new Set(productTokens(right));
+      return productTokens(left).some(token => rightTokens.has(token));
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
+
+    function productImage(product) {
+      return product.image
+        ? `<img class="thumb" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.brand)} 상품 이미지">`
+        : `<span class="thumb" aria-label="이미지 없음"></span>`;
+    }
+
+    function productLink(product) {
+      return product.url
+        ? `<a class="productLink" href="${escapeHtml(product.url)}" target="_blank" rel="noopener">상품 보기</a>`
+        : `<span class="meta">링크 없음</span>`;
+    }
+
+    function formatDiagnosticPrice(value) {
+      return Number.isFinite(Number(value)) ? `${Number(value).toLocaleString("ko-KR")}원` : "";
+    }
+
+    function renderDiagnostics() {
+      const diagnostics = model.diagnostics || {};
+      const counts = diagnostics.counts || {};
+      const issues = diagnostics.issues || [];
+      const samples = diagnostics.sample_rejected || [];
+      const statusText = diagnostics.status === "pass" ? "정상" : diagnostics.status === "sample" ? "샘플" : "확인 필요";
+      const stats = [
+        ["수집", counts.collected ?? 0],
+        ["필터 통과", counts.filtered ?? 0],
+        ["비교 후보", counts.scored ?? model.products.length],
+        ["브랜드명 매칭", counts.brand_only_matches ?? 0]
+      ].map(([label, value]) => `
+        <div class="diagnosticStat">
+          <span>${escapeHtml(label)}</span>
+          <b>${escapeHtml(value)}</b>
+        </div>
+      `).join("");
+      const issueHtml = issues.length ? issues.map((issue, index) => `
+        <article class="issueItem" style="--i:${index}">
+          <strong>${escapeHtml(issue.title || "진단 항목")}</strong>
+          <p>${escapeHtml(issue.detail || "")}</p>
+          <p>${escapeHtml(issue.suggestion || "")}</p>
+        </article>
+      `).join("") : `<div class="empty">현재 검색 조건에서 큰 탈락 원인은 감지되지 않았습니다.</div>`;
+      const sampleHtml = samples.length ? `
+        <div class="sampleRejected">
+          탈락 표본: ${samples.map(sample => `${escapeHtml(sample.brand)} / ${escapeHtml(cleanName(sample.product))} ${escapeHtml(formatDiagnosticPrice(sample.price))}`).join(" · ")}
+        </div>
+      ` : "";
+      document.getElementById("diagnostics").innerHTML = `
+        <div class="meta">진단 상태: ${escapeHtml(statusText)}</div>
+        <div class="diagnosticStats">${stats}</div>
+        <div class="issueList">${issueHtml}</div>
+        ${sampleHtml}
+      `;
+      syncDiagnosticsCollapse();
+    }
+
+    function syncDiagnosticsCollapse() {
+      const panel = document.getElementById("diagnosticsPanel");
+      const button = document.getElementById("diagnosticsToggle");
+      panel.classList.toggle("isCollapsed", diagnosticsCollapsed);
+      button.setAttribute("aria-expanded", diagnosticsCollapsed ? "false" : "true");
+      button.textContent = diagnosticsCollapsed ? "⌄" : "⌃";
+      button.title = diagnosticsCollapsed ? "검색 진단 펼치기" : "검색 진단 접기";
+    }
+
+    function trendMoveLabel(value) {
+      if (value > 0) return `<span class="trendMove up">▲${value}</span>`;
+      if (value < 0) return `<span class="trendMove down">▼${Math.abs(value)}</span>`;
+      return `<span class="trendMove">-</span>`;
+    }
+
+    function renderTrendGroup(group, fallbackTitle) {
+      const items = group?.items || [];
+      if (!items.length) {
+        return `<article class="trendGroup"><div class="empty">검색어를 불러오지 못했습니다.</div></article>`;
+      }
+      return `<article class="trendGroup">
+        <div class="trendGroupTitle">
+          <b>${escapeHtml(group.title || fallbackTitle)}</b>
+          <span>${escapeHtml(group.updated_at || "")}</span>
+        </div>
+        <ol class="trendList">
+          ${items.map((item, index) => `
+            <li class="trendItem" style="--i:${index}">
+              <button class="trendButton" type="button" data-keyword="${escapeHtml(item.text)}" title="${escapeHtml(item.text)} 검색">
+                <span class="trendRank">${item.rank}</span>
+                <span class="trendText">${escapeHtml(item.text)}</span>
+                ${trendMoveLabel(Number(item.rank_increment || 0))}
+              </button>
+            </li>
+          `).join("")}
+        </ol>
+      </article>`;
+    }
+
+    function renderSearchTrends(payload) {
+      const trends = payload?.trends || {};
+      document.getElementById("trendGrid").innerHTML = [
+        renderTrendGroup(trends.popular, "인기 검색어"),
+        renderTrendGroup(trends.rising, "급상승 검색어")
+      ].join("");
+      const discovery = payload?.keyword_discovery || {};
+      const discoveryCount = discovery.updated ? (discovery.terms || []).length : 0;
+      const discoveryText = discoveryCount ? ` · 신규 후보 ${discoveryCount}개` : "";
+      document.getElementById("trendStatus").textContent = payload?.fetched_at ? `${payload.fetched_at} 갱신${discoveryText}` : "갱신 대기";
+      document.querySelectorAll(".trendButton").forEach(button => button.addEventListener("click", () => {
+        const keyword = button.dataset.keyword || "";
+        document.getElementById("queryInput").value = keyword;
+        if (window.location.protocol !== "file:") {
+          selected = model.products.slice(0, 3).map(product => product.id);
+          runLiveAnalysis();
+        }
+      }));
+    }
+
+    async function refreshSearchTrends() {
+      const status = document.getElementById("trendStatus");
+      if (!status) return;
+      status.textContent = "갱신 중";
+      try {
+        const response = await fetch("/api/search-trends?live=1");
+        if (!response.ok) {
+          throw new Error(`서버 응답 오류 ${response.status}`);
+        }
+        const payload = await response.json();
+        trendRefreshSeconds = payload.refresh_seconds || 60;
+        renderSearchTrends(payload);
+      } catch (error) {
+        status.textContent = "갱신 실패";
+        document.getElementById("trendGrid").innerHTML = `<div class="empty">무신사 검색어를 불러오지 못했습니다.</div>`;
+      } finally {
+        clearTimeout(trendRefreshTimer);
+        if (window.location.protocol !== "file:") {
+          trendRefreshTimer = setTimeout(refreshSearchTrends, trendRefreshSeconds * 1000);
+        }
+      }
+    }
+
+    function startAppHeartbeat() {
+      if (window.location.protocol === "file:") return;
+      const sendHeartbeat = () => {
+        fetch("/api/heartbeat", { cache: "no-store" }).catch(() => {});
+      };
+      sendHeartbeat();
+      window.setInterval(sendHeartbeat, 5000);
+    }
+
+    function emptyReasonHtml() {
+      const issues = (model.diagnostics && model.diagnostics.issues) || [];
+      const primary = issues.find(i => i.type === "no_public_products")
+        || issues.find(i => i.type === "keyword_not_found")
+        || issues.find(i => i.type === "all_filtered_out")
+        || issues[0];
+      if (primary) {
+        const detail = primary.detail ? `<br>${escapeHtml(primary.detail)}` : "";
+        const suggestion = primary.suggestion ? `<br>${escapeHtml(primary.suggestion)}` : "";
+        return `<div class="empty"><b>${escapeHtml(primary.title || "결과 없음")}</b>${detail}${suggestion}</div>`;
+      }
+      return `<div class="empty">조건에 맞는 공개 후보가 없습니다.<br>검색어를 넓히거나 가격 조건을 완화해 다시 실행해 주세요.</div>`;
+    }
+
+    function render() {
+      document.getElementById("steps").innerHTML = model.workflow.map((step, index) => `<div class="step" style="--i:${index}">${index + 1}. ${step}</div>`).join("");
+      const hasProducts = model.products.length > 0;
+      document.getElementById("bars").innerHTML = hasProducts ? model.products.map((p, index) => `
+        <div class="barWrap" style="--i:${index}">
+          <div class="score">${p.score}</div>
+          <div class="barTrack"><div class="bar" style="--bar-height:${Math.max(10, Math.round(p.score * 1.9))}px; background:${COLORS[index % COLORS.length]}"></div></div>
+          <div class="short" title="${escapeHtml(p.brand)}">${escapeHtml(p.brand)}</div>
+        </div>
+      `).join("") : emptyReasonHtml();
+      document.getElementById("rows").innerHTML = hasProducts ? model.products.map((p, index) => `
+        <tr style="--i:${index}">
+          <td class="rank">${index + 1}</td>
+          <td>${productImage(p)}</td>
+          <td><b>${escapeHtml(p.brand)}</b><br>${escapeHtml(cleanName(p.name))}</td>
+          <td>${escapeHtml(p.price)}</td>
+          <td>${p.score}</td>
+          <td>${p.confidence}%</td>
+          <td>${productLink(p)}</td>
+        </tr>
+      `).join("") : `<tr><td colspan="7"><div class="empty">현재 조건으로 비교할 상품이 없습니다.</div></td></tr>`;
+      document.getElementById("checks").innerHTML = hasProducts ? model.products.map((p, index) => `
+        <label class="checkrow" style="--i:${index}">
+          <input type="checkbox" data-id="${p.id}" ${selected.includes(p.id) ? "checked" : ""}>
+          <span><span class="name">${escapeHtml(p.brand)}</span><span class="meta">${escapeHtml(p.price)}</span></span>
+          <span class="pill">${p.score}점</span>
+        </label>
+      `).join("") : `<div class="empty">선택 가능한 후보가 없습니다.</div>`;
+      document.querySelectorAll("#checks input").forEach(input => input.addEventListener("change", updateSelection));
+      renderDetails();
+      renderDiagnostics();
+      document.getElementById("boundaries").innerHTML = model.boundaries.join("<br>");
+    }
+
+    function updateSelection(event) {
+      const id = event.target.dataset.id;
+      if (event.target.checked) {
+        if (selected.length >= 3) {
+          event.target.checked = false;
+          return;
+        }
+        selected.push(id);
+      } else {
+        selected = selected.filter(item => item !== id);
+      }
+      renderDetails();
+    }
+
+    function renderDetails() {
+      const products = model.products.filter(p => selected.includes(p.id)).slice(0, 3);
+      if (!products.length) {
+        document.getElementById("details").innerHTML = `<div class="empty">세부 지표를 볼 후보가 없습니다.</div>`;
+        return;
+      }
+      document.getElementById("details").innerHTML = products.map((product, index) => {
+        const values = model.details[product.id] || [product.score, product.score, product.score, product.confidence, 50];
+        const gradient = values.map((value, index) => `${SEGMENT_COLORS[index]} ${index * 20}% ${(index + 1) * 20}%`).join(", ");
+        const legend = values.map((value, index) => `
+          <div class="legendRow"><span class="swatch" style="background:${SEGMENT_COLORS[index]}"></span><span>${model.labels[index]}</span><b>${value}</b></div>
+        `).join("");
+        return `<article class="card" style="--i:${index}">
+          <div class="name">${escapeHtml(product.brand)}</div>
+          <div class="meta">${escapeHtml(cleanName(product.name))}</div>
+          <div class="meta">${escapeHtml(product.price)} / ${escapeHtml(product.fit)}</div>
+          <div class="donut" style="background: conic-gradient(${gradient})"></div>
+          <div class="legend">${legend}</div>
+          <div style="margin-top:10px">${productLink(product)}</div>
+        </article>`;
+      }).join("");
+    }
+
+    function normalizeServerModel(serverModel) {
+      const report = serverModel.recommendation_report;
+      const rows = report.comparison_table.rows;
+      const barRows = report.visualizations.score_bar_chart;
+      const panels = report.shortlist_detail.detail_panels;
+      const nextProducts = rows.map((row, index) => ({
+        id: barRows[index]?.product_id || `${row.brand}-${row.product}`,
+        brand: row.brand,
+        name: row.product,
+        short: barRows[index]?.short_label || row.product.slice(0, 4),
+        price: row.price,
+        score: row.final_score,
+        confidence: row.confidence_percent,
+        fit: row.fit,
+        url: row.product_url || "",
+        image: row.image_url || ""
+      }));
+      const details = {};
+      panels.forEach((panel) => {
+        details[panel.product_id] = panel.component_segments.map((segment) => segment.score);
+      });
+      return {
+        collection_mode: serverModel.collection_mode,
+        workflow: serverModel.workflow,
+        boundaries: [
+          ...serverModel.collection_boundaries,
+          ...report.boundaries,
+          `공개 후보 ${serverModel.collected_public_product_count}개 중 조건 필터 후 ${serverModel.filtered_public_product_count}개`
+        ],
+        products: nextProducts,
+        details,
+        labels: ["목적", "리뷰", "가격", "타겟", "리스크"],
+        diagnostics: serverModel.search_diagnostics
+      };
+    }
+
+    async function runLiveAnalysis(options = {}) {
+      const button = document.getElementById("runBtn");
+      const rerollButton = document.getElementById("rerollBtn");
+      const status = document.getElementById("runStatus");
+      const keptProducts = options.reroll ? model.products.filter(product => selected.includes(product.id)).slice(0, 3) : [];
+      const keptTokens = new Set(keptProducts.flatMap(productTokens));
+      const keptDetails = {};
+      keptProducts.forEach(product => {
+        keptDetails[product.id] = model.details[product.id] || [product.score, product.score, product.score, product.confidence, 50];
+      });
+      button.disabled = true;
+      rerollButton.disabled = true;
+      document.body.classList.add("is-loading");
+      button.textContent = "수집 중";
+      rerollButton.textContent = options.reroll ? "다시 뽑는 중" : "리롤";
+      status.textContent = options.reroll ? "선택 후보를 유지하고 이미 본 상품을 제외해 다시 정합성 검사 중입니다." : "무신사 공개 랭킹 API를 읽고 후보를 계산 중입니다.";
+      try {
+        const query = encodeURIComponent(document.getElementById("queryInput").value);
+        if (!options.reroll) {
+          seenExcludeTokens = new Set();
+        }
+        addSeenProducts(model.products);
+        const excludeTokens = options.reroll
+          ? [...seenExcludeTokens].filter(token => !keptTokens.has(token))
+          : [];
+        const exclude = options.reroll ? `&exclude=${encodeURIComponent(excludeTokens.join("||"))}` : "";
+        const response = await fetch(`/api/recommend?live=1&query=${query}${exclude}`);
+        if (!response.ok) {
+          throw new Error(`서버 응답 오류 ${response.status}`);
+        }
+        const payload = await response.json();
+        const nextModel = normalizeServerModel(payload.model);
+        if (options.reroll) {
+          const newProducts = nextModel.products
+            .filter(product => !keptProducts.some(kept => sameProduct(kept, product)))
+            .slice(0, Math.max(0, 5 - keptProducts.length));
+          model = {
+            ...nextModel,
+            products: [...keptProducts, ...newProducts],
+            details: { ...nextModel.details, ...keptDetails }
+          };
+          selected = keptProducts.map(product => product.id);
+        } else {
+          model = nextModel;
+          selected = model.products.slice(0, 3).map(product => product.id);
+        }
+        addSeenProducts(model.products);
+        render();
+        const excludedText = payload.summary.excluded_product_count ? `, 제외 ${payload.summary.excluded_product_count}개` : "";
+        const keepText = options.reroll ? `, 선택 유지 ${keptProducts.length}개` : "";
+        const learning = payload.summary.keyword_learning || {};
+        const learningText = learning.updated ? `, 학습 후보 ${learning.terms.join(", ")}` : "";
+        status.textContent = `실행 완료: 공개 후보 ${payload.summary.collected_public_product_count}개, 조건 필터 ${payload.summary.filtered_public_product_count}개, 비교 후보 ${model.products.length}개${keepText}${excludedText}${learningText}`;
+      } catch (error) {
+        status.textContent = `실행 실패: ${error.message}. python scripts/musinsa_buyer_server.py로 로컬 서버를 먼저 실행해야 합니다.`;
+      } finally {
+        document.body.classList.remove("is-loading");
+        button.disabled = false;
+        rerollButton.disabled = false;
+        button.textContent = "분석";
+        rerollButton.textContent = "리롤";
+      }
+    }
+
+    document.getElementById("runBtn").addEventListener("click", () => {
+      if (window.location.protocol === "file:") {
+        document.getElementById("runStatus").textContent = "파일로 열면 실행 API를 호출할 수 없습니다. 로컬 서버 주소로 접속해야 합니다.";
+        return;
+      }
+      selected = model.products.slice(0, 3).map(product => product.id);
+      runLiveAnalysis();
+    });
+    document.getElementById("rerollBtn").addEventListener("click", () => {
+      if (window.location.protocol === "file:") {
+        document.getElementById("runStatus").textContent = "파일로 열면 실행 API를 호출할 수 없습니다. 로컬 서버 주소로 접속해야 합니다.";
+        return;
+      }
+      runLiveAnalysis({ reroll: true });
+    });
+    document.getElementById("queryInput").addEventListener("input", updateInputGuide);
+    document.querySelectorAll(".guideExample").forEach(button => {
+      button.addEventListener("click", () => {
+        document.getElementById("queryInput").value = button.dataset.example || "";
+        updateInputGuide();
+      });
+    });
+    document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+    document.getElementById("diagnosticsToggle").addEventListener("click", () => {
+      diagnosticsCollapsed = !diagnosticsCollapsed;
+      syncDiagnosticsCollapse();
+    });
+    updateThemeButton();
+    updateInputGuide();
+    render();
+    if (window.location.protocol !== "file:") {
+      startAppHeartbeat();
+      runLiveAnalysis();
+      refreshSearchTrends();
+    } else {
+      renderSearchTrends({
+        fetched_at: "샘플",
+        trends: {
+          popular: { title: "인기 검색어", updated_at: "샘플 기준", items: [{ rank: 1, text: "반팔", rank_increment: 0 }, { rank: 2, text: "반바지", rank_increment: 1 }] },
+          rising: { title: "급상승 검색어", updated_at: "샘플 기준", items: [{ rank: 1, text: "하객룩", rank_increment: 20 }, { rank: 2, text: "트레이닝 팬츠", rank_increment: 18 }] }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+{
+  "enabled_sources": [
+    "lh",
+    "hug",
+    "sh",
+    "gh"
+  ],
+  "required_layout": {
+    "lh_report_script": "lh/scripts/generate_reports.py"
+  },
+  "lh": {
+    "folder": "lh",
+    "scripts_folder": "lh/scripts",
+    "report_script": "lh/scripts/generate_reports.py",
+    "collection_mode": "direct",
+    "output_folder": "lh/outputs",
+    "search_keyword": "",
+    "notice_filter": {
+      "schedule_basis": "접수일",
+      "include_status": [
+        "접수예정",
+        "접수중"
+      ],
+      "exclude_status": [
+        "접수마감",
+        "일정확인필요"
+      ]
+    },
+    "region_selection": {
+      "required_before_parse": true,
+      "input_mode": "region_name",
+      "default_selected": []
+    }
+  },
+  "hug": {
+    "folder": "hug",
+    "allow_manual_region": true,
+    "region_presets": {
+      "서울": "01",
+      "경기도": "07",
+      "인천": "04"
+    },
+    "region_selection": {
+      "required_before_parse": true,
+      "allow_custom_code": false,
+      "default_selected": [],
+      "input_mode": "region_name"
+    },
+    "summary_top_n": 3,
+    "target_location": {
+      "name": "서대문역 5번출구",
+      "lat": 37.56577,
+      "lon": 126.96665
+    },
+    "output_patterns": {
+      "data": "hug_{region}_분석데이터.csv",
+      "summary": "hug_{region}_요약.txt"
+    },
+    "cache_folder": "app/cache/hug",
+    "output_folder": "hug/outputs"
+  },
+  "sh": {
+    "folder": "sh",
+    "allow_manual_region": true,
+    "list_url": "https://www.i-sh.co.kr/main/lay2/program/S1T294C295/www/brd/m_241/list.do?multi_itm_seqs=1,2,4,8,16,32,64,128,256,512,1024",
+    "detail_url": "https://www.i-sh.co.kr/main/lay2/program/S1T294C295/www/brd/m_241/view.do",
+    "region_selection": {
+      "required_before_parse": true,
+      "default_selected": [],
+      "input_mode": "region_name"
+    },
+    "notice_filter": {
+      "schedule_basis": "접수일",
+      "include_status": [
+        "접수예정",
+        "접수중"
+      ],
+      "exclude_status": [
+        "접수마감",
+        "일정확인필요"
+      ]
+    },
+    "max_search_pages": 3,
+    "output_patterns": {
+      "data": "sh_{region}_분석데이터.csv",
+      "summary": "sh_{region}_요약.txt"
+    },
+    "cache_folder": "app/cache/sh",
+    "attachment_folder": "sh/attachments",
+    "output_folder": "sh/outputs"
+  },
+  "gh": {
+    "folder": "gh",
+    "allow_manual_keyword": true,
+    "list_url": "https://apply.gh.or.kr/sb/sr/sr7150/selectPbancRentHouseList.do",
+    "detail_url": "https://apply.gh.or.kr/sb/sr/sr7150/selectPbancDetailView.do",
+    "competition_url": "https://apply.gh.or.kr/sb/sr/sr7150/selectGetCompete.do",
+    "status_map": {
+      "1": "공고중",
+      "2": "접수중",
+      "3": "접수마감"
+    },
+    "phase_map": {
+      "1": "공고전",
+      "2": "접수기간",
+      "3": "접수마감"
+    },
+    "max_pages": 25,
+    "closed_recent_days": 14,
+    "clear_output_before_run": true,
+    "output_patterns": {
+      "schedule": "gh_{pbancNo}_{shortTitle}_일정데이터.csv",
+      "live_competition": "gh_{pbancNo}_{shortTitle}_실시간경쟁률데이터.csv",
+      "general_supply_competition": "gh_{pbancNo}_{shortTitle}_일반공급경쟁률데이터.csv",
+      "competition": "gh_{pbancNo}_{shortTitle}_경쟁률데이터.csv"
+    },
+    "output_folder": "gh/outputs"
+  }
+}

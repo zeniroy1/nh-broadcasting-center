@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Step 05 Collection Scope Planning</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d2430;
+      --muted: #697386;
+      --line: #d8dee8;
+      --paper: #f7f8fb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #15803d;
+      --amber: #b45309;
+      --rose: #be123c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .badge {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 16px;
+    }
+    .metric strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      margin-top: 14px;
+      padding: 18px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .flow div {
+      min-height: 88px;
+      border: 1px solid var(--line);
+      padding: 12px;
+      background: #fbfcfe;
+    }
+    .flow b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .flow span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      background: #fbfcfe;
+    }
+    .source {
+      display: inline-block;
+      min-width: 138px;
+      padding: 4px 8px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      text-align: center;
+    }
+    .search { background: var(--blue); }
+    .ranking { background: var(--green); }
+    .category { background: var(--amber); }
+    .policy-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .policy {
+      border-left: 4px solid var(--rose);
+      background: #fff7f8;
+      padding: 12px;
+      min-height: 118px;
+    }
+    .policy b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .policy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      header { align-items: flex-start; flex-direction: column; }
+      .metrics, .flow, .policy-grid { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+      .source { min-width: 112px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>5단계 상품 목록 수집 범위 설계</h1>
+        <p class="subtitle">질문 의도와 검색어 후보를 바탕으로 수집할 공개 페이지, 후보 수, 중복 제거 정책을 확정합니다.</p>
+      </div>
+      <div class="badge">검수 통과</div>
+    </header>
+
+    <div class="metrics" aria-label="핵심 수치">
+      <div class="metric"><strong>14</strong><span>수집 작업 수</span></div>
+      <div class="metric"><strong>444</strong><span>중복 제거 전 최대 후보 수</span></div>
+      <div class="metric"><strong>3</strong><span>목록형 공개 소스</span></div>
+      <div class="metric"><strong>35</strong><span>누적 자동 테스트</span></div>
+    </div>
+
+    <section>
+      <h2>구현 흐름</h2>
+      <div class="flow">
+        <div><b>Intent</b><span>반팔 티셔츠, 블랙, 무지, 2~3만원, 남성, 40대 대체 지표를 구조화합니다.</span></div>
+        <div><b>Query</b><span>정확 검색, 핵심 검색, 랭킹 탐색, 넓은 탐색, fallback 검색어를 생성합니다.</span></div>
+        <div><b>Scope</b><span>검색 결과, 랭킹, 카테고리 목록에서만 1차 후보를 수집하고 JSON 설정으로 범위를 조정합니다.</span></div>
+        <div><b>Policy</b><span>광고 표기, 품절 처리, 요청 제한, product_id 중복 제거 원칙을 둡니다.</span></div>
+        <div><b>Next</b><span>다음 단계에서 실제 수집기와 product_id 기반 정규화를 연결합니다.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>대표 수집 작업</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>검색어</th>
+            <th>소스</th>
+            <th>목적</th>
+            <th>우선순위</th>
+            <th>최대 수집</th>
+            <th>필터</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>job-001</td>
+            <td>남성 블랙 무지 반팔 티셔츠</td>
+            <td><span class="source search">search_results_page</span></td>
+            <td>exact_match</td>
+            <td>190</td>
+            <td>30개 / 2쪽</td>
+            <td>price:20000-30000, gender:M</td>
+          </tr>
+          <tr>
+            <td>job-005</td>
+            <td>남성 블랙 반소매 티셔츠</td>
+            <td><span class="source ranking">ranking_page</span></td>
+            <td>ranking_probe</td>
+            <td>180</td>
+            <td>50개 / 2쪽</td>
+            <td>price:20000-30000, gender:M</td>
+          </tr>
+          <tr>
+            <td>job-008</td>
+            <td>남성 블랙 반소매 티셔츠</td>
+            <td><span class="source category">category_page</span></td>
+            <td>ranking_probe</td>
+            <td>155</td>
+            <td>40개 / 2쪽</td>
+            <td>price:20000-30000, gender:M</td>
+          </tr>
+          <tr>
+            <td>job-011</td>
+            <td>반팔 티셔츠</td>
+            <td><span class="source search">search_results_page</span></td>
+            <td>broad_discovery</td>
+            <td>150</td>
+            <td>18개 / 2쪽</td>
+            <td>price:20000-30000, gender:M</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>수집 정책</h2>
+      <div class="policy-grid">
+        <div class="policy"><b>광고 상품</b><p>제외하지 않고 `is_ad`로 표시하여 랭킹/검색 노출과 비교 점수에서 분리합니다.</p></div>
+        <div class="policy"><b>품절 상품</b><p>기본 비교 후보에서는 제외하되, 원본 표시는 유지할 수 있습니다.</p></div>
+        <div class="policy"><b>중복 제거</b><p>기본 키는 `product_id`, 보조 키는 URL과 정규화된 브랜드+상품명입니다.</p></div>
+        <div class="policy"><b>요청 제한</b><p>실제 수집 단계에서는 요청 간격과 재시도 제한을 둡니다.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      공개 페이지에서 확인 가능한 목록형 자료만 대상으로 하며, 내부 구매자 수·전환율·랭킹 알고리즘에는 접근하지 않습니다.
+    </footer>
+  </main>
+</body>
+</html>

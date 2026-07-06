@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NH 리마인더 1단계 결과: 다크 메탈릭 UI 전체 기능</title>
+  <style>
+    :root {
+      --bg: #151518;
+      --card-bg: #202026;
+      --text-main: #ffffff;
+      --text-sec: rgba(255, 255, 255, 0.54);
+      --primary: #4DB6AC;
+      --danger: #E57373;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif; }
+    body { background-color: #333; display: flex; justify-content: center; padding: 40px; }
+    .phone {
+      width: 360px;
+      height: 740px;
+      background: var(--bg);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      border: 8px solid #000;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #1C1C22;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-main);
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+    }
+    .page {
+      padding: 20px;
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .page.active {
+      display: flex;
+    }
+
+    /* === Home Tab Styles === */
+    .status-card {
+      background: linear-gradient(135deg, #26262F, #1E1E24);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .pulse-ring {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(77, 182, 172, 0.15);
+      display: flex; align-items: center; justify-content: center;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse { 0% { transform: scale(0.95); } 100% { transform: scale(1.05); } }
+    .pulse-ring svg { width: 50px; height: 50px; fill: var(--primary); }
+    .status-title { margin-top: 24px; color: var(--text-main); font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+    .status-desc { margin-top: 12px; color: var(--text-sec); font-size: 14px; text-align: center; line-height: 1.5; }
+    .btn-main {
+      background: var(--danger); color: white; border: none; border-radius: 16px; padding: 18px; width: 100%;
+      font-size: 16px; font-weight: bold; cursor: pointer; text-align: center;
+      box-shadow: 0 4px 10px rgba(229, 115, 115, 0.5);
+    }
+    .btn-main svg { vertical-align: middle; margin-right: 8px; margin-top: -2px; width: 20px; height: 20px; fill: white; }
+    .btn-main span { vertical-align: middle; }
+    .action-row { display: flex; gap: 16px; margin-top: 16px; }
+    .btn-sec {
+      flex: 1; border: 1px solid rgba(255,255,255,0.2); background: #22222A; border-radius: 16px; padding: 16px; color: var(--text-sec);
+      display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px;
+    }
+
+    /* === History Tab Styles === */
+    .history-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .history-icon {
+      background: rgba(77, 182, 172, 0.1);
+      padding: 10px;
+      border-radius: 50%;
+      display: flex;
+    }
+    .history-icon svg { width: 24px; height: 24px; fill: var(--primary); }
+    .history-info { flex: 1; }
+    .history-info .desc { color: var(--text-main); font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+    .history-info .time { color: var(--text-sec); font-size: 13px; }
+
+    /* === Settings Tab Styles === */
+    .section-title {
+      color: var(--text-sec); font-size: 14px; margin-top: 10px; margin-bottom: -10px;
+    }
+    .settings-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .setting-row {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }
+    .setting-label { color: var(--text-main); font-size: 16px; }
+    .setting-val { color: var(--primary); font-weight: bold; }
+    .slider { width: 100%; margin-bottom: 24px; accent-color: var(--primary); }
+    .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 0 0 24px 0; }
+    .menu-row {
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    }
+    .menu-row .left { display: flex; align-items: center; gap: 12px; color: var(--text-main); }
+    .menu-row .left svg { fill: var(--text-sec); width: 24px; height: 24px; }
+    .menu-row .right svg { fill: var(--text-sec); width: 24px; height: 24px; }
+
+    /* === Bottom Navigation === */
+    .bottom-bar {
+      background: #1C1C22; display: flex; padding: 12px; border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .tab {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: var(--text-sec); font-size: 11px; cursor: pointer; transition: color 0.2s;
+    }
+    .tab.active { color: var(--primary); }
+    .tab svg { width: 24px; height: 24px; fill: currentColor; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <header>NH 리마인더</header>
+    
+    <div class="content-area">
+      <!-- 1. होम 탭 -->
+      <div id="page-home" class="page active">
+        <div class="status-card">
+          <div class="pulse-ring">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+          </div>
+          <div class="status-title">탐지 중</div>
+          <div class="status-desc">서대문역 5번 출구 반경 30m<br>백그라운드에서 모니터링 중입니다.</div>
+        </div>
+        <div>
+          <button class="btn-main">
+            <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <span>모니터링 일시정지</span>
+          </button>
+          <div class="action-row">
+            <div class="btn-sec"><span style="font-size:24px;">📍</span> 위치 보정</div>
+            <div class="btn-sec"><span style="font-size:24px;">📲</span> NH앱 실행</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 기록 탭 -->
+      <div id="page-history" class="page">
+        <div class="history-card">
+          <div class="history-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+          <div class="history-info">
+            <div class="desc">출퇴근 체크 완료 (앱 실행 감지)</div>
+            <div class="time">2026년 4월 21일 08:52</div>
+          </div>
+        </div>
+        <div class="history-card">
+          <div class="history-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+          <div class="history-info">
+            <div class="desc">출근 구역 진입 (1차 알림)</div>
+            <div class="time">2026년 4월 21일 08:51</div>
+          </div>
+        </div>
+        <div class="history-card">
+          <div class="history-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+          <div class="history-info">
+            <div class="desc">퇴근 체크 완료 (자동 감지)</div>
+            <div class="time">2026년 4월 20일 18:15</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 설정 탭 -->
+      <div id="page-settings" class="page">
+        <div class="section-title">지오펜스 설정</div>
+        <div class="settings-card">
+          <div class="setting-row">
+            <div class="setting-label">감지 반경</div>
+            <div class="setting-val" id="radiusVal">30m</div>
+          </div>
+          <input type="range" class="slider" min="20" max="200" value="30" oninput="document.getElementById('radiusVal').innerText = this.value + 'm'">
+          
+          <div class="divider"></div>
+          
+          <div class="setting-row">
+            <div class="setting-label">알림 반복 간격</div>
+            <div class="setting-val" id="intervalVal">60초</div>
+          </div>
+          <input type="range" class="slider" min="30" max="300" step="30" value="60" oninput="document.getElementById('intervalVal').innerText = this.value + '초'">
+        </div>
+
+        <div class="section-title">시스템 권한</div>
+        <div class="settings-card">
+          <div class="menu-row">
+            <div class="left">
+              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+              권한 설정 관리
+            </div>
+            <div class="right">
+              <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 네비게이션 -->
+    <div class="bottom-bar">
+      <div class="tab active" onclick="switchTab('home', this)">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> <span>홈</span>
+      </div>
+      <div class="tab" onclick="switchTab('history', this)">
+        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> <span>기록</span>
+      </div>
+      <div class="tab" onclick="switchTab('settings', this)">
+        <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg> <span>설정</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(pageId, tabEl) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tabEl.classList.add('active');
+    }
+  </script>
+</body>
+</html>

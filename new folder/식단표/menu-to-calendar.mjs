@@ -20,14 +20,19 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import http from 'http';
 import { URL } from 'url';
 import { google } from 'googleapis';
 import * as cheerio from 'cheerio';
 
-// ===== 경로 설정 =====
-const PROJECT_ROOT = 'c:\\Users\\hamcoding\\Desktop\\codding';
-const BASE_DIR = path.join(PROJECT_ROOT, 'new folder', '식단표');
+// ===== 포터블 경로 설정 (하드코딩 없음) =====
+// 스크립트 위치: [루트]/new folder/식단표/menu-to-calendar.mjs
+// 루트(PROJECT_ROOT) = 스크립트 기준 2단계 상위
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const BASE_DIR = __dirname;                                           // new folder/식단표/
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');             // 루트
 const CREDENTIALS_PATH = path.join(PROJECT_ROOT, 'credentials.json');
 const TOKEN_PATH = path.join(PROJECT_ROOT, 'token.json');
 
@@ -114,7 +119,8 @@ function parseMenuHTML(htmlPath, building) {
     $('thead th').each((i, el) => {
         if (i === 0) return;
         const text = $(el).text().trim();
-        const match = text.match(/(\d{1,2})월\s*(\d{1,2})일/);
+        // 다양한 날짜 형식 지원: 03월 30일, 3/30, 3.30, 3-30
+        const match = text.match(/(\d{1,2})\s*[월\/\.\-]\s*(\d{1,2})/);
         if (match) {
             dates.push(`${year}-${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}`);
         }
@@ -124,13 +130,33 @@ function parseMenuHTML(htmlPath, building) {
     let cornerAMenus = [];
     let cornerBMenus = [];
     let cornerCMenus = []; // NH타워 코너3용
+    let currentMeal = '';
 
     $('tbody tr').each((_, row) => {
-        const categoryCell = $(row).find('td.category');
+        const rowText = $(row).text().replace(/\s+/g, '');
+
+        const categoryCell = $(row).find('td.category, td.sub-category, th.category, th.sub-category');
         if (!categoryCell.length) return;
 
         const catText = categoryCell.text().replace(/\s+/g, '');
+
+        // 식사 구분자 (조식, 중식, 석식) 영구 트래킹
+        // ※ rowText(전체 셀 텍스트)는 메뉴 내용("모닝빵샌드위치" 등)을 포함하여 오검출 위험이 있으므로
+        //    카테고리 셀(catText)만 사용하여 정확하게 식사 구분을 판별함
+        if (catText.match(/(조식|아침|모닝)/)) {
+            currentMeal = '조식';
+        } else if (catText.match(/(중식|점심|A코너|B코너|코너A|코너B|두레A|두레B)/)) {
+            currentMeal = '중식';
+        } else if (catText.match(/(석식|저녁|디너)/)) {
+            currentMeal = '석식';
+        }
         let cornerType = null; // 'A', 'B', 'C'
+
+        // 중식이 아닌 경우 파싱 건너뛰기
+        if (currentMeal && currentMeal !== '중식' && currentMeal !== '조식' && currentMeal !== '석식') {
+            // 알 수 없는 섹션은 기본적으로 무시 (하지만 조식/석식은 스킵 대상)
+        }
+        if (currentMeal === '조식' || currentMeal === '석식') return;
 
         if (building === 'NH타워') {
             if (catText.includes('코너1')) cornerType = 'A';
@@ -140,14 +166,14 @@ function parseMenuHTML(htmlPath, building) {
             if (catText.includes('A') && (catText.includes('코너') || catText.includes('코'))) cornerType = 'A';
             else if (catText.includes('B') && (catText.includes('코너') || catText.includes('코'))) cornerType = 'B';
         } else if (building === '본관') {
-            if (catText.includes('두레A') || (catText.includes('두레') && catText.includes('A'))) cornerType = 'A';
-            else if (catText.includes('두레B') || (catText.includes('두레') && catText.includes('B'))) cornerType = 'B';
+            if (catText.includes('두레') && catText.includes('A')) cornerType = 'A';
+            else if (catText.includes('두레') && catText.includes('B')) cornerType = 'B';
         }
 
         if (!cornerType) return;
 
-        // .category를 제외한 모든 td 순회
-        const menuCells = $(row).children('td').not('.category');
+        // .category, .sub-category를 제외한 모든 td 순회
+        const menuCells = $(row).children('td').not('.category').not('.sub-category');
 
         const menus = [];
         menuCells.each((j, cell) => {
@@ -157,7 +183,8 @@ function parseMenuHTML(htmlPath, building) {
             const rawText = $cell.text().trim();
 
             const isEvent = $cell.hasClass('event-text') || $cell.hasClass('holiday-cell') ||
-                rawText.includes('행 사') || rawText.includes('행사') || rawText.includes('< 행 사 >') || rawText.includes('<행사>');
+                rawText.includes('행 사') || rawText.includes('행사') || rawText.includes('< 행 사 >') || rawText.includes('<행사>') || 
+                rawText.includes('휴 무') || rawText.includes('휴무') || rawText.includes('휴 점') || rawText.includes('휴점');
 
             const isEmpty = !rawText || rawText === '\u00a0' || rawText.replace(/\s/g, '') === '';
 

@@ -1,0 +1,126 @@
+{
+  "version": "0.1.0",
+  "review_sample_limit": 80,
+  "categories": [
+    {
+      "signal_id": "size_positive",
+      "label": "사이즈 만족",
+      "polarity": "positive",
+      "risk_area": "size",
+      "keywords": ["정사이즈", "사이즈 좋아", "잘 맞", "핏 좋아", "편하게 맞"],
+      "weight": 1.0,
+      "confidence_cap": 78,
+      "interpretation": "사이즈 선택 리스크를 낮추는 공개 리뷰 단서다."
+    },
+    {
+      "signal_id": "size_negative",
+      "label": "사이즈 불만",
+      "polarity": "negative",
+      "risk_area": "size",
+      "keywords": ["너무 커", "너무 작", "크게 나", "작게 나", "사이즈 실패"],
+      "weight": 1.4,
+      "confidence_cap": 78,
+      "interpretation": "사이즈 선택 리스크를 높이는 공개 리뷰 단서다."
+    },
+    {
+      "signal_id": "sheerness_positive",
+      "label": "비침 적음",
+      "polarity": "positive",
+      "risk_area": "sheerness",
+      "keywords": ["비침 없", "비치지 않", "안 비쳐", "두께감 있"],
+      "weight": 1.0,
+      "confidence_cap": 74,
+      "interpretation": "얇은 티셔츠 구매 리스크를 낮추는 단서다."
+    },
+    {
+      "signal_id": "sheerness_negative",
+      "label": "비침 있음",
+      "polarity": "negative",
+      "risk_area": "sheerness",
+      "keywords": ["비침 있", "많이 비쳐", "얇아서 비", "속이 비"],
+      "weight": 1.3,
+      "confidence_cap": 74,
+      "interpretation": "원단 두께/비침 리스크를 높이는 단서다."
+    },
+    {
+      "signal_id": "neck_durability_negative",
+      "label": "목 늘어남",
+      "polarity": "negative",
+      "risk_area": "durability",
+      "keywords": ["목 늘어", "목이 늘어", "넥 늘어", "목 부분 늘"],
+      "weight": 1.5,
+      "confidence_cap": 76,
+      "interpretation": "내구성 리스크를 높이는 단서다."
+    },
+    {
+      "signal_id": "laundry_deformation_negative",
+      "label": "세탁 변형",
+      "polarity": "negative",
+      "risk_area": "durability",
+      "keywords": ["세탁 후 줄", "세탁 후 변", "줄어들", "뒤틀림", "틀어짐"],
+      "weight": 1.5,
+      "confidence_cap": 76,
+      "interpretation": "세탁 후 형태 유지 리스크를 높이는 단서다."
+    },
+    {
+      "signal_id": "fabric_positive",
+      "label": "원단 만족",
+      "polarity": "positive",
+      "risk_area": "fabric",
+      "keywords": ["탄탄", "원단 좋아", "재질 좋아", "부드러", "두께 적당"],
+      "weight": 1.1,
+      "confidence_cap": 76,
+      "interpretation": "품질 만족도를 높이는 공개 리뷰 단서다."
+    },
+    {
+      "signal_id": "fabric_negative",
+      "label": "원단 불만",
+      "polarity": "negative",
+      "risk_area": "fabric",
+      "keywords": ["원단 별로", "재질 별로", "까슬", "얇아", "후줄근"],
+      "weight": 1.3,
+      "confidence_cap": 76,
+      "interpretation": "품질 리스크를 높이는 공개 리뷰 단서다."
+    },
+    {
+      "signal_id": "fit_positive",
+      "label": "핏 만족",
+      "polarity": "positive",
+      "risk_area": "fit",
+      "keywords": ["핏 예", "핏 좋아", "무난한 핏", "기본핏", "깔끔한 핏"],
+      "weight": 1.0,
+      "confidence_cap": 78,
+      "interpretation": "목적 적합도를 높이는 착용감 단서다."
+    },
+    {
+      "signal_id": "fit_negative",
+      "label": "핏 불만",
+      "polarity": "negative",
+      "risk_area": "fit",
+      "keywords": ["핏 별로", "어벙", "애매한 핏", "너무 박시", "너무 붙"],
+      "weight": 1.2,
+      "confidence_cap": 78,
+      "interpretation": "목적 적합도를 낮출 수 있는 착용감 단서다."
+    },
+    {
+      "signal_id": "repurchase_positive",
+      "label": "재구매 언급",
+      "polarity": "positive",
+      "risk_area": "repurchase",
+      "keywords": ["재구매", "또 구매", "다시 살", "색깔별로", "여러 장"],
+      "weight": 1.2,
+      "confidence_cap": 70,
+      "interpretation": "만족도가 높을 가능성을 보여주는 단서지만 실제 재구매율은 아니다."
+    },
+    {
+      "signal_id": "age_40s_context",
+      "label": "40대 타겟",
+      "polarity": "context",
+      "risk_area": "age_context",
+      "keywords": ["40대", "아빠", "남편", "직장", "출근", "무난"],
+      "weight": 1.0,
+      "confidence_cap": 68,
+      "interpretation": "40대 남성에게 맞을 가능성을 보조하는 타겟 단서다."
+    }
+  ]
+}

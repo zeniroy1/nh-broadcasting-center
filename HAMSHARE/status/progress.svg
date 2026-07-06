@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="760" viewBox="0 0 1160 760" role="img" aria-labelledby="title desc">
+  <title id="title">HAMSHARE 10단계 구현 현황</title>
+  <desc id="desc">요구사항부터 Android 앱까지 완료, 종단 간 실기기 통합 진행 중</desc>
+  <defs>
+    <linearGradient id="bar" x1="0" x2="1"><stop stop-color="#43d39e"/><stop offset="1" stop-color="#55a7ff"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".3"/></filter>
+  </defs>
+  <rect width="1160" height="760" fill="#0d1b2d"/>
+  <g font-family="Segoe UI,Malgun Gothic,sans-serif">
+    <text x="55" y="72" fill="#eaf2ff" font-size="34" font-weight="700">구현 진행도</text>
+    <text x="1105" y="72" fill="#43d39e" font-size="34" font-weight="800" text-anchor="end">75%</text>
+    <rect x="55" y="98" width="1050" height="16" rx="8" fill="#20344d"/>
+    <rect x="55" y="98" width="788" height="16" rx="8" fill="url(#bar)"/>
+
+    <g transform="translate(55 154)" filter="url(#shadow)">
+      <rect width="510" height="98" rx="16" fill="#102a36" stroke="#43d39e"/>
+      <circle cx="45" cy="49" r="23" fill="#43d39e"/><path d="M34 49l8 8 16-19" fill="none" stroke="#07111f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="84" y="41" fill="#eaf2ff" font-size="20" font-weight="700">1. 요구사항·환경 확정</text><text x="84" y="69" fill="#91a7c0" font-size="15">S23+ · Windows 10 · TP-Link Wi-Fi 6</text>
+    </g>
+    <g transform="translate(595 154)" filter="url(#shadow)">
+      <rect width="510" height="98" rx="16" fill="#102a36" stroke="#43d39e"/>
+      <circle cx="45" cy="49" r="23" fill="#43d39e"/><path d="M34 49l8 8 16-19" fill="none" stroke="#07111f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="84" y="41" fill="#eaf2ff" font-size="20" font-weight="700">2. 네트워크·성능 기준</text><text x="84" y="69" fill="#91a7c0" font-size="15">완료 · 핫스팟 직접 연결</text>
+    </g>
+
+    <g fill="#0b1727" stroke="#20344d">
+      <rect x="55" y="278" width="330" height="92" rx="14"/><rect x="415" y="278" width="330" height="92" rx="14"/><rect x="775" y="278" width="330" height="92" rx="14"/>
+      <rect x="55" y="394" width="330" height="92" rx="14"/><rect x="415" y="394" width="330" height="92" rx="14"/><rect x="775" y="394" width="330" height="92" rx="14"/>
+      <rect x="55" y="510" width="330" height="92" rx="14"/><rect x="415" y="510" width="330" height="92" rx="14"/>
+    </g>
+    <g fill="#eaf2ff" font-size="18" font-weight="650">
+      <text x="80" y="316">3. 프로토콜 확정</text><text x="440" y="316">4. 보안·페어링</text><text x="800" y="316">5. Windows 수신기</text>
+      <text x="80" y="432">6. Android 송신 앱</text><text x="440" y="432">7. 종단 간 통합</text><text x="800" y="432">8. 성능 최적화</text>
+      <text x="80" y="548">9. 인수·복구 시험</text><text x="440" y="548">10. 패키징·운영</text>
+    </g>
+    <g fill="#91a7c0" font-size="14">
+      <text x="80" y="344" fill="#43d39e">완료 · API와 오류 코드</text><text x="440" y="344" fill="#43d39e">완료 · TLS와 PIN</text><text x="800" y="344" fill="#43d39e">완료 · WPF/Kestrel</text>
+      <text x="80" y="460" fill="#43d39e">완료 · S23+ 설치</text><text x="440" y="460" fill="#55a7ff">진행 중 · LAN 연결 대기</text><text x="800" y="460">대기 · 800MB 시험</text>
+      <text x="80" y="576">대기 · 장애 시나리오</text><text x="440" y="576">대기 · 설치 파일</text>
+    </g>
+    <rect x="775" y="510" width="330" height="92" rx="14" fill="#111d2e" stroke="#ffc857" stroke-dasharray="7 7"/>
+    <text x="800" y="548" fill="#ffc857" font-size="18" font-weight="700">현재 승인 상태</text><text x="800" y="576" fill="#eaf2ff" font-size="14">MVP 코딩 착수 승인 완료</text>
+
+    <line x1="55" y1="642" x2="1105" y2="642" stroke="#20344d"/>
+    <text x="55" y="684" fill="#91a7c0" font-size="15">핵심 경로</text>
+    <text x="55" y="716" fill="#eaf2ff" font-size="17" font-weight="650">S23+ 5GHz 핫스팟</text><text x="268" y="716" fill="#55a7ff" font-size="20">→</text>
+    <text x="305" y="716" fill="#eaf2ff" font-size="17" font-weight="650">HTTPS 스트리밍</text><text x="480" y="716" fill="#55a7ff" font-size="20">→</text>
+    <text x="517" y="716" fill="#eaf2ff" font-size="17" font-weight="650">Windows 수신기</text><text x="690" y="716" fill="#55a7ff" font-size="20">→</text>
+    <text x="727" y="716" fill="#eaf2ff" font-size="17" font-weight="650">SHA-256 검증</text><text x="886" y="716" fill="#55a7ff" font-size="20">→</text>
+    <text x="923" y="716" fill="#43d39e" font-size="17" font-weight="700">Received</text>
+  </g>
+</svg>

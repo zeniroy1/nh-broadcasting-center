@@ -1,0 +1,51 @@
+name: nh_reminder
+description: 농협파트너스 출퇴근 버튼 클릭 리마인더 앱
+publish_to: 'none'
+version: 2.5.0+2
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+
+  geofence_service: ^5.0.0
+
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.0
+
+  flutter_local_notifications: ^17.0.0
+
+  flutter_background_service: ^5.0.5
+
+  shared_preferences: ^2.2.2
+
+  usage_stats: ^1.3.1
+
+  url_launcher: ^6.2.4
+
+  cupertino_icons: ^1.0.2
+
+  excel: ^4.0.3
+  path_provider: ^2.1.2
+  share_plus: ^7.2.1
+
+  android_alarm_manager_plus: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  riverpod_generator: ^2.3.9
+  build_runner: ^2.4.8
+
+dependency_overrides:
+  usage_stats:
+    path: third_party/usage_stats
+
+flutter:
+  uses-material-design: true

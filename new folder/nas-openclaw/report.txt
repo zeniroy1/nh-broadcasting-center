@@ -1,0 +1,135 @@
+OpenClaw NAS 설치 완료 보고서
+작성일: 2026년 4월 16일  |  담당: 박삼석
+1. 설치 환경
+항목
+내용
+NAS 기기
+시놀로지(Synology) NAS
+NAS IP (내부)
+192.168.0.101
+NAS 도메인 (외부)
+setec2.synology.me
+공유기
+iptime
+컨테이너 관리
+Synology Container Manager (Docker)
+OpenClaw 버전
+ghcr.io/openclaw/openclaw:latest (v2026.4.14)
+2. 최종 docker-compose.yaml 설정
+아래는 현재 정상 작동 중인 docker-compose.yaml 전체 내용입니다.
+version: '3.8'
+services:
+  gateway:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw-gateway
+    ports:
+      - "18789:18789"
+      - "18790:18790"
+    volumes:
+      - /volume1/docker/openclaw/config:/home/node/.openclaw
+      - /volume1/docker/openclaw/workspace:/home/node/.openclaw/workspace
+    environment:
+      - NODE_ENV=production
+      - ANTHROPIC_API_KEY=[재발급 필요]
+      - GEMINI_API_KEY=[재발급 필요]
+      - OPENCLAW_GATEWAY_TOKEN=navm4unet!
+      - OPENCLAW_GATEWAY_BIND=0.0.0.0
+      - OPENCLAW__gateway__controlUi__dangerouslyAllowHostHeaderOriginFallback=true
+    command: ["node", "dist/index.js", "gateway", "--bind", "lan", "--port", "18789", "--allow-unconfigured"]
+    restart: unless-stopped
+    init: true
+3. openclaw.json 설정
+경로: /volume1/docker/openclaw/config/openclaw.json
+{
+  "gateway": {
+    "mode": "local",
+    "bind": "lan",
+    "controlUi": {
+      "allowedOrigins": [
+        "http://192.168.0.101:18789",
+        "http://setec2.synology.me:18789",
+        "http://127.0.0.1:18789",
+        "http://localhost:18789"
+      ],
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    }
+  }
+}
+4. 네트워크 포트 설정
+4-1. iptime 포트포워딩
+이름
+외부 포트
+내부 포트
+내부 IP
+openclaw-gateway
+18789
+18789
+192.168.0.101
+openclaw-bridge
+18790
+18790
+192.168.0.101
+SSH
+22
+22
+192.168.0.101
+4-2. 시놀로지 방화벽 허용 포트
+18789 (TCP) - OpenClaw Gateway
+18790 (TCP) - OpenClaw Bridge
+22 (TCP) - SSH
+5. 접속 방법
+5-1. 내부 접속 (집 내부 네트워크)
+http://192.168.0.101:18789/#token=navm4unet!
+5-2. 외부 접속 (외부 네트워크/모바일)
+http://setec2.synology.me:18789/#token=navm4unet!
+⚠️ 주의: 외부 접속 시 크롬 브라우저에서 아래 설정 필요
+크롬 주소창에 chrome://flags/#unsafely-treat-insecure-origin-as-secure 입력
+입력란에 http://setec2.synology.me:18789 추가
+Enabled 선택 후 Relaunch
+6. 페어링된 디바이스
+디바이스
+상태
+비고
+본체 PC (내부)
+페어링 완료
+192.168.0.x
+외부 PC
+페어링 완료
+외부 접속
+핸드폰
+페어링 완료
+모바일 접속
+7. SSH 접속 정보
+내부 접속
+ssh zeniroy@192.168.0.101
+외부 접속
+ssh zeniroy@setec2.synology.me
+주요 명령어:
+컨테이너 로그 확인: sudo docker logs openclaw-gateway --tail 20
+컨테이너 재시작: sudo docker restart openclaw-gateway
+기기 목록 확인: sudo docker exec openclaw-gateway node dist/index.js devices list
+기기 승인: sudo docker exec openclaw-gateway node dist/index.js devices approve [ID]
+8. 앞으로 할 작업 (TODO)
+우선순위
+작업
+비고
+🔴 긴급
+API 키 재발급
+대화 기록에 노출됨 - 즉시 교체 필요
+🟡 권장
+HTTPS 설정
+Let's Encrypt SSL 인증서 설치
+🟡 권장
+모델 설정
+Claude/Gemini 모델 선택 및 설정
+🟢 선택
+채널 연결
+텔레그램, 디스코드 등 연결
+🟢 선택
+크롬 플래그 영구화
+업데이트 시 초기화 방지
+9. API 키 재발급 방법 (긴급)
+⚠️ 기존 API 키가 대화 기록에 노출되었습니다. 아래 링크에서 즉시 재발급하세요.
+Anthropic: https://console.anthropic.com
+Google Gemini: https://aistudio.google.com
+재발급 후 Container Manager에서 YAML의 API 키 값을 새 키로 교체하고 재빌드하세요.

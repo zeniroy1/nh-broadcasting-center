@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NH 리마인더 작동 시뮬레이터 (UsageStats & Geofence)</title>
+  <style>
+    :root {
+      --bg: #111;
+      --panel-bg: #1c1c1e;
+      --text: #fff;
+      --primary: #4DB6AC;
+      --danger: #ff453a;
+      --nh-blue: #005BAC;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif; }
+    body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+    /* Left Control Panel */
+    .controls {
+      flex: 1; padding: 40px; border-right: 1px solid #333; display: flex; flex-direction: column; gap: 30px;
+      overflow-y: auto; background: var(--panel-bg);
+    }
+    .header h1 { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
+    .header p { color: #aaa; font-size: 14px; line-height: 1.5; }
+    
+    .panel-section { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+    .panel-title { font-weight: bold; margin-bottom: 16px; font-size: 15px; color: #ccc; display: flex; align-items: center; gap: 8px; }
+    
+    .btn {
+      width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: bold; font-size: 15px;
+      cursor: pointer; transition: 0.2s; background: #333; color: white; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:hover { background: #444; }
+    .btn.active { background: var(--primary); color: #000; }
+    .btn.danger { background: var(--danger); color: white; }
+
+    .status-log {
+      flex: 1; background: #000; padding: 16px; border-radius: 12px; font-family: monospace; font-size: 12px;
+      color: #0f0; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+    }
+    .status-log .time { color: #888; }
+    .status-log .sys { color: #0ff; }
+    .status-log .warn { color: #ff0; }
+
+    /* Right Phone Panel */
+    .phone-container {
+      flex: 1; display: flex; align-items: center; justify-content: center; position: relative; background: #0a0a0c;
+    }
+    .phone {
+      width: 320px; height: 680px; border-radius: 36px; border: 8px solid #222; background: #000;
+      position: relative; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8); transition: 0.3s;
+    }
+    .phone.vibrate { animation: shake 0.5s infinite; box-shadow: 0 0 50px rgba(255, 69, 58, 0.5); border-color: #521; }
+    @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+
+    /* Phone Screens */
+    .screen { position: absolute; top:0; left:0; right:0; bottom:0; display: none; flex-direction: column; }
+    .screen.active { display: flex; opacity: 1; z-index: 10; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+    /* AOD Screen */
+    .scr-aod { background: #000; align-items: center; padding-top: 100px; }
+    .aod-time { font-size: 60px; font-weight: 300; color: #ddd; line-height: 1; }
+    .aod-date { color: #888; font-size: 16px; margin-top: 10px; }
+
+    /* Alarm Popup Screen */
+    .scr-alarm { background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-1.2.1&auto=format&fit=crop&w=360&q=80') center/cover; position: relative; }
+    .scr-alarm::after { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.7); }
+    .alarm-card {
+      position: absolute; top: 50%; left: 5%; width: 90%; background: #1c1c1e; border-radius: 20px; padding: 24px;
+      z-index: 20; transform: translateY(-50%); box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .alarm-title { font-size: 20px; font-weight: bold; margin-bottom: 12px; color: white; display: flex; align-items: center; gap: 8px; }
+    .alarm-desc { font-size: 14px; color: #aaa; margin-bottom: 24px; line-height: 1.5; }
+    .alarm-btn { padding: 14px; border-radius: 12px; text-align: center; font-weight: bold; background: var(--primary); color: #000; cursor: pointer; margin-bottom: 10px; }
+
+    /* NH App Screen */
+    .scr-nh { background: #f4f4f4; color: #333; }
+    .nh-header { background: var(--nh-blue); color: white; padding: 40px 20px 20px; font-size: 18px; font-weight: bold; text-align: center; }
+    .nh-content { padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; }
+    .nh-btn-huge { width: 150px; height: 150px; border-radius: 50%; background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 4px solid var(--nh-blue); color: var(--nh-blue); font-weight: bold; font-size: 20px; cursor: pointer; }
+
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <div class="header">
+      <h1>[3단계] 네이티브 로직 시뮬레이터</h1>
+      <p>가상 GPS 이동과 백그라운드 UsageStatsManager의 작동을 시뮬레이션힙니다. 버튼을 눌러 시나리오를 진행하세요.</p>
+    </div>
+
+    <!-- 1. 지오펜스 동작 -->
+    <div class="panel-section">
+      <div class="panel-title">📍 행동 시뮬레이션</div>
+      <button class="btn" id="btn-walk" onclick="simulateWalk()">🚶 서대문역(지오펜스 반경) 진입하기</button>
+      <button class="btn" id="btn-ignore" onclick="simulateIgnore()" style="margin-top: 10px; display: none;">⏳ 사용자 알림 무시 (타이머 발동)</button>
+    </div>
+
+    <!-- 2. 타앱 감지 시스템 상태 (UsageStatsManager) -->
+    <div class="panel-section">
+      <div class="panel-title">⚙️ UsageStatsManager 백그라운드 시스템</div>
+      <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+        <div style="flex:1; background: #000; padding: 12px; border-radius: 8px; text-align: center;">
+          <div style="color: #666; font-size: 12px; margin-bottom: 4px;">알람 타이머</div>
+          <div id="stat-alarm" style="color: white; font-weight: bold;">대기 중</div>
+        </div>
+        <div style="flex:1; background: #000; padding: 12px; border-radius: 8px; text-align: center;">
+          <div style="color: #666; font-size: 12px; margin-bottom: 4px;">포그라운드 앱 감지</div>
+          <div id="stat-app" style="color: white; font-weight: bold;">없음</div>
+        </div>
+      </div>
+      <p style="font-size: 12px; color: #888;">* 10초마다 현재 떠있는 앱(com.vus.nhpthrm)을 체크중입니다.</p>
+    </div>
+
+    <!-- 3. 시스템 로그 -->
+    <div class="status-log" id="sys-log">
+      <div><span class="time">[00:00:00]</span> <span class="sys">[시스템]</span> 시뮬레이터 초기화 완료.</div>
+    </div>
+  </div>
+
+  <div class="phone-container">
+    <div class="phone" id="phone">
+      
+      <!-- Screen: Always On Display -->
+      <div class="screen scr-aod active" id="scr-aod">
+        <div class="aod-time">08:45</div>
+        <div class="aod-date">4월 21일 화요일</div>
+      </div>
+
+      <!-- Screen: Full-Screen Alarm Popup -->
+      <div class="screen scr-alarm" id="scr-alarm">
+        <div class="aod-time" style="position: absolute; top: 60px; left: 0; right: 0; text-align: center; font-size: 50px;">08:50</div>
+        <div class="alarm-card">
+          <div class="alarm-title"><span style="font-size:24px">🚨</span> 출퇴근 체크하셨나요?</div>
+          <div class="alarm-desc">반경(30m) 이내 진입 감지.<br>앱을 켜서 출퇴근 기록을 남겨주세요!</div>
+          <div class="alarm-btn" onclick="openNhApp()">📲 NH파트너스 열기</div>
+          <div class="alarm-btn" style="background:#333;color:white;" onclick="ignoreAlarm()">✅ 직접 나중에 닫기</div>
+        </div>
+      </div>
+
+      <!-- Screen: Fake NH App -->
+      <div class="screen scr-nh" id="scr-nh">
+        <div class="nh-header">NH파트너스</div>
+        <div class="nh-content">
+          <div class="nh-btn-huge" onclick="alert('출퇴근 체크 완료!')">
+            <div>👆</div>
+            <div style="margin-top: 8px;">출근/퇴근</div>
+          </div>
+          <p style="margin-top: 30px; font-size: 14px; color: #888;">(NH 리마인더가 이 화면을 감지합니다)</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let logEl = document.getElementById('sys-log');
+    let phoneEl = document.getElementById('phone');
+    let isAlarming = false;
+    let alarmTimer = null;
+    let usageStatTimer = null;
+
+    function addLog(msg, type='normal') {
+      let d = new Date();
+      let t = d.toTimeString().split(' ')[0];
+      let tpl = `<span class="time">[${t}]</span> `;
+      if(type==='sys') tpl += `<span class="sys">[시스템]</span> `;
+      else if(type==='warn') tpl += `<span class="warn">[경고]</span> `;
+      else tpl += `<span style="color:#fff">[이벤트]</span> `;
+      
+      logEl.innerHTML += `<div>${tpl} ${msg}</div>`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function switchScreen(id) {
+      document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // 단계 1: 걷기
+    function simulateWalk() {
+      addLog('서대문역 방향으로 이동 중...', 'sys');
+      let btnWalk = document.getElementById('btn-walk');
+      btnWalk.innerText = '🚶 이동 중...';
+      btnWalk.disabled = true;
+
+      document.querySelector('.aod-time').innerText = '08:50';
+
+      setTimeout(() => {
+        addLog('🚨 지오펜스(서대문역 30m) 진입 감지 이벤트 발생!', 'warn');
+        triggerAlarm();
+        document.getElementById('btn-ignore').style.display = 'block';
+        btnWalk.style.display = 'none';
+      }, 2000);
+    }
+
+    // 단계 2: 알람 발생 (백그라운드 > 풀스크린 인텐트)
+    function triggerAlarm() {
+      isAlarming = true;
+      switchScreen('scr-alarm');
+      phoneEl.classList.add('vibrate');
+      
+      document.getElementById('stat-alarm').innerText = '동작 중 🔔';
+      document.getElementById('stat-alarm').style.color = '#ff453a';
+
+      // 1분(여기선 10초) 마다 알람 울리기 타이머
+      alarmTimer = setInterval(() => {
+        addLog('사용자 응답 없음.. 백그라운드 리마인더 반복 알림 발송 🔔', 'warn');
+      }, 5000);
+
+      // UsageStatsManager 폴링 시작 (여기선 3초마다 체크)
+      addLog('UsageStatsManager: 감시 쓰레드 시작', 'sys');
+      usageStatTimer = setInterval(() => {
+        addLog('UsageStatsManager: 현재 포그라운드 패키지 조회 중...', 'sys');
+        // 지금 떠있는 앱이 nhApp인지 HTML 클래스로 확인 (시뮬레이션)
+        let activeScr = document.querySelector('.screen.active').id;
+        document.getElementById('stat-app').innerText = (activeScr === 'scr-nh') ? 'com.vus.nhpthrm' : 'com.android.systemui';
+
+        if(activeScr === 'scr-nh') {
+          addLog('✨ **NH파트너스 포그라운드 실행 감지!**', 'warn');
+          stopAlarm();
+        }
+      }, 3000);
+    }
+
+    function simulateIgnore() {
+      addLog('스마트폰 화면을 껐습니다. (주머니에 넣음)');
+      switchScreen('scr-aod');
+      phoneEl.classList.remove('vibrate');
+      // 알람은 꺼졌지만 백그라운드 타이머는 계속 돔
+    }
+
+    function openNhApp() {
+      addLog('사용자가 알림을 탭하여 NH파트너스를 실행했습니다.');
+      switchScreen('scr-nh');
+      phoneEl.classList.remove('vibrate');
+      // UsageStats가 감지할 시간을 주기 위해 1초 후 감지됨
+    }
+
+    function ignoreAlarm() {
+      addLog('사용자가 직접 알림을 종료했습니다.');
+      switchScreen('scr-aod');
+      stopAlarm();
+    }
+
+    function stopAlarm() {
+      if(!isAlarming) return;
+      isAlarming = false;
+      clearInterval(alarmTimer);
+      clearInterval(usageStatTimer);
+      phoneEl.classList.remove('vibrate');
+      
+      document.getElementById('stat-alarm').innerText = '종료 됨 🔕';
+      document.getElementById('stat-alarm').style.color = '#4DB6AC';
+      
+      addLog('✅ 지오펜스 모니터링 알람이 완전 종료되었습니다.', 'sys');
+    }
+
+  </script>
+</body>
+</html>

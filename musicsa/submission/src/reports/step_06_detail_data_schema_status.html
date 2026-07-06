@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Step 06 Detail Data Schema</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dde8;
+      --paper: #f5f7fa;
+      --panel: #ffffff;
+      --teal: #0f766e;
+      --blue: #2563eb;
+      --orange: #c2410c;
+      --violet: #6d28d9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .badge {
+      padding: 8px 12px;
+      color: #166534;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 16px;
+    }
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    section {
+      margin-top: 14px;
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+    .lane {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .lane div {
+      min-height: 94px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+    .lane b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .lane span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      background: #fbfcfe;
+    }
+    .pill {
+      display: inline-block;
+      min-width: 74px;
+      padding: 4px 8px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .direct { background: var(--teal); }
+    .refined { background: var(--blue); }
+    .inferred { background: var(--orange); }
+    .config {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .config div {
+      min-height: 104px;
+      padding: 12px;
+      border-left: 4px solid var(--violet);
+      background: #faf7ff;
+    }
+    .config b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .config p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      header { flex-direction: column; }
+      .metrics, .lane, .config { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>6단계 상품 상세 데이터 수집 설계</h1>
+        <p class="subtitle">목록 후보의 product_id/product_url을 이용해 상세 페이지 공개 지표를 보강하는 스키마와 작업 청사진입니다.</p>
+      </div>
+      <div class="badge">검수 통과</div>
+    </header>
+
+    <div class="metrics" aria-label="핵심 수치">
+      <div class="metric"><strong>23</strong><span>상세 필드 수</span></div>
+      <div class="metric"><strong>2</strong><span>추정 필드 수</span></div>
+      <div class="metric"><strong>5</strong><span>기본 상세 작업 수</span></div>
+      <div class="metric"><strong>35</strong><span>누적 자동 테스트</span></div>
+    </div>
+
+    <section>
+      <h2>구현 흐름</h2>
+      <div class="lane">
+        <div><b>Collection</b><span>5단계 후보 작업에서 product_id와 product_url을 받습니다.</span></div>
+        <div><b>Detail Task</b><span>우선순위 높은 후보부터 상세 페이지 작업을 생성합니다.</span></div>
+        <div><b>Direct</b><span>가격, 브랜드, 리뷰 수처럼 공개 노출값을 보존합니다.</span></div>
+        <div><b>Refined</b><span>성별, 시즌, 소재, 핏 문구를 표준 값으로 정제합니다.</span></div>
+        <div><b>Inferred</b><span>무지 적합도와 40대 타겟 적합도에는 신뢰도와 한계를 붙입니다.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>대표 상세 필드</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>필드</th>
+            <th>구분</th>
+            <th>소스 영역</th>
+            <th>신뢰도</th>
+            <th>규칙</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>product_name</td>
+            <td><span class="pill direct">direct</span></td>
+            <td>product_header</td>
+            <td>100%</td>
+            <td>상세 헤더의 상품명을 공백 정규화합니다.</td>
+          </tr>
+          <tr>
+            <td>sale_price</td>
+            <td><span class="pill direct">direct</span></td>
+            <td>price_area</td>
+            <td>100%</td>
+            <td>현재 노출 판매가를 원 단위 정수로 저장합니다.</td>
+          </tr>
+          <tr>
+            <td>material_keywords</td>
+            <td><span class="pill refined">refined</span></td>
+            <td>description_area</td>
+            <td>88%</td>
+            <td>소재 단어를 사전 기반으로 추출합니다.</td>
+          </tr>
+          <tr>
+            <td>plain_style_fit</td>
+            <td><span class="pill inferred">inferred</span></td>
+            <td>name_description_image_alt</td>
+            <td>82%</td>
+            <td>무지, 로고, 프린트 단서를 조합하되 이미지 정밀 판정은 하지 않습니다.</td>
+          </tr>
+          <tr>
+            <td>age_40s_context_fit</td>
+            <td><span class="pill inferred">inferred</span></td>
+            <td>category_description_review_summary</td>
+            <td>72%</td>
+            <td>실제 40대 구매자 수가 아니라 공개 문구 기반 타겟 추정입니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>오픈형 설정</h2>
+      <div class="config">
+        <div><b>설정 파일</b><p>`src/config/collection_scope.json`에서 수집량, 우선순위, 정책 문구를 조정합니다.</p></div>
+        <div><b>검증 방식</b><p>기본 설정과 사용자 지정 설정 모두 테스트에서 수집량 변경 여부를 확인합니다.</p></div>
+        <div><b>경계 원칙</b><p>실제 구매자 수, 연령대별 구매 비율, 내부 랭킹 알고리즘은 수집 대상으로 표현하지 않습니다.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      다음 단계는 리뷰 키워드 사전과 리뷰 기반 리스크 요약 규칙입니다. 사용자 승인 전까지 진행하지 않습니다.
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520">
+  <rect width="1100" height="520" fill="#ffffff"/>
+  <style>
+    text { font-family: "Malgun Gothic", "Noto Sans KR", sans-serif; fill: #111111; }
+    .title { font-size: 46px; font-weight: 700; }
+    .date { font-size: 22px; font-weight: 700; }
+    .head { font-size: 18px; font-weight: 700; }
+    .cell { font-size: 17px; }
+    .dept { font-size: 15px; }
+    .grid { stroke: #9aa0a6; stroke-width: 1; stroke-dasharray: 2 4; }
+    .strong { stroke: #222222; stroke-width: 2; }
+  </style>
+
+  <text x="550" y="65" text-anchor="middle" class="title">방송업무일지</text>
+  <line x1="285" y1="90" x2="815" y2="90" stroke="#b7d7a8" stroke-width="4"/>
+  <text x="550" y="122" text-anchor="middle" class="date">2026년 06월 19일 금요일</text>
+
+  <rect x="40" y="170" width="1020" height="52" fill="#d9d9d9" stroke="#222222" stroke-width="2"/>
+  <line x1="110" y1="170" x2="110" y2="460" class="grid"/>
+  <line x1="270" y1="170" x2="270" y2="460" class="grid"/>
+  <line x1="430" y1="170" x2="430" y2="460" class="grid"/>
+  <line x1="790" y1="170" x2="790" y2="460" class="grid"/>
+  <line x1="960" y1="170" x2="960" y2="460" class="grid"/>
+
+  <text x="75" y="202" text-anchor="middle" class="head">번호</text>
+  <text x="190" y="202" text-anchor="middle" class="head">시간</text>
+  <text x="350" y="202" text-anchor="middle" class="head">장소</text>
+  <text x="610" y="202" text-anchor="middle" class="head">회의내용</text>
+  <text x="875" y="202" text-anchor="middle" class="head">주관부서</text>
+  <text x="1010" y="202" text-anchor="middle" class="head">인원</text>
+
+  <line x1="40" y1="300" x2="1060" y2="300" class="grid"/>
+  <line x1="40" y1="380" x2="1060" y2="380" class="grid"/>
+  <line x1="40" y1="460" x2="1060" y2="460" class="strong"/>
+  <rect x="40" y="222" width="1020" height="238" fill="none" stroke="#222222" stroke-width="2"/>
+
+  <text x="75" y="266" text-anchor="middle" class="cell">1</text>
+  <text x="190" y="266" text-anchor="middle" class="cell">11:20~14:00</text>
+  <text x="350" y="266" text-anchor="middle" class="cell">소회의실</text>
+  <text x="610" y="252" text-anchor="middle" class="cell">26년 여성조합원 참여 공동사업</text>
+  <text x="610" y="277" text-anchor="middle" class="cell">무선2, 전자칠판</text>
+  <text x="875" y="250" text-anchor="middle" class="dept">사무금융노조/</text>
+  <text x="875" y="273" text-anchor="middle" class="dept">김민주(6968)</text>
+  <text x="1010" y="266" text-anchor="middle" class="cell">20</text>
+
+  <text x="75" y="346" text-anchor="middle" class="cell">2</text>
+  <text x="190" y="346" text-anchor="middle" class="cell">15:00~17:00</text>
+  <text x="350" y="346" text-anchor="middle" class="cell">화상회의실</text>
+  <text x="610" y="346" text-anchor="middle" class="cell">농업인의 날 행사추진위원회 실무추진회의</text>
+  <rect x="792" y="302" width="166" height="76" fill="#eef6ea" stroke="#6aa84f" stroke-width="2"/>
+  <text x="875" y="327" text-anchor="middle" class="dept">농정협력팀/</text>
+  <text x="875" y="350" text-anchor="middle" class="dept">신승훈(031-220-</text>
+  <text x="875" y="373" text-anchor="middle" class="dept">8743)</text>
+  <text x="1010" y="346" text-anchor="middle" class="cell">30</text>
+
+  <text x="75" y="426" text-anchor="middle" class="cell">3</text>
+  <text x="190" y="426" text-anchor="middle" class="cell">09:30~12:00</text>
+  <text x="350" y="426" text-anchor="middle" class="cell">중회의실</text>
+  <text x="610" y="426" text-anchor="middle" class="cell">본인확인기관 사전미팅 인터뷰</text>
+  <text x="875" y="409" text-anchor="middle" class="dept">전자서명사업팀/</text>
+  <text x="875" y="434" text-anchor="middle" class="dept">강혜정(2024-5573)</text>
+  <text x="1010" y="426" text-anchor="middle" class="cell">30</text>
+
+  <text x="550" y="500" text-anchor="middle" font-size="15" fill="#5f6368">긴 주관부서 셀도 모든 줄이 같은 크기이며, 셀 중심을 기준으로 정렬됩니다.</text>
+</svg>

@@ -1,0 +1,30 @@
+{
+  "version": "0.1.0",
+  "weights": {
+    "purpose_fit_score": 26,
+    "purchase_trust_score": 16,
+    "review_purchase_evidence_score": 12,
+    "age_male_40s_fit_score": 12,
+    "buyer_context_profile_score": 8,
+    "price_fit_score": 12,
+    "popularity_proxy_score": 7,
+    "delivery_stock_score": 3,
+    "review_risk_score": 4
+  },
+  "confidence_caps": {
+    "final_score": 88,
+    "public_direct_score": 95,
+    "inferred_component_score": 82,
+    "review_component_score": 80
+  },
+  "penalties": {
+    "is_ad": 3,
+    "is_sold_out": 100,
+    "missing_required_public_data": 8
+  },
+  "explanation": {
+    "score_boundary": "final_score는 공개 지표와 대체 지표 기반의 추천 점수이며 실제 구매 전환율이나 실제 구매자 수가 아니다.",
+    "confidence_boundary": "confidence_percent는 근거 충실도이며 정답 확률이 아니다.",
+    "internal_data_boundary": "리뷰 수는 구매 후 반응 누적량으로 사용하지만 실제 구매자 수, 반품률, 재구매율, 개인화 추천 점수는 사용하지 않는다."
+  }
+}

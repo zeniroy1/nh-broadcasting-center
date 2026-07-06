@@ -41,7 +41,7 @@ mod.main()
         f.write(launcher_code)
         
     bat_code = '''@echo off
-"C:\\Python313\\python.exe" "C:\\kakao_report\\launcher.py"
+py -3.13 "C:\\kakao_report\\launcher.py"
 '''
     with open(os.path.join(kakao_report_dir, "run.bat"), "w", encoding="utf-8") as f:
         f.write(bat_code)
@@ -76,7 +76,8 @@ def setup_schedule():
             res = subprocess.run(cmd, capture_output=True, text=True)
             if res.returncode == 0:
                 # 시간이 지나더라도 부팅/절전모드해제 시 "가능한 한 빨리 작업 시작" 옵션 제거 (아침에 보내지는 현상 방지)
-                ps_cmd = "Set-ScheduledTask -TaskName 'DailyReport' -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries)"
+                # 추가: 해당 시간에 컴퓨터가 절전 모드일 경우 깨워서 실행할 수 있도록 WakeToRun 옵션 추가
+                ps_cmd = "Set-ScheduledTask -TaskName 'DailyReport' -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -WakeToRun)"
                 subprocess.run(['powershell', '-Command', ps_cmd], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 print(f" -> 매일 {time_input} 전송 스케줄러 등록 완료! ✅")
             else:

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Step 07 Review Signal Design</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dde8;
+      --paper: #f5f7fa;
+      --panel: #ffffff;
+      --green: #15803d;
+      --red: #b91c1c;
+      --blue: #2563eb;
+      --purple: #7c3aed;
+      --amber: #b45309;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .badge {
+      padding: 8px 12px;
+      border: 1px solid #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .metric {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    section {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .flow div {
+      min-height: 94px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+    .flow b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .flow span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      background: #fbfcfe;
+    }
+    .pill {
+      display: inline-block;
+      min-width: 78px;
+      padding: 4px 8px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .positive { background: var(--green); }
+    .negative { background: var(--red); }
+    .context { background: var(--purple); }
+    .boundary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .boundary div {
+      min-height: 104px;
+      padding: 12px;
+      border-left: 4px solid var(--amber);
+      background: #fff8ed;
+    }
+    .boundary b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .boundary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      header { flex-direction: column; }
+      .metrics, .flow, .boundary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>7단계 리뷰 기반 보조 지표 설계</h1>
+        <p class="subtitle">리뷰 키워드를 실제 내부 통계로 단정하지 않고, 구매 판단을 돕는 보조 신호와 신뢰도 퍼센트로 정리합니다.</p>
+      </div>
+      <div class="badge">검수 통과</div>
+    </header>
+
+    <div class="metrics" aria-label="핵심 수치">
+      <div class="metric"><strong>12</strong><span>리뷰 신호 카테고리</span></div>
+      <div class="metric"><strong>4</strong><span>리뷰 보조 지표</span></div>
+      <div class="metric"><strong>80%</strong><span>신뢰도 상한</span></div>
+      <div class="metric"><strong>35</strong><span>누적 자동 테스트</span></div>
+    </div>
+
+    <section>
+      <h2>구현 흐름</h2>
+      <div class="flow">
+        <div><b>Detail</b><span>상세 후보의 product_id와 product_url을 입력 키로 사용합니다.</span></div>
+        <div><b>Review</b><span>리뷰 영역 원문에서 공개 텍스트 단서만 봅니다.</span></div>
+        <div><b>Signal</b><span>사이즈, 비침, 내구성, 원단, 핏, 재구매, 40대 타겟 신호로 분류합니다.</span></div>
+        <div><b>Metric</b><span>score, confidence_percent, evidence, limitation을 함께 산출합니다.</span></div>
+        <div><b>Next</b><span>다음 단계에서 상세/리뷰 지표를 점수화 모델로 합칩니다.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>대표 리뷰 신호</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>신호</th>
+            <th>구분</th>
+            <th>영역</th>
+            <th>신뢰도 상한</th>
+            <th>해석</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>size_positive</td>
+            <td><span class="pill positive">positive</span></td>
+            <td>size</td>
+            <td>78%</td>
+            <td>사이즈 선택 리스크를 낮추는 공개 리뷰 단서입니다.</td>
+          </tr>
+          <tr>
+            <td>sheerness_negative</td>
+            <td><span class="pill negative">negative</span></td>
+            <td>sheerness</td>
+            <td>74%</td>
+            <td>원단 두께/비침 리스크를 높이는 공개 리뷰 단서입니다.</td>
+          </tr>
+          <tr>
+            <td>neck_durability_negative</td>
+            <td><span class="pill negative">negative</span></td>
+            <td>durability</td>
+            <td>76%</td>
+            <td>목 늘어남 등 내구성 리스크를 높이는 단서입니다.</td>
+          </tr>
+          <tr>
+            <td>repurchase_positive</td>
+            <td><span class="pill positive">positive</span></td>
+            <td>repurchase</td>
+            <td>70%</td>
+            <td>만족도가 높을 가능성을 보여주지만 실제 재구매율은 아닙니다.</td>
+          </tr>
+          <tr>
+            <td>age_40s_context</td>
+            <td><span class="pill context">context</span></td>
+            <td>age_context</td>
+            <td>68%</td>
+            <td>40대 남성에게 맞을 가능성을 보조하는 타겟 단서입니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>내부 데이터 경계</h2>
+      <div class="boundary">
+        <div><b>반품률 아님</b><p>리뷰의 불만 키워드는 반품 리스크 단서일 뿐, 실제 반품률이 아닙니다.</p></div>
+        <div><b>재구매율 아님</b><p>재구매 언급은 만족도 단서일 뿐, 실제 재구매율이 아닙니다.</p></div>
+        <div><b>구매자 수 아님</b><p>40대/남편/출근 타겟은 실제 40대 구매자 수가 아닙니다.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      다음 단계는 상세 지표와 리뷰 보조 지표를 결합하는 점수화 모델입니다. 사용자 승인 전까지 진행하지 않습니다.
+    </footer>
+  </main>
+</body>
+</html>

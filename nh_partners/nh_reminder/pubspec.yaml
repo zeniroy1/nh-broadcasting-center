@@ -1,0 +1,55 @@
+name: nh_reminder
+description: 농협파트너스 출퇴근 버튼 클릭 리마인더 앱
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 상태 관리
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+
+  # 지오펜싱 (위치 기반 트리거)
+  geofence_service: ^5.0.0
+
+  # 위치 권한 및 위치 정보
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.0
+
+  # 로컬 알림 (Heads-up + Full-screen + 액션 버튼)
+  flutter_local_notifications: ^17.0.0
+
+  # 백그라운드 서비스 (앱 종료 후에도 동작)
+  flutter_background_service: ^5.0.5
+
+  # 로컬 저장소 (설정값 유지)
+  shared_preferences: ^2.2.2
+
+  # 앱 실행 (NH파트너스 앱 바로가기)
+  url_launcher: ^6.2.4
+
+  # 아이콘
+  cupertino_icons: ^1.0.2
+
+  # 엑셀 다운로드 및 공유
+  excel: ^4.0.3
+  path_provider: ^2.1.2
+  share_plus: ^7.2.1
+
+  # 매일 6:00 자동 모니터링 재시작
+  android_alarm_manager_plus: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  riverpod_generator: ^2.3.9
+  build_runner: ^2.4.8
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,34 @@
+{
+  "name": "musinsa-product-roadmap",
+  "version": "0.1.0",
+  "description": "Public-signal based Musinsa product search and comparison prototype.",
+  "author": {
+    "name": "hamcoding"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "musinsa",
+    "shopping",
+    "product-search",
+    "product-comparison",
+    "public-signals"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Musinsa Product Search",
+    "shortDescription": "무신사 공개 지표 기반 상품 검색·비교 프로토타입입니다.",
+    "longDescription": "사용자의 자연어 구매 요청을 검색 조건으로 분해하고, 무신사 공개 HTML/JSON 신호와 대체 지표를 기반으로 후보 상품을 수집·점수화·비교하는 Codex 플러그인입니다. 구매자용 로컬 웹 UI와 실행 코드, 테스트, EXE 빌드 구성을 함께 포함합니다.",
+    "developerName": "hamcoding",
+    "category": "Productivity",
+    "capabilities": [
+      "Planning",
+      "Analysis"
+    ],
+    "defaultPrompt": [
+      "무신사 제품 검색기 실행 구조를 점검해줘.",
+      "공개 지표 기반 상품 비교 결과를 검토해줘.",
+      "자연어 구매 요청이 검색 조건으로 잘 변환되는지 확인해줘."
+    ],
+    "brandColor": "#111111"
+  }
+}

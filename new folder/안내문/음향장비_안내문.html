@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이동형 장비 안내문 (가로)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --text-color: #1e293b;
+            --accent-color: #2563eb;
+            /* A4 Landscape dimensions: 297mm x 210mm */
+            --page-width: 297mm;
+            --page-height: 210mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #e2e8f0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .page {
+            width: var(--page-width);
+            height: var(--page-height);
+            background-color: var(--primary-bg);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+
+        /* Decorative Background Elements */
+        .deco-circle-1 {
+            position: absolute;
+            top: -150px;
+            right: -100px;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(37,99,235,0) 100%);
+            z-index: 1;
+        }
+
+        .deco-circle-2 {
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 550px;
+            height: 550px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(37,99,235,0) 0%, rgba(37,99,235,0.08) 100%);
+            z-index: 1;
+        }
+
+        /* Inner Border */
+        .border-container {
+            position: absolute;
+            top: 20mm;
+            left: 20mm;
+            right: 20mm;
+            bottom: 20mm;
+            border: 4px solid var(--text-color);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .content {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .date-badge {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 55px;
+            font-weight: 900;
+            padding: 10px 40px;
+            border-radius: 100px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            align-self: center;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .location {
+            font-size: 80px;
+            font-weight: 700;
+            color: #475569;
+            word-break: keep-all;
+            line-height: 1.2;
+        }
+
+        .equipment {
+            font-size: 140px;
+            font-weight: 900;
+            color: var(--text-color);
+            letter-spacing: -3px;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.05);
+            position: relative;
+            display: inline-block;
+            align-self: center;
+            margin-top: 10px;
+        }
+        
+        .equipment::after {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            left: -3%;
+            width: 106%;
+            height: 40px;
+            background-color: rgba(37, 99, 235, 0.2);
+            z-index: -1;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: var(--text-color);
+            z-index: 3;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .corner-tl { top: calc(20mm - 13px); left: calc(20mm - 13px); }
+        .corner-tr { top: calc(20mm - 13px); right: calc(20mm - 13px); }
+        .corner-bl { bottom: calc(20mm - 13px); left: calc(20mm - 13px); }
+        .corner-br { bottom: calc(20mm - 13px); right: calc(20mm - 13px); }
+
+        /* Print Specific Styles */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+            body {
+                background-color: transparent;
+                margin: 0;
+                padding: 0;
+            }
+            .page {
+                box-shadow: none;
+                width: 100%;
+                height: 100vh;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Background Elements -->
+        <div class="deco-circle-1"></div>
+        <div class="deco-circle-2"></div>
+        
+        <!-- Border and Corners -->
+        <div class="border-container"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div>
+                <div class="date-badge">4월 17일</div>
+            </div>
+            <div class="location">외부 광장 설치</div>
+            <div class="equipment">이동형 장비</div>
+        </div>
+    </div>
+</body>
+</html>

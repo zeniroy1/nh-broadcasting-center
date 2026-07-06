@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Step 07 Review Signal Design</title>
+  <desc id="desc">Musinsa roadmap step 7 status diagram showing review signal categories, proxy metrics, confidence caps, and validation results.</desc>
+  <rect width="1200" height="760" fill="#f5f7fa"/>
+  <rect x="40" y="36" width="1120" height="688" fill="#ffffff" stroke="#d7dde8"/>
+  <text x="72" y="88" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="#172033">7단계 리뷰 기반 보조 지표 설계</text>
+  <text x="72" y="120" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#667085">리뷰 키워드를 내부 통계로 단정하지 않고 구매 판단용 보조 신호로 정리합니다.</text>
+  <rect x="1014" y="64" width="104" height="34" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="1038" y="86" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="700" fill="#166534">검수 통과</text>
+
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="96" y="195" font-size="32" font-weight="700" fill="#172033">12</text>
+    <text x="96" y="222" font-size="14" fill="#667085">리뷰 신호 카테고리</text>
+    <rect x="336" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="360" y="195" font-size="32" font-weight="700" fill="#172033">4</text>
+    <text x="360" y="222" font-size="14" fill="#667085">리뷰 보조 지표</text>
+    <rect x="600" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="624" y="195" font-size="32" font-weight="700" fill="#172033">80%</text>
+    <text x="624" y="222" font-size="14" fill="#667085">신뢰도 상한</text>
+    <rect x="864" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="888" y="195" font-size="32" font-weight="700" fill="#172033">35</text>
+    <text x="888" y="222" font-size="14" fill="#667085">누적 자동 테스트</text>
+  </g>
+
+  <text x="72" y="300" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#172033">리뷰 신호 흐름</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="96" y="354" font-size="15" font-weight="700" fill="#172033">Detail</text>
+    <text x="96" y="380" font-size="13" fill="#667085">product_id/url</text>
+    <line x1="252" y1="370" x2="284" y2="370" stroke="#667085"/>
+    <polygon points="284,370 274,364 274,376" fill="#667085"/>
+
+    <rect x="284" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="308" y="354" font-size="15" font-weight="700" fill="#172033">Review</text>
+    <text x="308" y="380" font-size="13" fill="#667085">공개 리뷰 텍스트</text>
+    <line x1="464" y1="370" x2="496" y2="370" stroke="#667085"/>
+    <polygon points="496,370 486,364 486,376" fill="#667085"/>
+
+    <rect x="496" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="520" y="354" font-size="15" font-weight="700" fill="#172033">Signal</text>
+    <text x="520" y="380" font-size="13" fill="#667085">12개 키워드 신호</text>
+    <line x1="676" y1="370" x2="708" y2="370" stroke="#667085"/>
+    <polygon points="708,370 698,364 698,376" fill="#667085"/>
+
+    <rect x="708" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="732" y="354" font-size="15" font-weight="700" fill="#172033">Metric</text>
+    <text x="732" y="380" font-size="13" fill="#667085">4개 보조 지표</text>
+    <line x1="888" y1="370" x2="920" y2="370" stroke="#667085"/>
+    <polygon points="920,370 910,364 910,376" fill="#667085"/>
+
+    <rect x="920" y="324" width="180" height="92" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="944" y="354" font-size="15" font-weight="700" fill="#172033">Boundary</text>
+    <text x="944" y="380" font-size="13" fill="#667085">내부 통계 아님</text>
+  </g>
+
+  <text x="72" y="470" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#172033">대표 보조 지표</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif" font-size="14">
+    <rect x="72" y="496" width="1056" height="48" fill="#fbfcfe" stroke="#d7dde8"/>
+    <text x="96" y="526" font-weight="700" fill="#667085">지표</text>
+    <text x="430" y="526" font-weight="700" fill="#667085">score</text>
+    <text x="570" y="526" font-weight="700" fill="#667085">confidence</text>
+    <text x="760" y="526" font-weight="700" fill="#667085">한계</text>
+
+    <text x="96" y="574" fill="#172033">size_fit_review_score</text>
+    <text x="430" y="574" fill="#172033">96</text>
+    <text x="570" y="574" fill="#172033">60%</text>
+    <text x="760" y="574" fill="#172033">실제 교환/반품률 아님</text>
+
+    <text x="96" y="622" fill="#172033">fabric_risk_review_score</text>
+    <text x="430" y="622" fill="#172033">42</text>
+    <text x="570" y="622" fill="#172033">56%</text>
+    <text x="760" y="622" fill="#172033">리뷰 표현 기반 보조 지표</text>
+
+    <text x="96" y="670" fill="#172033">age_40s_context_review_score</text>
+    <text x="430" y="670" fill="#172033">77</text>
+    <text x="570" y="670" fill="#172033">64%</text>
+    <text x="760" y="670" fill="#172033">실제 40대 구매자 수 아님</text>
+  </g>
+</svg>

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LH/HUG 통합 수집 프로그램</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="주 메뉴">
+        <div class="brand">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6.5 12 2l8 4.5v11L12 22l-8-4.5z" />
+            <path d="M8 9h8M8 13h8M8 17h5" />
+          </svg>
+          <div>
+            <strong>주택 자료 통합</strong>
+            <span>LH / HUG / SH / GH</span>
+          </div>
+        </div>
+        <nav class="tabs" aria-label="기능 탭">
+          <button class="tab is-active" data-tab="lh">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 20v-6h6v6" /></svg>
+            LH
+          </button>
+          <button class="tab" data-tab="hug">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 6v12M16 6v12" /></svg>
+            HUG
+          </button>
+          <button class="tab" data-tab="sh">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5l8-3 8 3v14" /><path d="M8 19v-7h8v7M8 8h8" /></svg>
+            SH
+          </button>
+          <button class="tab" data-tab="gh">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20V6l7-3 7 3v14" /><path d="M9 10h6M9 14h6" /></svg>
+            GH
+          </button>
+          <button class="tab" data-tab="results">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z" /><path d="M9 13h6M9 17h6M14 3v4h4" /></svg>
+            결과
+          </button>
+          <button class="tab" data-tab="settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 3-.2-.1a1.8 1.8 0 0 0-2 .1 1.8 1.8 0 0 0-.8 1.6V22h-3.6v-.3a1.8 1.8 0 0 0-.8-1.6 1.8 1.8 0 0 0-2-.1l-.2.1-2-3 .1-.1a1.7 1.7 0 0 0 .3-1.9 1.8 1.8 0 0 0-1.5-1H4v-4h.3a1.8 1.8 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-3 .2.1a1.8 1.8 0 0 0 2-.1 1.8 1.8 0 0 0 .8-1.6V2h3.6v.3a1.8 1.8 0 0 0 .8 1.6 1.8 1.8 0 0 0 2 .1l.2-.1 2 3-.1.1a1.7 1.7 0 0 0-.3 1.9 1.8 1.8 0 0 0 1.5 1h.3v4h-.3a1.8 1.8 0 0 0-1.5 1Z" /></svg>
+            설정
+          </button>
+        </nav>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <h1 id="view-title">LH 공고 일정 확인</h1>
+            <p id="view-subtitle">지역별 접수예정/접수중 공고를 확인한 뒤 선택 분석합니다.</p>
+          </div>
+          <div class="status-pill">
+            <span></span>
+            표준 구조 확인됨
+          </div>
+        </header>
+
+
+        <section class="progress-panel" aria-live="polite" aria-label="작업 진행 상태">
+          <div class="progress-meta">
+            <strong id="progress-title">대기 중</strong>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span id="progress-fill"></span>
+          </div>
+          <p id="progress-detail">실행할 작업을 기다리고 있습니다.</p>
+        </section>
+        <section class="panel is-active" id="panel-lh">
+          <div class="surface">
+            <div class="section-title">
+              <h2>지역 선택</h2>
+              <button class="icon-button" id="lh-reset-regions" title="지역 목록 초기화" data-log="LH 지역 선택 초기화">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 3v6h6" /></svg>
+              </button>
+            </div>
+            <div class="region-grid" id="lh-region-grid" role="group" aria-label="LH 선택 지역"></div>
+            <div class="manual-region">
+              <label>
+                지역명
+                <input id="lh-manual-region-input" type="text" value="" placeholder="예: 인천" />
+              </label>
+              <button class="secondary" id="lh-add-region" data-log="LH 지역명 추가">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                추가
+              </button>
+            </div>
+            <div class="lh-actions">
+              <button class="primary green" id="lh-run-collect" data-log="LH 공고 일정 확인 요청">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4M4 9h16M6 4h12a2 2 0 0 1 2 2v14H4V6a2 2 0 0 1 2-2Z" /></svg>
+                공고 일정 확인
+              </button>
+              <button class="primary" id="lh-run-selected-notices" data-log="LH 선택 공고 분석 요청" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /><path d="m8 9 3 3-3 3" /></svg>
+                선택 공고 분석
+              </button>
+            </div>
+            <div class="notice-list" id="lh-notice-list" aria-live="polite">
+              <div class="notice-empty">접수예정 또는 접수중 공고를 확인하면 이곳에 표시됩니다.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-hug">
+          <div class="surface">
+            <div class="section-title">
+              <h2>지역 선택</h2>
+              <button class="icon-button" id="hug-reset-regions" title="지역 목록 초기화" data-log="HUG 지역 선택 초기화">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 3v6h6" /></svg>
+              </button>
+            </div>
+            <div class="region-grid" id="hug-region-grid" role="group" aria-label="HUG 선택 지역"></div>
+            <div class="manual-region">
+              <label>
+                지역명
+                <input id="hug-manual-region-input" type="text" value="" placeholder="예: 대전" />
+              </label>
+              <button class="secondary" id="hug-add-region" data-log="HUG 지역명 추가">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                추가
+              </button>
+            </div>
+            <button class="primary" id="hug-run-collect" data-log="HUG 선택 지역 파싱 요청">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /><path d="m8 9 3 3-3 3" /></svg>
+              선택 지역 파싱
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-sh">
+          <div class="surface">
+            <div class="section-title">
+              <h2>검색어 선택</h2>
+              <button class="icon-button" id="sh-reset-regions" title="검색어 목록 초기화" data-log="SH 검색어 선택 초기화">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 3v6h6" /></svg>
+              </button>
+            </div>
+            <div class="region-grid" id="sh-region-grid" role="group" aria-label="SH 선택 검색어"></div>
+            <div class="manual-region">
+              <label>
+                검색어
+                <input id="sh-manual-region-input" type="text" value="" placeholder="예: 성북구 예술인마을" />
+              </label>
+              <button class="secondary" id="sh-add-region" data-log="SH 지역명 추가">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                추가
+              </button>
+            </div>
+            <div class="lh-actions">
+              <button class="primary green" id="sh-run-collect" data-log="SH 공고 일정 확인 요청">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4M4 9h16M6 4h12a2 2 0 0 1 2 2v14H4V6a2 2 0 0 1 2-2Z" /></svg>
+                공고 일정 확인
+              </button>
+              <button class="primary" id="sh-run-selected-notices" data-log="SH 선택 공고 분석 요청" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /><path d="m8 9 3 3-3 3" /></svg>
+                선택 공고 분석
+              </button>
+            </div>
+            <div class="notice-list" id="sh-notice-list" aria-live="polite">
+              <div class="notice-empty">접수예정 또는 접수중 공고를 확인하면 이곳에 표시됩니다.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-gh">
+          <div class="surface">
+            <div class="section-title">
+              <h2>GH 상태별 수집</h2>
+              <button class="icon-button" id="gh-reset-regions" title="검색어 목록 초기화" data-log="GH 검색어 선택 초기화">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 3v6h6" /></svg>
+              </button>
+            </div>
+            <div class="region-grid" id="gh-region-grid" role="group" aria-label="GH 선택 검색어"></div>
+            <div class="manual-region">
+              <label>
+                검색어
+                <input id="gh-manual-region-input" type="text" value="" placeholder="예: 다산지금A3" />
+              </label>
+              <button class="secondary" id="gh-add-region" data-log="GH 검색어 추가">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                추가
+              </button>
+            </div>
+            <button class="primary" id="gh-run-collect" data-log="GH 상태별 자료 수집 요청">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /><path d="m8 9 3 3-3 3" /></svg>
+              상태별 자료 수집
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-results">
+          <div class="surface">
+            <div class="section-title">
+              <h2>최종 산출물</h2>
+              <button class="icon-button" title="결과 새로고침" data-log="결과 폴더 새로고침">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.4 6.4L3 16M3 12A9 9 0 0 1 18.4 5.6L21 8" /><path d="M3 21v-5h5M21 3v5h-5" /></svg>
+              </button>
+            </div>
+            <div class="result-table">
+              <div class="row head"><span>기관</span><span>파일</span><span>상태</span><span>작업</span></div>
+              <div class="row">
+                <span>HUG</span><span>hug_서울_분석데이터.csv</span><strong>321건</strong>
+                <div class="actions"><button data-log="hug_서울_분석데이터.csv 열기">열기</button><button data-log="HUG 폴더 열기">폴더</button><button data-log="hug_서울_분석데이터.csv 내보내기">내보내기</button></div>
+              </div>
+              <div class="row">
+                <span>HUG</span><span>hug_서울_요약.txt</span><strong>요약</strong>
+                <div class="actions"><button data-log="hug_서울_요약.txt 열기">열기</button><button data-log="HUG 폴더 열기">폴더</button><button data-log="hug_서울_요약.txt 내보내기">내보내기</button></div>
+              </div>
+              <div class="row">
+                <span>HUG</span><span>hug_경기도_분석데이터.csv</span><strong>141건</strong>
+                <div class="actions"><button data-log="hug_경기도_분석데이터.csv 열기">열기</button><button data-log="HUG 폴더 열기">폴더</button><button data-log="hug_경기도_분석데이터.csv 내보내기">내보내기</button></div>
+              </div>
+              <div class="row">
+                <span>HUG</span><span>hug_경기도_요약.txt</span><strong>요약</strong>
+                <div class="actions"><button data-log="hug_경기도_요약.txt 열기">열기</button><button data-log="HUG 폴더 열기">폴더</button><button data-log="hug_경기도_요약.txt 내보내기">내보내기</button></div>
+              </div>
+              <div class="row">
+                <span>HUG</span><span>hug_인천_분석데이터.csv</span><strong>333건</strong>
+                <div class="actions"><button data-log="hug_인천_분석데이터.csv 열기">열기</button><button data-log="HUG 폴더 열기">폴더</button><button data-log="hug_인천_분석데이터.csv 내보내기">내보내기</button></div>
+              </div>
+              <div class="row">
+                <span>HUG</span><span>hug_인천_요약.txt</span><strong>요약</strong>
+                <div class="actions"><button data-log="hug_인천_요약.txt 열기">열기</button><button data-log="HUG 폴더 열기">폴더</button><button data-log="hug_인천_요약.txt 내보내기">내보내기</button></div>
+              </div>
+              <div class="row">
+                <span>LH</span><span>통합_경쟁률_보고서.txt</span><strong>생성됨</strong>
+                <div class="actions"><button data-log="통합_경쟁률_보고서.txt 열기">열기</button><button data-log="LH 폴더 열기">폴더</button><button data-log="통합_경쟁률_보고서.txt 내보내기">내보내기</button></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-settings">
+          <div class="grid two">
+            <section class="surface">
+              <div class="section-title">
+                <h2>표준 위치</h2>
+              </div>
+              <div class="field-row"><span class="label">LH 수집</span><code>LH 공고 페이지 직접 크롤링</code></div>
+              <div class="field-row"><span class="label">LH 분석</span><code>lh/scripts/generate_reports.py</code></div>
+              <div class="field-row"><span class="label">LH 결과</span><code>lh/outputs</code></div>
+              <div class="field-row"><span class="label">HUG 결과</span><code>hug/outputs</code></div>
+              <div class="field-row"><span class="label">HUG 캐시</span><code>app/cache/hug</code></div>
+              <div class="field-row"><span class="label">SH 수집</span><code>SH 공고 목록/상세 직접 크롤링</code></div>
+              <div class="field-row"><span class="label">SH 결과</span><code>sh/outputs</code></div>
+              <div class="field-row"><span class="label">SH 첨부</span><code>sh/attachments</code></div>
+              <div class="field-row"><span class="label">GH 수집</span><code>공고 일정, 접수중 실시간 경쟁률, 최근 마감 최종 경쟁률</code></div>
+              <div class="field-row"><span class="label">GH 결과</span><code>gh/outputs</code></div>
+              <div class="field-row"><span class="label">지표 풀</span><code id="metrics-path">app/config/metrics_registry.json</code></div>
+            </section>
+            <section class="surface">
+              <div class="section-title">
+                <h2>요약 기준</h2>
+              </div>
+              <div class="field-row"><span class="label">TOP 개수</span><code>3</code></div>
+              <div class="field-row"><span class="label">거리 기준</span><code>서대문역 5번출구</code></div>
+              <div class="field-row"><span class="label">종합점수</span><code>낮을수록 좋음</code></div>
+              <div class="field-row"><span class="label">표준 지표</span><code id="metrics-count">확인 중</code></div>
+            </section>
+          </div>
+        </section>
+
+        <footer class="logbar" aria-label="실행 로그">
+          <span>대기</span>
+          <code id="log-text">통합 UI 확인 화면이 준비되었습니다.</code>
+        </footer>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,251 @@
+{
+  "version": "2026-06-30",
+  "description": "Musinsa category wording used as canonical keywords for natural-language intent normalization.",
+  "categories": [
+    {
+      "key": "short_sleeve_tshirt",
+      "label": "반소매 티셔츠",
+      "musinsa_hint": "상의 > 반소매 티셔츠",
+      "keywords": ["반소매 티셔츠", "반팔 티셔츠", "반팔티", "반팔", "무지티", "무지 티"],
+      "search_terms": ["반소매 티셔츠", "반팔 티셔츠", "반팔티"]
+    },
+    {
+      "key": "long_sleeve_tshirt",
+      "label": "긴소매 티셔츠",
+      "musinsa_hint": "상의 > 긴소매 티셔츠",
+      "keywords": ["긴소매 티셔츠", "긴팔 티셔츠", "긴팔티", "롱슬리브", "long sleeve"],
+      "search_terms": ["긴소매 티셔츠", "긴팔 티셔츠", "롱슬리브"]
+    },
+    {
+      "key": "shirt_blouse",
+      "label": "셔츠/블라우스",
+      "musinsa_hint": "상의 > 셔츠/블라우스",
+      "keywords": ["셔츠", "블라우스", "남방", "shirt", "blouse"],
+      "search_terms": ["셔츠/블라우스", "셔츠", "블라우스"]
+    },
+    {
+      "key": "sweatshirt",
+      "label": "맨투맨/스웨트셔츠",
+      "musinsa_hint": "상의 > 맨투맨/스웨트셔츠",
+      "keywords": ["맨투맨", "스웨트셔츠", "스웻셔츠", "sweatshirt"],
+      "search_terms": ["맨투맨/스웨트셔츠", "맨투맨", "스웨트셔츠"]
+    },
+    {
+      "key": "hoodie",
+      "label": "후드 티셔츠",
+      "musinsa_hint": "상의 > 후드 티셔츠",
+      "keywords": ["후드 티셔츠", "후드티", "후디", "hoodie"],
+      "search_terms": ["후드 티셔츠", "후드티", "후디"]
+    },
+    {
+      "key": "knit_sweater",
+      "label": "니트/스웨터",
+      "musinsa_hint": "상의 > 니트/스웨터",
+      "keywords": ["니트", "스웨터", "knit", "sweater"],
+      "search_terms": ["니트/스웨터", "니트", "스웨터"]
+    },
+    {
+      "key": "pique_collar_tshirt",
+      "label": "피케/카라 티셔츠",
+      "musinsa_hint": "상의 > 피케/카라 티셔츠",
+      "keywords": ["피케", "카라 티셔츠", "카라티", "폴로 티셔츠", "polo"],
+      "search_terms": ["피케/카라 티셔츠", "카라 티셔츠", "카라티"]
+    },
+    {
+      "key": "sleeveless_tshirt",
+      "label": "민소매 티셔츠",
+      "musinsa_hint": "상의 > 민소매 티셔츠",
+      "keywords": ["민소매", "나시", "슬리브리스", "탱크탑", "런닝", "sleeveless", "tank top"],
+      "search_terms": ["민소매 티셔츠", "나시", "슬리브리스", "탱크탑"]
+    },
+    {
+      "key": "one_piece_dress",
+      "label": "원피스",
+      "musinsa_hint": "원피스 > 원피스",
+      "keywords": ["원피스", "드레스", "롱원피스", "미니원피스", "dress", "one piece"],
+      "search_terms": ["원피스", "드레스", "롱원피스"]
+    },
+    {
+      "key": "skirt",
+      "label": "스커트",
+      "musinsa_hint": "스커트 > 스커트",
+      "keywords": ["스커트", "치마", "미니스커트", "롱스커트", "skirt"],
+      "search_terms": ["스커트", "치마", "미니스커트", "롱스커트"]
+    },
+    {
+      "key": "outer",
+      "label": "아우터",
+      "musinsa_hint": "아우터",
+      "keywords": ["아우터", "자켓", "재킷", "점퍼", "가디건", "카디건", "코트", "바람막이", "윈드브레이커", "블루종"],
+      "search_terms": ["아우터", "재킷", "점퍼", "카디건", "코트", "바람막이"]
+    },
+    {
+      "key": "blazer",
+      "label": "슈트/블레이저 재킷",
+      "musinsa_hint": "아우터 > 슈트/블레이저 재킷",
+      "keywords": ["블레이저", "슈트 재킷", "수트 재킷", "정장 자켓"],
+      "search_terms": ["슈트/블레이저 재킷", "블레이저", "슈트 재킷"]
+    },
+    {
+      "key": "cardigan",
+      "label": "카디건",
+      "musinsa_hint": "아우터 > 카디건",
+      "keywords": ["카디건", "가디건", "cardigan"],
+      "search_terms": ["카디건", "가디건"]
+    },
+    {
+      "key": "fleece",
+      "label": "플리스",
+      "musinsa_hint": "아우터 > 플리스",
+      "keywords": ["플리스", "후리스", "fleece"],
+      "search_terms": ["플리스", "후리스"]
+    },
+    {
+      "key": "padding",
+      "label": "패딩",
+      "musinsa_hint": "아우터 > 패딩",
+      "keywords": ["패딩", "다운", "숏패딩", "롱패딩", "puffer", "down"],
+      "search_terms": ["패딩", "숏패딩", "롱패딩"]
+    },
+    {
+      "key": "pants",
+      "label": "바지",
+      "musinsa_hint": "바지",
+      "keywords": ["바지", "팬츠", "하의", "긴바지", "pants"],
+      "search_terms": ["바지", "팬츠", "하의"]
+    },
+    {
+      "key": "denim_pants",
+      "label": "데님 팬츠",
+      "musinsa_hint": "바지 > 데님 팬츠",
+      "keywords": ["데님 팬츠", "청바지", "데님", "jeans", "denim"],
+      "search_terms": ["데님 팬츠", "청바지", "데님"]
+    },
+    {
+      "key": "slacks",
+      "label": "슈트 팬츠/슬랙스",
+      "musinsa_hint": "바지 > 슈트 팬츠/슬랙스",
+      "keywords": ["슬랙스", "슈트 팬츠", "수트 팬츠", "트라우저", "trouser"],
+      "search_terms": ["슈트 팬츠/슬랙스", "슬랙스", "트라우저"]
+    },
+    {
+      "key": "jogger_pants",
+      "label": "트레이닝/조거 팬츠",
+      "musinsa_hint": "바지 > 트레이닝/조거 팬츠",
+      "keywords": ["조거 팬츠", "트레이닝 팬츠", "트레이닝 바지", "운동복 바지", "스웨트 팬츠", "스웻팬츠", "jogger"],
+      "search_terms": ["트레이닝/조거 팬츠", "조거 팬츠", "트레이닝 팬츠", "트레이닝 바지"]
+    },
+    {
+      "key": "short_pants",
+      "label": "숏 팬츠",
+      "musinsa_hint": "바지 > 숏 팬츠",
+      "keywords": ["숏 팬츠", "반바지", "쇼츠", "버뮤다", "하프팬츠", "하프 팬츠", "shorts", "bermuda"],
+      "search_terms": ["숏 팬츠", "반바지", "쇼츠", "버뮤다", "하프팬츠"]
+    },
+    {
+      "key": "leggings",
+      "label": "레깅스",
+      "musinsa_hint": "바지 > 레깅스",
+      "keywords": ["레깅스", "타이즈", "요가팬츠", "leggings", "tights"],
+      "search_terms": ["레깅스", "타이즈", "요가팬츠"]
+    },
+    {
+      "key": "sneakers",
+      "label": "스니커즈",
+      "musinsa_hint": "신발 > 스니커즈",
+      "keywords": ["스니커즈", "운동화", "러닝화", "런닝화", "워킹화", "신발", "슈즈", "sneakers", "running shoes"],
+      "search_terms": ["스니커즈", "운동화", "러닝화", "슈즈"]
+    },
+    {
+      "key": "boots",
+      "label": "부츠",
+      "musinsa_hint": "신발 > 부츠",
+      "keywords": ["부츠", "워커", "boots"],
+      "search_terms": ["부츠", "워커"]
+    },
+    {
+      "key": "sandals_slippers",
+      "label": "샌들/슬리퍼",
+      "musinsa_hint": "신발 > 샌들/슬리퍼",
+      "keywords": ["샌들", "샌달", "슬리퍼", "쪼리", "플립플랍", "클로그", "뮬", "슬라이드", "flip flop", "sandals", "slippers", "clog", "mule", "slide"],
+      "search_terms": ["샌들/슬리퍼", "샌들", "샌달", "슬리퍼", "쪼리", "클로그", "뮬", "슬라이드"]
+    },
+    {
+      "key": "swimwear",
+      "label": "수영복/비치웨어",
+      "musinsa_hint": "스포츠/용품 > 수영복/비치웨어",
+      "keywords": ["수영복", "비치웨어", "비키니", "래시가드", "래쉬가드", "스윔웨어", "swimwear", "rash guard"],
+      "search_terms": ["수영복/비치웨어", "수영복", "비키니", "래시가드", "래쉬가드"]
+    },
+    {
+      "key": "backpack",
+      "label": "백팩",
+      "musinsa_hint": "가방 > 백팩",
+      "keywords": ["백팩", "배낭", "backpack"],
+      "search_terms": ["백팩", "배낭"]
+    },
+    {
+      "key": "messenger_cross_bag",
+      "label": "메신저/크로스 백",
+      "musinsa_hint": "가방 > 메신저/크로스 백",
+      "keywords": ["메신저백", "메신저 백", "크로스백", "크로스 백", "cross bag", "messenger bag"],
+      "search_terms": ["메신저/크로스 백", "메신저백", "크로스백"]
+    },
+    {
+      "key": "shoulder_bag",
+      "label": "숄더백",
+      "musinsa_hint": "가방 > 숄더백",
+      "keywords": ["숄더백", "숄더 백", "shoulder bag"],
+      "search_terms": ["숄더백", "숄더 백"]
+    },
+    {
+      "key": "tote_bag",
+      "label": "토트백",
+      "musinsa_hint": "가방 > 토트백",
+      "keywords": ["토트백", "토트 백", "tote bag"],
+      "search_terms": ["토트백", "토트 백"]
+    },
+    {
+      "key": "eco_bag",
+      "label": "에코백",
+      "musinsa_hint": "가방 > 에코백",
+      "keywords": ["에코백", "에코 백", "eco bag"],
+      "search_terms": ["에코백", "에코 백"]
+    },
+    {
+      "key": "duffel_bag",
+      "label": "보스턴/더플백",
+      "musinsa_hint": "가방 > 보스턴/더플백",
+      "keywords": ["더플백", "더플 백", "보스턴백", "보스턴 백", "duffel", "boston bag"],
+      "search_terms": ["보스턴/더플백", "더플백", "보스턴백"]
+    },
+    {
+      "key": "cap_hat",
+      "label": "모자",
+      "musinsa_hint": "패션소품 > 모자",
+      "keywords": ["모자", "볼캡", "캡", "비니", "버킷햇", "hat", "cap"],
+      "search_terms": ["모자", "볼캡", "비니"]
+    },
+    {
+      "key": "belt",
+      "label": "벨트",
+      "musinsa_hint": "패션소품 > 벨트",
+      "keywords": ["벨트", "belt"],
+      "search_terms": ["벨트"]
+    },
+    {
+      "key": "wallet",
+      "label": "지갑",
+      "musinsa_hint": "패션소품 > 지갑",
+      "keywords": ["지갑", "월렛", "wallet"],
+      "search_terms": ["지갑", "월렛"]
+    },
+    {
+      "key": "socks",
+      "label": "양말/레그웨어",
+      "musinsa_hint": "패션소품 > 양말/레그웨어",
+      "keywords": ["양말", "삭스", "레그웨어", "socks"],
+      "search_terms": ["양말/레그웨어", "양말", "삭스"]
+    }
+  ]
+}

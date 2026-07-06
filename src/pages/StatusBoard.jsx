@@ -130,10 +130,10 @@ const StatusBoard = () => {
                                                 backgroundColor: 'var(--color-bg-card)'
                                             }}
                                         >
-                                            <Card.Section withBorder inheritPadding py="md" style={{ backgroundColor: `var(--mantine-color-${buildingData.color}-1)` }}>
+                                            <Card.Section withBorder inheritPadding py="md" style={{ backgroundColor: `var(--card-header-bg-${buildingData.color})` }}>
                                                 <Group justify="space-between" align="center">
                                                     {/* Increased size for title */}
-                                                    <Text fw={900} style={{ fontSize: '1.5rem', letterSpacing: '-0.5px', color: '#1a1a1a' }}>
+                                                    <Text fw={900} style={{ fontSize: '1.5rem', letterSpacing: '-0.5px', color: 'var(--color-text)' }}>
                                                         {room.name}
                                                     </Text>
                                                     {room.video !== '미지원' && room.video !== 'X' && (

@@ -1,0 +1,226 @@
+[2026-05-20T16:57:35.024708] [NH리마인더] 자동 시작 알람 예약: 2026-05-21 06:00:00.000
+[2026-05-20T16:57:35.126962] [NH리마인더] 자동 종료 알람 예약: 2026-05-20 19:00:00.000
+[2026-05-20T16:57:35.206964] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:init
+[2026-05-20T16:57:35.225683] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:35.443034] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T16:57:35.454036] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:35.456271] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:37.265384] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T16:57:37.269052] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:37.544326] [NH알리미] 일시정지 상태 — 지오펜스 시작 안 함
+[2026-05-20T16:57:37.546897] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T16:57:37.548454] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T16:57:39.456647] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:40.228462] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:40.237381] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:42.462077] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:42.464223] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:42.491580] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T16:57:42.494115] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:44.048237] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:44.631585] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:44.637180] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:46.323268] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:46.325818] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:46.345757] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T16:57:46.347964] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:true, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:52.630343] [NH알리미] 모니터링 소프트 리셋 시작 — reason:수동 모니터링 재개, recalibrate:false, resume:true
+[2026-05-20T16:57:52.655489] [NH알리미] 반복 알림 중지
+[2026-05-20T16:57:52.697671] [NH알리미] 반복 알림 중지
+[2026-05-20T16:57:52.705086] [NH알리미] 지오펜스 중지 완료 — 차단 플래그 해제
+[2026-05-20T16:57:52.707654] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:54.388066] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:54.393624] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:55.491622] [NH알리미] 지오펜스 시작 — 위치:마스킹, 반경:40.0m, mode:초기 진입 고감도, interval:5초, reason:start
+[2026-05-20T16:57:55.499083] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:55.502364] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:55.560047] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:false, notifActive:false, monitorActive:false, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:57:56.382797] [NH알리미] 시작 시 범위 밖 (68m) — ENTER 대기
+[2026-05-20T16:57:56.393446] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T16:57:56.396704] [NH알리미] 백그라운드 감시 리프레시 — active:true, lastCallback:1375159121ms, lastSchedule:1375157859ms
+[2026-05-20T16:57:56.399275] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T16:57:56.422] [NH알리미] 배터리 사용량 측정 시작 — 시작:51%, charging:false, plugged:NONE
+[2026-05-20T16:57:56.424] [NH알리미] 포그라운드 서비스 배터리 시작/복구 — battery:51%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:51%, 현재:51%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 0회, 위치요청 0회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T16:57:56.428411] [NH알리미] 모니터링 소프트 리셋 완료 — 위치:마스킹, 반경:40.0m, positionUpdated:false
+[2026-05-20T16:57:58.649] [NH알리미] 포그라운드 서비스 배터리 시작/복구 — battery:51%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:51%, 현재:51%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 0회, 위치요청 0회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T16:57:58.668004] [NH알리미] 반복 알림 중지
+[2026-05-20T16:57:58.675319] [NH알리미] 지오펜스 재시작 준비 완료 — 차단 플래그 유지
+[2026-05-20T16:57:58.681942] [NH알리미] 지오펜스 시작 — 위치:마스킹, 반경:40.0m, mode:초기 진입 고감도, interval:5초, reason:start
+[2026-05-20T16:57:58.688337] [NH알리미] 시작 시 범위 밖 (68m) — ENTER 대기
+[2026-05-20T16:57:58.698728] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T16:58:02.641] [NH알리미] 포그라운드 서비스 배터리 시작/복구 — battery:51%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:51%, 현재:51%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 1회, 위치요청 1회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T16:58:02.657474] [NH알리미] 반복 알림 중지
+[2026-05-20T16:58:02.664671] [NH알리미] 지오펜스 재시작 준비 완료 — 차단 플래그 유지
+[2026-05-20T16:58:02.667404] [NH알리미] 지오펜스 시작 — 위치:마스킹, 반경:30.0m, mode:초기 진입 고감도, interval:5초, reason:start
+[2026-05-20T16:58:02.672271] [NH알리미] 시작 시 범위 밖 (69m) — ENTER 대기
+[2026-05-20T16:58:02.674524] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T16:58:08.456551] [NH알리미] 모니터링 소프트 리셋 시작 — reason:수동 위치보정, recalibrate:true, resume:true
+[2026-05-20T16:58:08.499934] [NH알리미] 소프트 리셋 위치보정 성공 — 위치:마스킹, 정확도:85m
+[2026-05-20T16:58:08.515] [NH알리미] 포그라운드 서비스 배터리 시작/복구 — battery:51%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:51%, 현재:51%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 2회, 위치요청 2회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T16:58:08.527437] [NH알리미] 반복 알림 중지
+[2026-05-20T16:58:08.544059] [NH알리미] 반복 알림 중지
+[2026-05-20T16:58:08.553789] [NH알리미] 지오펜스 중지 완료 — 차단 플래그 해제
+[2026-05-20T16:58:08.559757] [NH알리미] 지오펜스 시작 — 위치:마스킹, 반경:30.0m, mode:초기 진입 고감도, interval:5초, reason:start
+[2026-05-20T16:58:08.563504] [NH알리미] 지오펜스 이벤트: ENTER
+[2026-05-20T16:58:08.583205] [NH알리미] 시작 시 이미 범위 안 → 즉시 알림 시작 (0m)
+[2026-05-20T16:58:08.590345] [NH알리미] ENTER 검증 통과 — 거리 0m / 반경 30m, 정확도 85m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:통과
+[2026-05-20T16:58:08.596704] [NH알리미] ENTER — 알림 시작!
+[2026-05-20T16:58:08.599531] [NH알리미] 반복 알림 중지
+[2026-05-20T16:58:08.607] [NH알리미] 포그라운드 서비스 배터리 시작/복구 — battery:51%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:51%, 현재:51%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 2회, 위치요청 2회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T16:58:08.612932] [NH알리미] 네이티브 직접 알림 발송 완료 — 본문 클릭 Activity 경유 NH파트너스 연결
+[2026-05-20T16:58:08.615912] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T16:58:08.622037] [NH알리미] 반복 알림 예약 보강 — 활성 상태 감지, 30초 후 반복 예약 복구
+[2026-05-20T16:58:08.624023] [NH알리미] 지오펜스 감시모드 전환 — 5초 → 300초, mode:저전력, reason:시작 시 범위 안
+[2026-05-20T16:58:08.627826] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T16:58:08.630863] [NH알리미] 반복 알림 시작 (30초 간격, AlarmManager)
+[2026-05-20T16:58:08.633051] [NH알리미] 지오펜스 감시모드 전환 생략 — 이미 전환 중, reason:ENTER 알림 시작
+[2026-05-20T16:58:08.635955] [NH알리미] 지오펜스 시작 — 위치:마스킹, 반경:30.0m, mode:저전력, interval:300초, reason:시작 시 범위 안
+[2026-05-20T16:58:08.637881] [NH알리미] 지오펜스 이벤트: ENTER
+[2026-05-20T16:58:08.639903] [NH알리미] ENTER — 알림 이미 활성 중, 새 알림 시작 생략
+[2026-05-20T16:58:08.643131] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T16:58:08.645021] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:2초, 거리 0m / 반경 30m, 정확도 85m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:통과)
+[2026-05-20T16:58:08.647634] [NH알리미] 리프레시 전 위치 확인 — 위치감시 절전 전환 (범위 안, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T16:58:08.649702] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 안, 반복 알림 유지 중)
+[2026-05-20T16:58:08.653228] [NH알리미] 모니터링 소프트 리셋 완료 — 위치:마스킹, 반경:30.0m, positionUpdated:true
+[2026-05-20T16:58:11.613] [NH알리미] 네이티브 보조 팝업 생략 — 반복 알림 이미 활성 중
+[2026-05-20T16:58:11.617] [NH알리미] 네이티브 위치감시 절전 — 알림 활성 상태, GPS 재확인:300초, 반복 알림:30초 유지
+[2026-05-20T16:58:13.615812] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:7초, 거리 0m / 반경 30m, 정확도 85m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:통과)
+[2026-05-20T16:58:13.620548] [NH알리미] 백그라운드 감시 — 위치감시 절전 전환 (범위 안, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T16:58:13.624652] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 안, 반복 알림 유지 중)
+[2026-05-20T16:58:13.751096] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:true, monitorActive:true, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:58:13.904620] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:true, monitorActive:true, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:58:13.910917] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:true, monitorActive:true, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T16:58:37.595562] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:0초, 거리 57m / 반경 30m, 정확도 60m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T16:58:37.615635] [NH알리미] 리프레시 전 위치 확인 — 위치감시 절전 전환 (범위 밖 감지, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T16:58:37.625018] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 밖 감지, 반복 알림 유지 중)
+[2026-05-20T16:58:38.863440] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T16:58:40.644323] [NH알리미] 지오펜스 이벤트: EXIT
+[2026-05-20T16:58:40.669992] [NH알리미] EXIT — 알림 활성 상태라 GPS 이탈 판정 무시 (60m, 기준 50m, 정확도 61m)
+[2026-05-20T16:59:07.594864] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:0초, 거리 57m / 반경 30m, 정확도 47m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T16:59:07.616283] [NH알리미] 리프레시 전 위치 확인 — 위치감시 절전 전환 (범위 밖 감지, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T16:59:07.627786] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 밖 감지, 반복 알림 유지 중)
+[2026-05-20T16:59:09.100291] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T16:59:37.593638] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:1초, 거리 93m / 반경 30m, 정확도 13m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T16:59:37.606020] [NH알리미] 리프레시 전 위치 확인 — 위치감시 절전 전환 (범위 밖 감지, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T16:59:37.618830] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 밖 감지, 반복 알림 유지 중)
+[2026-05-20T16:59:39.344465] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T17:00:07.599427] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:1초, 거리 83m / 반경 30m, 정확도 20m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:00:07.620957] [NH알리미] 리프레시 전 위치 확인 — 위치감시 절전 전환 (범위 밖 감지, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T17:00:07.636981] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 밖 감지, 반복 알림 유지 중)
+[2026-05-20T17:00:09.587305] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T17:00:37.583878] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:0초, 거리 82m / 반경 30m, 정확도 26m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:00:37.601707] [NH알리미] 리프레시 전 위치 확인 — 위치감시 절전 전환 (범위 밖 감지, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T17:00:37.614799] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 밖 감지, 반복 알림 유지 중)
+[2026-05-20T17:00:37.622451] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T17:00:37.628520] [NH알리미] 백그라운드 감시 리프레시 — active:true, lastCallback:143980ms, lastSchedule:143969ms
+[2026-05-20T17:00:39.854300] [NH알리미] 다음 반복 알림 예약 → 30초 후
+[2026-05-20T17:00:42.656965] [NH알리미] 백그라운드 감시 저전력 위치 — 알림 활성 절전, lastKnown 사용 (age:2초, 거리 82m / 반경 30m, 정확도 60m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:00:42.673181] [NH알리미] 백그라운드 감시 — 위치감시 절전 전환 (범위 밖 감지, 반복 알림 유지 중, GPS 재확인:300초, 반복 알림:30초 유지)
+[2026-05-20T17:00:42.684431] [NH알리미] 위치감시 절전 — 알림은 30초 반복 유지, GPS 재확인만 300초로 완화 (범위 밖 감지, 반복 알림 유지 중)
+[2026-05-20T17:00:44.519000] [NH알리미] 알림 본문 클릭 감지 — 기록 저장 후 NH파트너스 실행 요청, source:flutter_notification
+[2026-05-20T17:00:44.527000] [NH알리미] 출퇴근 기록 저장 완료 — source:flutter_notification, timestamp:2026-05-20T17:00:44.522
+[2026-05-20T17:00:44.529000] [NH알리미] 알림 클릭 처리 완료 — 반복 알림 중지, 출퇴근 확인 차단 진입
+[2026-05-20T17:00:44.532000] [NH알리미] NH파트너스 실행 요청 — source:flutter_notification
+[2026-05-20T17:00:44.541000] [NH알리미] NH파트너스 실행 인텐트 전달 완료 — source:flutter_notification
+[2026-05-20T17:00:44.658000] [NH알리미] NH파트너스 실행 요청 — source:앱 버튼
+[2026-05-20T17:00:44.673000] [NH알리미] NH파트너스 실행 인텐트 전달 완료 — source:앱 버튼
+[2026-05-20T17:00:44.641939] [NH알리미] 반복 알림 중지
+[2026-05-20T17:00:44.676732] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:44.683809] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:44.689382] [NH알리미] 출퇴근 확인 완료 — 이탈 전까지 알림 차단
+[2026-05-20T17:00:46.830300] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:46.842844] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:51.198823] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:51.201131] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:51.245349] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:00:51.250596] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:5초, 거리 80m / 반경 30m, 정확도 27m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:00:51.253451] [NH알리미] 리프레시 전 위치 확인 — 출퇴근 확인 차단 유지 (80m, 기준 50m, 정확도 27m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:01:17.794806] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:01:17.958703] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:01:17.970358] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:03:07.600796] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+[2026-05-20T17:03:07.613753] [NH알리미] 백그라운드 감시 리프레시 — active:true, lastCallback:144923ms, lastSchedule:144895ms
+[2026-05-20T17:03:11.655] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (75m, 기준 50m, 정확도 54m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:03:12.655441] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:5초, 거리 78m / 반경 30m, 정확도 45m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:03:12.666035] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (78m, 기준 50m, 정확도 45m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:04:11.677] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (84m, 기준 50m, 정확도 68m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:04:12.724516] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:5초, 거리 85m / 반경 30m, 정확도 68m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:04:12.746328] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (85m, 기준 50m, 정확도 68m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:05:11.704] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (81m, 기준 50m, 정확도 44m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:05:12.814427] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 82m / 반경 30m, 정확도 44m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:05:12.832114] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (82m, 기준 50m, 정확도 44m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:06:11.744] [NH알리미] 네이티브 위치감시 절전 — 화면꺼짐 상태(background_recent), GPS 재확인:300초
+[2026-05-20T17:06:12.894962] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 96m / 반경 30m, 정확도 106m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:06:12.906036] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (96m, 기준 50m, 정확도 106m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:07:12.969172] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:1초, 거리 73m / 반경 30m, 정확도 43m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:07:12.983278] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (73m, 기준 50m, 정확도 43m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:08:13.041011] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:6초, 거리 74m / 반경 30m, 정확도 43m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:08:13.057587] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (74m, 기준 50m, 정확도 43m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:09:13.132973] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 78m / 반경 30m, 정확도 13m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:09:13.150355] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (78m, 기준 50m, 정확도 13m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:10:13.222584] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 79m / 반경 30m, 정확도 52m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:10:13.234301] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (79m, 기준 50m, 정확도 52m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:11:11.803] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (75m, 기준 50m, 정확도 56m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:11:13.324593] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:2초, 거리 80m / 반경 30m, 정확도 60m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:11:13.351161] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (80m, 기준 50m, 정확도 60m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:11:37.574797] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:polling
+[2026-05-20T17:12:11.832] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (80m, 기준 50m, 정확도 56m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:12:13.407049] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:6초, 거리 80m / 반경 30m, 정확도 56m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:12:13.428482] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (80m, 기준 50m, 정확도 56m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:13:08.621] [NH알리미] 포그라운드 서비스 배터리 샘플 — battery:49%, charging:false, plugged:NONE, 사용량:총 배터리 약 2% 사용, 시작:51%, 현재:49%, 경과:15분, 기준:비충전 기준, 네이티브감시:위치체크 9회, 위치요청 2회, timeout 0회, lastKnown 7회, 보조팝업 0회
+[2026-05-20T17:13:11.846] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (98m, 기준 50m, 정확도 64m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:13:13.498254] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:5초, 거리 97m / 반경 30m, 정확도 64m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:13:13.518693] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (97m, 기준 50m, 정확도 64m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:13:13.542252] [NH알리미] 사용자 진단 요약 — 최근 15분, Flutter감시:24회, 위치요청:4회, lastKnown:20회, 실패/timeout:0회, 실행지연:0회, 예약간격:5-300초(last:60초)
+[2026-05-20T17:14:11.864] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (80m, 기준 50m, 정확도 79m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:14:13.562610] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 80m / 반경 30m, 정확도 78m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:14:13.577939] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (80m, 기준 50m, 정확도 78m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:15:11.884] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (76m, 기준 50m, 정확도 60m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:15:13.623809] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:2초, 거리 77m / 반경 30m, 정확도 60m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:15:13.638096] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (77m, 기준 50m, 정확도 60m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:16:11.902] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (78m, 기준 50m, 정확도 64m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:16:13.690209] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:6초, 거리 78m / 반경 30m, 정확도 64m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:16:13.715509] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (78m, 기준 50m, 정확도 64m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:17:13.777061] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 74m / 반경 30m, 정확도 49m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:17:13.806930] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (74m, 기준 50m, 정확도 49m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:17:14.788] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (73m, 기준 50m, 정확도 48m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:18:13.866458] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 77m / 반경 30m, 정확도 88m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:18:13.891650] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (77m, 기준 50m, 정확도 88m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:18:21.332] [NH알리미] 네이티브 보조 감시 — 출퇴근 확인 차단 유지 (75m, 기준 50m, 정확도 42m, 차단 해제 기준 100m 초과)
+[2026-05-20T17:19:13.952203] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:0초, 거리 63m / 반경 30m, 정확도 17m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:19:13.971274] [NH알리미] 백그라운드 감시 — 출퇴근 확인 차단 유지 (63m, 기준 50m, 정확도 17m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:19:21.364] [NH알리미] 네이티브 위치감시 절전 — 화면꺼짐 상태(background_recent), GPS 재확인:300초
+[2026-05-20T17:20:14.011299] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:1초, 거리 43m / 반경 30m, 정확도 30m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:20:19.569118] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:20:19.583587] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:20:19.638609] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:20:19.642078] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:1초, 거리 57m / 반경 30m, 정확도 38m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:20:19.645776] [NH알리미] 리프레시 전 위치 확인 — 출퇴근 확인 차단 유지 (57m, 기준 50m, 정확도 38m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:20:57.887155] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:20:58.467172] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:20:58.488819] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:21:03.037271] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:21:03.040272] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:21:03.071206] [NH알리미] 앱 실행상태 스냅샷 — mode:foreground, state:resumed, foreground:true, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:true, reason:lifecycle
+[2026-05-20T17:21:03.074500] [NH알리미] 백그라운드 감시 저전력 위치 — 출퇴근 확인 차단 저전력, lastKnown 사용 (age:3초, 거리 54m / 반경 30m, 정확도 62m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)
+[2026-05-20T17:21:03.080314] [NH알리미] 리프레시 전 위치 확인 — 출퇴근 확인 차단 유지 (54m, 기준 50m, 정확도 62m, 차단 해제 기준 100m 초과, 저전력 감시 60초)
+[2026-05-20T17:21:06.624] [NH알리미] 포그라운드 서비스 종료 — battery:48%, charging:false, plugged:NONE, 사용량:총 배터리 약 3% 사용, 시작:51%, 현재:48%, 경과:23분, 기준:비충전 기준, 네이티브감시:위치체크 16회, 위치요청 2회, timeout 0회, lastKnown 14회, 보조팝업 0회
+[2026-05-20T17:21:06.651005] [NH알리미] 반복 알림 중지
+[2026-05-20T17:21:06.655795] [NH알리미] 지오펜스 중지 완료 — 차단 플래그 해제
+[2026-05-20T17:21:06.659009] [NH알리미] 백그라운드 감시 중지
+[2026-05-20T17:21:07.369114] [NH알리미] 모니터링 소프트 리셋 시작 — reason:수동 모니터링 재개, recalibrate:false, resume:true
+[2026-05-20T17:21:07.411] [NH알리미] 배터리 사용량 측정 시작 — 시작:48%, charging:false, plugged:NONE
+[2026-05-20T17:21:07.414] [NH알리미] 포그라운드 서비스 배터리 시작/복구 — battery:48%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:48%, 현재:48%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 0회, 위치요청 0회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T17:21:07.422116] [NH알리미] 반복 알림 중지
+[2026-05-20T17:21:07.444675] [NH알리미] 반복 알림 중지
+[2026-05-20T17:21:07.448735] [NH알리미] 지오펜스 중지 완료 — 차단 플래그 해제
+[2026-05-20T17:21:07.456605] [NH알리미] 지오펜스 시작 — 위치:마스킹, 반경:30.0m, mode:초기 진입 고감도, interval:5초, reason:start
+[2026-05-20T17:21:07.461971] [NH알리미] 시작 시 범위 밖 (54m) — ENTER 대기
+[2026-05-20T17:21:07.469753] [NH알리미] 백그라운드 감시 시작 — 5초 후 첫 확인
+tery:48%, charging:false, plugged:NONE, 사용량:총 배터리 약 0% 사용, 시작:48%, 현재:48%, 경과:0분, 기준:비충전 기준, 네이티브감시:위치체크 0회, 위치요청 0회, timeout 0회, lastKnown 0회, 보조팝업 0회
+[2026-05-20T17:21:07.483952] [NH알리미] 모니터링 소프트 리셋 완료 — 위치:마스킹, 반경:30.0m, positionUpdated:false
+[2026-05-20T17:22:37.985869] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:inactive, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T17:22:38.148232] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:hidden, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T17:22:38.165259] [NH알리미] 앱 실행상태 스냅샷 — mode:background_recent, state:paused, foreground:false, paused:false, notifActive:false, monitorActive:true, dismissedUntilExit:false, reason:lifecycle
+[2026-05-20T17:22:46.630] [NH알리미] 네이티브 위치감시 절전 — 화면꺼짐 상태(background_recent), GPS 재확인:120초
+[2026-05-20T17:22:54.777634] [NH알리미] 백그라운드 감시 저전력 위치 — 화면꺼짐 저전력, lastKnown 사용 (age:4초, 거리 49m / 반경 30m, 정확도 106m, 통과기준: 중심권 15m 이내 또는 정확도 35m 이하, 이탈기준: 50m 초과, 판정:보류)

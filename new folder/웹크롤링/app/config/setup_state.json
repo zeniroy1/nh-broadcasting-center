@@ -1,0 +1,15 @@
+{
+  "updated_at": "2026-06-16T10:01:53",
+  "python": "D:\\codding\\new folder\\웹크롤링\\runtime\\python\\python.exe",
+  "requirements": "D:\\codding\\new folder\\웹크롤링\\app\\requirements.txt",
+  "required_dirs": [
+    "lh/outputs",
+    "hug/outputs",
+    "app/cache/hug"
+  ],
+  "collection_mode": {
+    "lh": "direct",
+    "hug": "direct"
+  },
+  "python_included": true
+}

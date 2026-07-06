@@ -1,0 +1,215 @@
+diff --git "a/new folder/\354\213\235\353\213\250\355\221\234/menu-to-calendar.mjs" "b/new folder/\354\213\235\353\213\250\355\221\234/menu-to-calendar.mjs"
+index 4daa1b2..861c75e 100644
+--- "a/new folder/\354\213\235\353\213\250\355\221\234/menu-to-calendar.mjs"	
++++ "b/new folder/\354\213\235\353\213\250\355\221\234/menu-to-calendar.mjs"	
+@@ -109,7 +109,7 @@ function parseMenuHTML(htmlPath, building) {
+     const yearMatch = dateRangeText.match(/(20\d{2})/);
+     const year = yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
+ 
+-    // 헤더에서 날짜 추출
++    // 헤더에서 날짜 추출 (5일치)
+     const dates = [];
+     $('thead th').each((i, el) => {
+         if (i === 0) return;
+@@ -120,61 +120,46 @@ function parseMenuHTML(htmlPath, building) {
+         }
+     });
+ 
+-    // 공휴일 날짜 찾기
+-    const holidayDates = new Set();
+-    $('td.holiday-cell').each((_, el) => {
+-        const tr = $(el).parent();
+-        const cells = tr.children('td');
+-        let dateIdx = 0;
+-        cells.each((j, cell) => {
+-            if ($(cell).hasClass('category')) return;
+-            if (cell === el) {
+-                if (dateIdx < dates.length) holidayDates.add(dates[dateIdx]);
+-            }
+-            dateIdx++;
+-        });
+-    });
+-
+-    const activeDates = dates.filter(d => !holidayDates.has(d));
+-
+     // 코너 행 파싱 (A/B 또는 코너1/2/3)
+     let cornerAMenus = [];
+     let cornerBMenus = [];
+     let cornerCMenus = []; // NH타워 코너3용
++    let ramenMenus = []; // NH타워 셀프라면용
+ 
+     $('tbody tr').each((_, row) => {
+         const categoryCell = $(row).find('td.category');
+         if (!categoryCell.length) return;
+ 
+         const catText = categoryCell.text().replace(/\s+/g, '');
+-
+         let cornerType = null; // 'A', 'B', 'C'
+ 
+         if (building === 'NH타워') {
+-            if (catText.includes('코너1') || catText === '코너1') cornerType = 'A';
+-            else if (catText.includes('코너2') || catText === '코너2') cornerType = 'B';
+-            else if (catText.includes('코너3') || catText === '코너3') cornerType = 'C';
++            if (catText.includes('코너1')) cornerType = 'A';
++            else if (catText.includes('코너2')) cornerType = 'B';
++            else if (catText.includes('코너3')) cornerType = 'C';
++            else if (catText.includes('라면')) cornerType = 'R';
+         } else if (building === '신관') {
+-            if (catText.includes('A') && catText.includes('코') && catText.includes('너')) cornerType = 'A';
+-            if (catText.includes('B') && catText.includes('코') && catText.includes('너')) cornerType = 'B';
+-        } else {
+-            if (catText.includes('두') && catText.includes('A')) cornerType = 'A';
+-            if (catText.includes('두') && catText.includes('B')) cornerType = 'B';
++            if (catText.includes('A') && (catText.includes('코너') || catText.includes('코'))) cornerType = 'A';
++            else if (catText.includes('B') && (catText.includes('코너') || catText.includes('코'))) cornerType = 'B';
++        } else if (building === '본관') {
++            if (catText.includes('두레A') || (catText.includes('두레') && catText.includes('A'))) cornerType = 'A';
++            else if (catText.includes('두레B') || (catText.includes('두레') && catText.includes('B'))) cornerType = 'B';
+         }
+ 
+         if (!cornerType) return;
+ 
+-        const menuCells = $(row).children('td').not('.category').not('.holiday-cell');
++        // .category를 제외한 모든 td 순회
++        const menuCells = $(row).children('td').not('.category');
+ 
+         const menus = [];
+         menuCells.each((j, cell) => {
+-            if (j >= activeDates.length) return;
++            if (j >= dates.length) return;
+ 
+             const $cell = $(cell);
+             const rawText = $cell.text().trim();
+ 
+-            const isEvent = $cell.hasClass('event-text') ||
+-                rawText.includes('행 사') || rawText.includes('행사');
++            const isEvent = $cell.hasClass('event-text') || $cell.hasClass('holiday-cell') ||
++                rawText.includes('행 사') || rawText.includes('행사') || rawText.includes('< 행 사 >') || rawText.includes('<행사>');
+ 
+             const isEmpty = !rawText || rawText === '\u00a0' || rawText.replace(/\s/g, '') === '';
+ 
+@@ -185,27 +170,30 @@ function parseMenuHTML(htmlPath, building) {
+                 clone.find('em').remove();
+ 
+                 let cellHtml = clone.html();
+-                cellHtml = cellHtml.replace(/<br\s*\/?>/gi, '\n');
+-                const textOnly = cellHtml.replace(/<[^>]*>/g, '').trim();
+-                items = textOnly
+-                    .split('\n')
+-                    .map(s => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim())
+-                    .filter(Boolean);
++                if (cellHtml) {
++                    cellHtml = cellHtml.replace(/<br\s*\/?>/gi, '\n');
++                    const textOnly = cellHtml.replace(/<[^>]*>/g, '').trim();
++                    items = textOnly
++                        .split('\n')
++                        .map(s => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim())
++                        .filter(Boolean);
++                }
+             }
+ 
+-            menus.push({ date: activeDates[j], isEvent, isEmpty, items });
++            menus.push({ date: dates[j], isEvent, isEmpty, items });
+         });
+ 
+         if (cornerType === 'A') cornerAMenus = menus;
+         if (cornerType === 'B') cornerBMenus = menus;
+         if (cornerType === 'C') cornerCMenus = menus;
++        if (cornerType === 'R') ramenMenus = menus;
+     });
+ 
+-    return { building, cornerAMenus, cornerBMenus, cornerCMenus, dates, holidayDates, activeDates };
++    return { building, cornerAMenus, cornerBMenus, cornerCMenus, ramenMenus, dates };
+ }
+ 
+ // ===== 4. 코너별 설명 텍스트 생성 =====
+-function buildCornerSection(label, menuA, menuB, menuC) {
++function buildCornerSection(label, menuA, menuB, menuC, menuR) {
+     const lines = [];
+ 
+     function addCorner(cornerLabel, menu, refMenu, refLabel) {
+@@ -232,6 +220,7 @@ function buildCornerSection(label, menuA, menuB, menuC) {
+         addCorner(`${label} 코너1`, menuA, null, '');
+         addCorner(`${label} 코너2`, menuB, null, '');
+         if (menuC) addCorner(`${label} 코너3`, menuC, null, '');
++        if (menuR) addCorner(`${label} 셀프라면`, menuR, null, '');
+     } else {
+         addCorner(`${label}A`, menuA, null, '');
+         addCorner(`${label}B`, menuB, menuA, `${label}A`);
+@@ -242,13 +231,13 @@ function buildCornerSection(label, menuA, menuB, menuC) {
+ 
+ // ===== 5. 날짜별 통합 이벤트 생성 =====
+ function buildDailyEvents(singwanParsed, bongwanParsed, nhtowerParsed) {
+-    // 활성 날짜 통합
+-    const allActiveDates = new Set();
+-    if (singwanParsed) singwanParsed.activeDates.forEach(d => allActiveDates.add(d));
+-    if (bongwanParsed) bongwanParsed.activeDates.forEach(d => allActiveDates.add(d));
+-    if (nhtowerParsed) nhtowerParsed.activeDates.forEach(d => allActiveDates.add(d));
++    // 모든 유효 날짜 수집 (보통 월~금 5일)
++    const allDates = new Set();
++    if (singwanParsed) singwanParsed.dates.forEach(d => allDates.add(d));
++    if (bongwanParsed) bongwanParsed.dates.forEach(d => allDates.add(d));
++    if (nhtowerParsed) nhtowerParsed.dates.forEach(d => allDates.add(d));
+ 
+-    const sortedDates = [...allActiveDates].sort();
++    const sortedDates = [...allDates].sort();
+     const events = [];
+ 
+     for (const date of sortedDates) {
+@@ -275,12 +264,14 @@ function buildDailyEvents(singwanParsed, bongwanParsed, nhtowerParsed) {
+             const menu1 = nhtowerParsed.cornerAMenus.find(m => m.date === date);
+             const menu2 = nhtowerParsed.cornerBMenus.find(m => m.date === date);
+             const menu3 = nhtowerParsed.cornerCMenus.find(m => m.date === date);
+-            const section = buildCornerSection('NH타워', menu1, menu2, menu3);
++            const menuR = nhtowerParsed.ramenMenus.find(m => m.date === date);
++            const section = buildCornerSection('NH타워', menu1, menu2, menu3, menuR);
+             if (section.trim()) sections.push(section);
+         }
+ 
+         if (sections.length > 0) {
+             const description = sections.join('\n\n━━━━━━━━━━━━━━━━━━━━\n\n');
++            // console.log(`  ✅ [DEBUG] ${date} 이벤트 생성됨 (${sections.length}개 섹션)`);
+             events.push({
+                 date,
+                 title: `오늘의 점심메뉴`,
+@@ -407,19 +398,19 @@ async function main() {
+     if (singwanFile) {
+         console.log(`📄 신관 파싱: ${singwanFile}`);
+         singwanParsed = parseMenuHTML(path.join(menuDir, singwanFile), '신관');
+-        console.log(`  📅 활성 날짜: ${singwanParsed.activeDates.join(', ')}`);
++        console.log(`  📅 날짜 추출 완료: ${singwanParsed.dates.join(', ')}`);
+     }
+ 
+     if (bongwanFile) {
+         console.log(`📄 본관 파싱: ${bongwanFile}`);
+         bongwanParsed = parseMenuHTML(path.join(menuDir, bongwanFile), '본관');
+-        console.log(`  📅 활성 날짜: ${bongwanParsed.activeDates.join(', ')}`);
++        console.log(`  📅 날짜 추출 완료: ${bongwanParsed.dates.join(', ')}`);
+     }
+ 
+     if (nhtowerFile) {
+         console.log(`📄 NH타워 파싱: ${nhtowerFile}`);
+         nhtowerParsed = parseMenuHTML(path.join(menuDir, nhtowerFile), 'NH타워');
+-        console.log(`  📅 활성 날짜: ${nhtowerParsed.activeDates.join(', ')}`);
++        console.log(`  📅 날짜 추출 완료: ${nhtowerParsed.dates.join(', ')}`);
+     }
+ 
+     console.log('');
+diff --git a/token.json b/token.json
+index 2e1be94..f1a8596 100644
+--- a/token.json
++++ b/token.json
+@@ -1,8 +1,8 @@
+ {
+-  "access_token": "ya29.a0ATkoCc7w_BKPF0XcjlBs2NrtJZOD0JAtwKD1WYE7ghs6mP5ROEUoeqAolMWsSlTysysp7SdXqotgqelUdiJp53vuoeuAYvfUllyuDN-m6LThZAXyrxKvkqxhsL1K_AAV3rFsDLmRa7YQeJOHl9_RX-yiihhZwebCvN7fFW3ojyyILz3JHhXcBDuKjorVogng4xT8HjoaCgYKAeMSARcSFQHGX2MiyQ8odvn07ZqhHVS-pjiEvA0206",
+-  "refresh_token": "1//0ehtFbeHw998kCgYIARAAGA4SNwF-L9IrjbO8q9ZMqt2x1s0ZyZjDrTTirsyF1HloEEN-tvBhKHsbMILNE9CHZhQiLm8vMjxYWv0",
+-  "scope": "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/drive.file",
++  "access_token": "ya29.a0ATkoCc7zHDBEdX6FoxHZ69z8TQNO39ztG2aWmBiNKvQ48NVSzkFrXpTvVoau-osEATFOzT4mLAv4923JxMPfh7g8kLcdUQ0NSoauPaCaJMKkdxMbVUbELCQyb4PM8DguXnjuVnnKLywI4gITazjfyOYrfJpdhQPYxaNMDqqPDwq6Onc1j0EL863CP-sNV4WweDLIjb4aCgYKAX8SARcSFQHGX2Mi-0fiWVaOTtGxw7m7REG3Uw0206",
++  "refresh_token": "1//0eXy1zmWIcmfPCgYIARAAGA4SNwF-L9IrWyPEdSoynb0OgiVwdAhXhVsm3gnXh5MLGG5C0Caz-GJ_0HaXZm1Z-guZf0x9ngRqDGM",
++  "scope": "https://www.googleapis.com/auth/calendar",
+   "token_type": "Bearer",
+   "refresh_token_expires_in": 604799,
+-  "expiry_date": 1772530468340
++  "expiry_date": 1773625815230
+ }
+\ No newline at end of file

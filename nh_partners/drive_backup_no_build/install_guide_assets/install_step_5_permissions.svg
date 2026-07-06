@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-label="권한 허용 그림">
+  <rect width="900" height="420" fill="#f6f8fb"/>
+  <rect x="92" y="70" width="310" height="270" rx="28" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <circle cx="247" cy="145" r="46" fill="#eaf2fb" stroke="#2f5f9f" stroke-width="4"/>
+  <path d="M247 112 C223 112 207 130 207 153 C207 184 247 215 247 215 C247 215 287 184 287 153 C287 130 271 112 247 112 Z" fill="#2f5f9f"/>
+  <circle cx="247" cy="151" r="12" fill="#ffffff"/>
+  <text x="247" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2d3d">위치 권한</text>
+  <text x="247" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#116b3a">항상 허용</text>
+  <rect x="500" y="70" width="310" height="270" rx="28" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <circle cx="655" cy="145" r="46" fill="#eaf2fb" stroke="#2f5f9f" stroke-width="4"/>
+  <path d="M630 153 C630 135 642 122 655 122 C668 122 680 135 680 153 V176 L692 191 H618 L630 176 Z" fill="#2f5f9f"/>
+  <circle cx="655" cy="198" r="8" fill="#2f5f9f"/>
+  <text x="655" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2d3d">알림 권한</text>
+  <text x="655" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#116b3a">허용</text>
+  <text x="450" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f2d3d">권한은 허용으로 선택</text>
+</svg>

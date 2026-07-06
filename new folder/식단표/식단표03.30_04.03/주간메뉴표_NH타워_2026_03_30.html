@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주간 메뉴표(03.30-04.03) NH타워</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border: 2px solid #333;
+            padding: 25px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .date-range {
+            text-align: right;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 7px 5px;
+            text-align: center;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        th {
+            background: #e8e8e8;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        td.category {
+            background: #f5f5f5;
+            font-weight: 600;
+            vertical-align: middle;
+            width: 7%;
+        }
+
+        td.menu-cell {
+            text-align: left;
+            padding: 6px 8px;
+            font-size: 12px;
+        }
+
+        .section-title {
+            display: block;
+            text-align: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #555;
+            background: #f0f0f0;
+            padding: 3px 4px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: #fff;
+            }
+
+            .menu-container {
+                border: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu-container">
+        <h1>주간 메뉴표(03.30-04.03)</h1>
+        <p class="date-range">2026.03.30 - 2026.04.03</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:7%;">구분</th>
+                    <th>03/30(Mon)</th>
+                    <th>03/31(Tue)</th>
+                    <th>04/01(Wed)</th>
+                    <th>04/02(Thu)</th>
+                    <th>04/03(Fri)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 조식 코너2 (한식) -->
+                <tr>
+                    <td class="category" rowspan="2">조<br>식</td>
+                    <td class="category">코너2<br>(한식)</td>
+                    <td class="menu-cell">
+                        소고기미역국<br>
+                        잡곡밥<br>
+                        너비아니새송이조림<br>
+                        숙주나물<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        삼치데리야끼구이<br>
+                        잡곡밥<br>
+                        순두부찌개<br>
+                        무말랭이고추장무침<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        콩나물밥*양념장<br>
+                        냉이된장국<br>
+                        언양식해물불고기<br>
+                        깻잎지무침<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        민물새우수제비탕<br>
+                        잡곡밥<br>
+                        햄감자채볶음<br>
+                        궁채장아찌<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        코다리무조림<br>
+                        잡곡밥<br>
+                        들깨버섯된장국<br>
+                        참나물생채<br>
+                        백김치
+                    </td>
+                </tr>
+                <!-- 조식 코너3 (스넥) -->
+                <tr>
+                    <td class="category">코너3<br>(스넥)</td>
+                    <td class="menu-cell">
+                        고추참치주먹밥&감자알이<br>
+                        미역미소국<br>
+                        단무지<br>
+                        두유
+                    </td>
+                    <td class="menu-cell">
+                        수제유부치즈김밥<br>
+                        팽이미소국<br>
+                        하루견과<br>
+                        두유
+                    </td>
+                    <td class="menu-cell">
+                        수제햄버거<br>
+                        맑은우동국물<br>
+                        오복채무침<br>
+                        블루베리주스
+                    </td>
+                    <td class="menu-cell">
+                        수제소세지김밥<br>
+                        맑은우동국물<br>
+                        단무지<br>
+                        두유
+                    </td>
+                    <td class="menu-cell">
+                        미니와플&스크램블볶음밥<br>
+                        딸기잼&버터<br>
+                        양송이스프<br>
+                        시리얼&우유<br>
+                        그린샐러드&드레싱
+                    </td>
+                </tr>
+                <!-- 셀프라면 ZON (조식 Cafe) -->
+                <tr>
+                    <td class="category">셀프<br>라면<br>ZON<br>(Café)</td>
+                    <td class="category"></td>
+                    <td class="menu-cell">
+                        셀프라면/쌀밥/배추김치<br>
+                        토핑4종(계란,파,치즈,콩나물)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/토핑4종/배추김치<br>
+                        토핑4종(계란,파,치즈,비엔나)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/토핑4종/배추김치<br>
+                        토핑4종(계란,파,치즈,청양고추)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/토핑4종/배추김치<br>
+                        토핑4종(계란,파,치즈,떡국떡)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/쌀밥/배추김치<br>
+                        토핑4종(계란,파,치즈,양파)
+                    </td>
+                </tr>
+                <!-- 중식 코너1 (일품) -->
+                <tr>
+                    <td class="category" rowspan="3">중<br>식</td>
+                    <td class="category">코너1<br>(일품)</td>
+                    <td class="menu-cell">
+                        명란오일파스타<br>
+                        후리가케밥<br>
+                        크림옥수수스프<br>
+                        멘치까스*쓰리라차마요<br>
+                        수제피클<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        매콤까르보돈까스<br>
+                        추가밥<br>
+                        유부우동국<br>
+                        펜네샐러드파스타<br>
+                        단무지<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        김치어묵우동<br>
+                        단무지김가루밥<br>
+                        뿌링클st치킨<br>
+                        빵가루마카로니샐러드<br>
+                        오복채무침<br>
+                        파김치
+                    </td>
+                    <td class="menu-cell">
+                        달걀볶음밥*자장소스<br>
+                        짬뽕국<br>
+                        칠리탕수육<br>
+                        목이버섯겨자냉채<br>
+                        짜사이무침<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        얼큰돈코츠라멘<br>
+                        추가밥<br>
+                        오꼬노미야끼<br>
+                        치즈알새우칩<br>
+                        꼬들단무지<br>
+                        배추김치
+                    </td>
+                </tr>
+                <!-- 중식 코너2 (한식) -->
+                <tr>
+                    <td class="category">코너2<br>(한식)</td>
+                    <td class="menu-cell">
+                        치즈순살닭갈비<br>
+                        쌀밥&흑미밥<br>
+                        북어해장국<br>
+                        동그랑땡전*케찹<br>
+                        치커리흑임자무침<br>
+                        백김치
+                    </td>
+                    <td class="menu-cell">
+                        닭곰탕*당면사리<br>
+                        쌀밥&잡곡밥<br>
+                        우렁곤약초무침<br>
+                        순두부새싹샐러드<br>
+                        간장깻잎지<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        들깨고추장불고기<br>
+                        쌀밥&잡곡밥<br>
+                        미역국<br>
+                        맛살달걀찜<br>
+                        삼색냉채<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        훈제오리야채볶음<br>
+                        쌀밥&옥수수밥<br>
+                        버섯잡채<br>
+                        부들어묵볶음<br>
+                        부추적채생채<br>
+                        백김치
+                    </td>
+                    <td class="menu-cell">
+                        해물된장찌개<br>
+                        쌀밥&흑미밥<br>
+                        햄달걀말이<br>
+                        콩나물김가루무침<br>
+                        치즈알새우칩<br>
+                        배추김치
+                    </td>
+                </tr>
+                <!-- 중식 코너3 (분식) -->
+                <tr>
+                    <td class="category">코너3<br>(분식)</td>
+                    <td class="menu-cell">
+                        돈육갈릭필라프*후라이<br>
+                        크림옥수수스프<br>
+                        피쉬앤칩스*타르타르<br>
+                        오이피클<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        차돌누들떡볶이*김말이<br>
+                        유부우동국<br>
+                        참치유부초밥<br>
+                        단무지<br>
+                        수제딸기요거트
+                    </td>
+                    <td class="menu-cell">
+                        소고기버섯영양밥<br>
+                        미역국<br>
+                        돼지고기두부조림<br>
+                        맥시칸샐러드<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        하와이안로코모코<br>
+                        팽이미소국<br>
+                        소세지감자튀김*케찹<br>
+                        오이피클<br>
+                        사과주스
+                    </td>
+                    <td class="menu-cell">
+                        참치야채비빔밥<br>
+                        콩나물국<br>
+                        명란떡갈비*흑임자마요S<br>
+                        치즈알새우칩<br>
+                        배추김치
+                    </td>
+                </tr>
+                <!-- 플러스바 -->
+                <tr>
+                    <td class="category">플<br>러<br>스<br>바</td>
+                    <td class="category"></td>
+                    <td class="menu-cell">
+                        그린샐러드/드레싱2종<br>
+                        현미밥/과일워터
+                    </td>
+                    <td class="menu-cell">
+                        그린샐러드/드레싱2종<br>
+                        현미밥/유자차
+                    </td>
+                    <td class="menu-cell">
+                        그린샐러드/드레싱2종<br>
+                        현미밥/과일워터
+                    </td>
+                    <td class="menu-cell">
+                        그린샐러드/드레싱2종<br>
+                        현미밥/수정과
+                    </td>
+                    <td class="menu-cell">
+                        그린샐러드/드레싱2종<br>
+                        현미밥/과일워터
+                    </td>
+                </tr>
+                <!-- 테이크아웃 -->
+                <tr>
+                    <td class="category">테이<br>크아웃<br>(Café)</td>
+                    <td class="category"></td>
+                    <td class="menu-cell">
+                        훈제오리마늘볼샐러드
+                    </td>
+                    <td class="menu-cell">
+                        쉬림프갈릭스파게티샐러드
+                    </td>
+                    <td class="menu-cell">
+                        치킨텐더단호박샐러드
+                    </td>
+                    <td class="menu-cell">
+                        떡갈비에그마요샐러드
+                    </td>
+                    <td class="menu-cell">
+                        우삽겹메밀면샐러드
+                    </td>
+                </tr>
+                <!-- 석식 코너2 -->
+                <tr>
+                    <td class="category" rowspan="2">석<br>식</td>
+                    <td class="category">코너2<br>(한식&일품)</td>
+                    <td class="menu-cell">
+                        마파두부밥<br>
+                        계살스프<br>
+                        후르츠만두탕수<br>
+                        양콘브로콜리볶음<br>
+                        싸사오무침<br>
+                        백김치
+                    </td>
+                    <td class="menu-cell">
+                        소고기해장국<br>
+                        잡곡밥<br>
+                        너비아니전*파채<br>
+                        미역줄기볶음<br>
+                        모듬장아반<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        갓치볶음밥*후라이<br>
+                        근대된장국<br>
+                        핫도그*케찹<br>
+                        두부쑹쑥나물<br>
+                        건평튀김<br>
+                        배추김치
+                    </td>
+                    <td class="menu-cell">
+                        돈육순대국밥<br>
+                        잡곡밥<br>
+                        미니메일전병<br>
+                        오이고추된장무침<br>
+                        명엽채볶음<br>
+                        깍두기
+                    </td>
+                    <td class="menu-cell">
+                        닭가슴살카레라이스<br>
+                        팽이쑥갓국<br>
+                        미트볼케찹조림<br>
+                        오이생채<br>
+                        황도
+                    </td>
+                </tr>
+                <!-- 석식 셀프라면 ZON -->
+                <tr>
+                    <td class="category">셀프<br>라면<br>ZON<br>(Café)</td>
+                    <td class="menu-cell">
+                        셀프라면/쌀밥/배추김치<br>
+                        토핑4종(계란,파,치즈,콩나물)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/토핑4종/배추김치<br>
+                        토핑4종(계란,파,치즈,비엔나)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/토핑4종/배추김치<br>
+                        토핑4종(계란,파,치즈,청양고추)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/토핑4종/배추김치<br>
+                        토핑4종(계란,파,치즈,떡국떡)
+                    </td>
+                    <td class="menu-cell">
+                        셀프라면/쌀밥/배추김치<br>
+                        토핑4종(계란,파,치즈,양파)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

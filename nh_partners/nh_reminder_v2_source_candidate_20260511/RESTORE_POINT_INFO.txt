@@ -1,0 +1,21 @@
+NH Alimi Restore Point
+Created: 2026-05-04 10:22:39
+Source: D:\codding\nh_partners\nh_reminder
+Restore folder: D:\codding\nh_partners\restore_points\nh_reminder_restore_20260504_102235
+
+Included:
+- Project source and documents
+- logs_analysis folder
+- current APK copied to artifacts\NH_Alimi.apk
+
+Excluded regenerated caches:
+- build
+- .dart_tool
+- .gradle
+
+Restore method:
+1. Close VS Code, Flutter, Gradle, and adb sessions if running.
+2. Copy this restore folder contents back to D:\codding\nh_partners\nh_reminder.
+3. Run: $env:PUB_CACHE='D:\flutter_pub_cache'
+4. Run: flutter pub get
+5. Run: flutter run or flutter build apk --release

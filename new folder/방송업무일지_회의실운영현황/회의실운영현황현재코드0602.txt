@@ -1,0 +1,802 @@
+/** Baseline1 v1 (2026-06-02)
+ * *****************************************************
+ * 1번(업무일지) → 2번(본관/신관) 동기화 & 검증 로직
+ * + A열 구분('본관', '신관') 누락 시 동기화 즉시 중단 및 일괄 오류 목록 알림창(순정 모달) 표출
+ * + 외부 클릭 무력화 및 가독성이 강화된 HtmlService 순정 모달 다이얼로그 적용
+ * + 사진 포맷 확장(블록 복제)
+ * + 레터박스(월 구분 / 월 보수) 삽입·제거
+ * + 사진업로드(K1:N1, ID/링크 혼용)
+ * -----------------------------------------------------
+ * ⚙ A1:J1 글씨 크기 자동 적용 제외(요청사항)
+ * *****************************************************/
+
+/* =========================================================
+ * 기본 설정
+ * ========================================================= */
+const CONFIG = {
+  SOURCE_SPREADSHEET_ID: '1GirV90C_Vr70CXDuBQLj8T2b5TophLZiL2TccINZYxE',
+  SOURCE_SHEET_NAMES: ['월','화','수','목','금'],
+  TARGET_SHEET_BY_BUILDING: { '본관': '2. 본관 방송운영 상세', '신관': '3. 신관 방송운영 상세' },
+  SRC_COL: { TIME:3, PLACE:4, SUBJECT:5, DEPT:6, HEAD:7 },
+  TARGET_HEADER_ROWS: 2,
+  TIMEZONE: 'Asia/Seoul',
+  FONT_FAMILY: 'Malgun Gothic',
+  FONT_SIZE: 9
+};
+
+const CONFIG_UI = { USE_TOAST: false };
+
+/* =========================================================
+ * 사진 포맷 설정
+ * ========================================================= */
+const PHOTO_INPUT = {
+  SLOT_NAME: {
+    B:  '사진슬롯_본관',
+    S:  '사진슬롯_신관',
+    MB: '사진슬롯_본관_보수',
+    MS: '사진슬롯_신관_보수'
+  },
+  SECOND_COL_OFFSET: 2
+};
+
+/* =========================================================
+ * 레터박스 정의
+ * ========================================================= */
+const MONTH_HEADER = {
+  MAIN_TEXT:  '월 주요 회의/행사',
+  MAINT_TEXT: '월 보수 및 사용불능 & 장애 예방 활동',
+  WIDTH_COLS: 3,
+  HDR_HEIGHT: 48,
+  SPC_HEIGHT: 20
+};
+
+const COLORS = {
+  BLACK: '#000000',
+  WHITE: '#ffffff',
+  RED: '#ff0022',
+  FONT_MAIN: '#ff0022',
+  FONT_MAINT: '#000000'
+};
+
+/* =========================================================
+ * 텍스트 정제 및 유틸리티 함수 (전역)
+ * ========================================================= */
+const _t  = s => (s == null ? '' : String(s).trim());
+const _tc = s => _t(s).replace(/\s+/g,'');
+const firstLine_ = s => _t(String(s || '').split(/[\r\n\u000b\u2028\u2029]/)[0]);
+const normKey_ = s => _t(s).toLowerCase().replace(/\s+/g,'');
+const TIME_RE = /^\d{2}:\d{2}\s*~\s*\d{2}:\d{2}$/;
+
+/* =========================================================
+ * 메뉴 생성 (Triggers)
+ * ========================================================= */
+function onOpen(){
+  try { if (SpreadsheetApp.getActive().getId() === CONFIG.SOURCE_SPREADSHEET_ID) return; } catch(e){}
+
+  SpreadsheetApp.getUi()
+    .createMenu('📡 방송업무일지 연동')
+      .addItem('주간(월~금)', 'sync_week_all')
+      .addItem('오늘(오늘날짜)', 'sync_today_only')
+      .addToUi();
+
+  SpreadsheetApp.getUi()
+    .createMenu('🧩 사진틀')
+      .addItem('사진틀 1개', 'photoFormat_cloneBlockOnceHere')
+      .addItem('사진틀 100개', 'photoFormat_cloneBlock100Here')
+      .addSeparator()
+      .addItem('레터박스(사진철)', 'photoFormat_insertMonthHeaderHere')
+      .addItem('레터박스(보수,점검)', 'photoFormat_insertMaintenanceHeaderHere')
+      .addItem('레터박스 제거', 'photoFormat_removeMonthHeaderHere')
+      .addToUi();
+
+  SpreadsheetApp.getUi()
+    .createMenu('▶ 사진업로드')
+      .addItem('실행', 'simplePhotoUpload_fillFromInput')
+      .addToUi();
+}
+
+/* =========================================================
+ * ── 동기화 핵심 제어 로직 ──
+ * ========================================================= */
+function sync_today_only(){
+  const YOIL = ['일','월','화','수','목','금','토'];
+  const today = YOIL[new Date().getDay()];
+  if (!CONFIG.SOURCE_SHEET_NAMES.includes(today)) {
+    SpreadsheetApp.getUi().alert(`업무일지 탭은 평일만 존재합니다. (오늘: ${today})`);
+    return;
+  }
+  sync_core_([today]);
+}
+
+function sync_week_all(){
+  sync_core_(CONFIG.SOURCE_SHEET_NAMES);
+}
+
+function sync_core_(sheetNames){
+  if (SpreadsheetApp.getActive().getId() === CONFIG.SOURCE_SPREADSHEET_ID) {
+    throw new Error('이 코드는 2번 파일에서만 실행하세요. 1번 파일은 읽기 전용입니다.');
+  }
+  ensure_target_sheets_exist_();
+
+  const srcSS = SpreadsheetApp.openById(CONFIG.SOURCE_SPREADSHEET_ID);
+
+  // A열 구분 검증: 누락된 모든 오류를 일괄 수집하여 연동 즉시 취소 및 외부 클릭이 무력화된 모달창 표출
+  if (!validate_source_sheets_division_(srcSS, sheetNames)) {
+    return;
+  }
+
+  const stats = {};
+  Object.keys(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(k => stats[k] = {written:0, left:0});
+
+  sheetNames.forEach(name => {
+    const sh = srcSS.getSheetByName(name);
+    if (!sh) return;
+    const dateInfo = extract_date_from_sheet_(sh);
+    if (!dateInfo) return;
+    const {month, day} = dateInfo;
+
+    const sections = read_sections_from_source_(sh); // {본관:[], 신관:[]}
+    Object.keys(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(b => {
+      const rows = sections[b] || [];
+      const {written, left} = upsert_one_day_noinsert_(b, month, day, rows);
+      stats[b].written += written;
+      stats[b].left    += left;
+    });
+  });
+
+  Object.values(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(apply_sheet_font_);
+  showSyncReport_(stats);
+}
+
+/* =========================================================
+ * ── 동기화 보조 유틸 함수 ──
+ * ========================================================= */
+
+/**
+ * A열(구분)에 '본관' 및 '신관' 구분 단어가 모두 존재하는지 사전 검증합니다.
+ * 누락된 항목이 있을 경우, 외부 클릭이 무력화되고 가독성이 극대화된 HTML 순정 모달 다이얼로그를 표출하고 연동을 중단합니다.
+ */
+function validate_source_sheets_division_(srcSS, sheetNames) {
+  const errors = [];
+  
+  for (let i = 0; i < sheetNames.length; i++) {
+    const name = sheetNames[i];
+    const sh = srcSS.getSheetByName(name);
+    if (!sh) continue;
+
+    const lastRow = sh.getLastRow();
+    if (lastRow < 1) continue;
+
+    const aRange = sh.getRange(1, 1, lastRow, 1);
+    const aVals = aRange.getDisplayValues().map(r => _tc(r[0] || ''));
+    const merges = aRange.getMergedRanges();
+
+    let hasBongwan = false;
+    let hasSingwan = false;
+
+    // 1) 병합 범위 검증
+    merges.forEach(m => {
+      if (m.getColumn() !== 1) return;
+      const val = _tc(m.getDisplayValue());
+      if (val === '본관') hasBongwan = true;
+      if (val === '신관') hasSingwan = true;
+    });
+
+    // 2) 일반 단일 셀 검증
+    aVals.forEach(v => {
+      if (v === '본관') hasBongwan = true;
+      if (v === '신관') hasSingwan = true;
+    });
+
+    if (!hasBongwan || !hasSingwan) {
+      let missingList = [];
+      if (!hasBongwan) missingList.push('본관');
+      if (!hasSingwan) missingList.push('신관');
+      const missingStr = missingList.join(', ');
+      errors.push(`<strong>'${name}요일'</strong> 시트 A열 ➔ <span style="color: #d93025; font-weight: bold;">'${missingStr}'</span> 누락`);
+    }
+  }
+
+  // 누락 오류가 존재할 경우 연동 작업을 즉시 취소하고 외부 클릭이 무력화된 모바일/데스크톱 대응 모달 표출
+  if (errors.length > 0) {
+    const errorHtmlList = errors.map(err => `<li>${err}</li>`).join('');
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body {
+      font-family: 'Malgun Gothic', sans-serif;
+      margin: 0;
+      padding: 16px 20px;
+      background-color: #ffffff;
+      color: #333333;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .modal-container {
+      display: flex;
+      flex-direction: column;
+      height: 340px; /* 창의 세로 공간을 flex로 나누어 쓰기 위해 명시적 높이 할당 */
+      box-sizing: border-box;
+    }
+    .alert-header {
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: #111111;
+      border-bottom: 2px solid #f1f3f4;
+      padding-bottom: 8px;
+    }
+    .alert-content {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333333;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      overflow: hidden;
+    }
+    .main-message {
+      font-size: 16px;
+      font-weight: bold;
+      color: #d93025;
+      margin-bottom: 10px;
+    }
+    .error-title {
+      font-weight: bold;
+      color: #1a73e8;
+      margin-top: 8px;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .error-box {
+      background-color: #fdf2f2;
+      border: 1px solid #fde8e8;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 12px;
+      max-height: 110px; /* 누락 항목이 늘어날 경우 스크롤 처리 */
+      overflow-y: auto;
+      flex-shrink: 1; /* 여유 공간 부족 시 스스로 축소 */
+    }
+    .error-box ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #202124;
+      font-size: 13.5px;
+    }
+    .error-box li {
+      margin-bottom: 4px;
+    }
+    .error-box li:last-child {
+      margin-bottom: 0;
+    }
+    .footer-desc {
+      font-size: 13.5px;
+      color: #5f6368;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: auto; /* 버튼 컨테이너를 항상 바닥에 고정 */
+      padding-bottom: 4px;
+    }
+    .confirm-btn {
+      background-color: #ffffff;
+      color: #1a73e8;
+      border: 2px solid #1a73e8;
+      padding: 8px 32px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      outline: none;
+    }
+    .confirm-btn:hover {
+      background-color: #f4f8fe;
+      border-color: #1557b0;
+      color: #1557b0;
+    }
+    .confirm-btn:active {
+      background-color: #e8f0fe;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-container">
+    <div class="alert-header">
+      <span>🚨</span> [연동 실패] 구분 누락 오류
+    </div>
+    <div class="alert-content">
+      <div class="main-message">❌ 시트 연동을 진행할 수 없습니다.</div>
+      
+      <div class="error-title">⚠️ 누락 항목 목록</div>
+      <div class="error-box">
+        <ul>
+          ${errorHtmlList}
+        </ul>
+      </div>
+      
+      <div class="footer-desc">원본 시트에 구분을 기재해야 연동이 정상 작동합니다.</div>
+      
+      <div class="button-container">
+        <button class="confirm-btn" onclick="google.script.host.close()">확인</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+
+    const htmlOutput = HtmlService.createHtmlOutput(htmlContent)
+        .setWidth(520)
+        .setHeight(380);
+        
+    SpreadsheetApp.getUi().showModalDialog(htmlOutput, ' ');
+    return false; // 연동 차단
+  }
+  return true; // 모두 정상 통과
+}
+
+function ensure_target_sheets_exist_(){
+  const ss = SpreadsheetApp.getActive();
+  Object.values(CONFIG.TARGET_SHEET_BY_BUILDING).forEach(n => {
+    if (!ss.getSheetByName(n)) throw new Error('타깃 시트를 찾을 수 없습니다: ' + n);
+  });
+}
+
+function extract_date_from_sheet_(sh){
+  const vals = sh.getRange(1, 1, Math.min(sh.getLastRow(), 20), Math.min(sh.getLastColumn(), 15)).getDisplayValues();
+  for (let r = 0; r < vals.length; r++){
+    for (let c = 0; c < vals[r].length; c++){
+      const s = String(vals[r][c] || '');
+      const m = s.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
+      if (m) return {year:+m[1], month:+m[2], day:+m[3]};
+    }
+  }
+  return null;
+}
+
+function splitSubjectAndTitle_(s){
+  const first = firstLine_(s);
+  const m = first.match(/\(([^()]*)\)\s*$/);
+  if (m) return { subject: first.slice(0, m.index).trim(), title: m[1].trim() };
+  return { subject: first, title: '' };
+}
+
+function read_sections_from_source_(sh){
+  const out = {'본관':[], '신관':[]};
+  const lastRow = sh.getLastRow();
+  if (lastRow < 1) return out;
+
+  const aRange = sh.getRange(1, 1, lastRow, 1);
+  const aVals  = aRange.getDisplayValues().map(r => r[0] || '');
+  const merges = aRange.getMergedRanges();
+
+  const sections = [];
+  merges.forEach(m => {
+    if (m.getColumn() !== 1) return;
+    const label = _tc(m.getDisplayValue());
+    if (label === '본관' || label === '신관')
+      sections.push({type:label, start:m.getRow(), end:m.getRow()+m.getNumRows()-1});
+  });
+
+  function isInsideAny(r){ return sections.some(s => r >= s.start && r <= s.end); }
+  for (let r = 1; r <= lastRow; r++){
+    const label = _tc(aVals[r-1]);
+    if ((label === '본관' || label === '신관') && !isInsideAny(r)){
+      let end = lastRow;
+      for (let rr = r + 1; rr <= lastRow; rr++){
+        const l2 = _tc(aVals[rr-1]);
+        if (l2 === '본관' || l2 === '신관'){ end = rr - 1; break; }
+      }
+      sections.push({type:label, start:r, end});
+    }
+  }
+
+  sections.sort((a,b) => (a.start - b.start) || (a.end - b.end));
+  const uniq = [];
+  for (const s of sections){
+    if (!uniq.length || uniq[uniq.length-1].start !== s.start || uniq[uniq.length-1].end !== s.end) uniq.push(s);
+  }
+
+  const {TIME:C, PLACE:D, SUBJECT:E, DEPT:F, HEAD:G} = CONFIG.SRC_COL;
+  const headerTokens = new Set(['시간','운영시간','장소','회의실명','회의내용','회의명','주관부서','주관팀','담당','인원','비고','주요안내사항']);
+
+  uniq.forEach(sec => {
+    const n = Math.max(0, sec.end - sec.start + 1); if (!n) return;
+    const rows = sh.getRange(sec.start, 1, n, Math.max(G, 7)).getDisplayValues();
+
+    let lastDept = '';
+    const seen = new Set();
+    for (let i = 0; i < n; i++){
+      const r = rows[i];
+      const time = _t(r[C-1]);
+      const place = _t(r[D-1]);
+      const subjRaw = r[E-1];
+      const {subject, title} = splitSubjectAndTitle_(subjRaw);
+      let dept = _t(r[F-1]);
+      const head = _t(r[G-1]);
+
+      if (!dept) dept = lastDept; else lastDept = dept;
+
+      if ([time,place,subject,dept,head].every(v => !v)) continue;
+      if ([time,place,subject,dept,head].some(x => headerTokens.has(_tc(x)))) continue;
+      if (!TIME_RE.test(time) || (!place && !subject)) continue;
+
+      const key = [time, place, subject, dept].map(normKey_).join('|');
+      if (seen.has(key)) continue; seen.add(key);
+
+      out[sec.type].push({time, place, subject, title, dept, head});
+    }
+  });
+
+  return out;
+}
+
+function format_headcount_(s){
+  const n = String(s || '').replace(/[^\d]/g,'');
+  return n ? n + '명' : '';
+}
+
+function lastDataRowBJ_(sh){
+  const hr = CONFIG.TARGET_HEADER_ROWS, max = sh.getLastRow();
+  if (max <= hr) return hr;
+  const vals = sh.getRange(hr+1, 2, max-hr, 9).getValues();
+  for (let i = vals.length-1; i >= 0; i--){
+    if (vals[i].some(v => String(v).trim() !== '')) return hr + 1 + i;
+  }
+  return hr;
+}
+
+function copyTemplateFormatDJ_(sh, startRow, numRows){
+  if (numRows <= 0) return;
+  const tplRow = Math.min(sh.getLastRow(), CONFIG.TARGET_HEADER_ROWS + 1) || (CONFIG.TARGET_HEADER_ROWS + 1);
+  const src = sh.getRange(tplRow, 4, 1, 7);
+  const dst = sh.getRange(startRow, 4, numRows, 7);
+  src.copyTo(dst, {formatOnly:true});
+}
+
+function upsert_one_day_noinsert_(building, month, day, rows){
+  const name = CONFIG.TARGET_SHEET_BY_BUILDING[building];
+  if (!name) return {written:0, left:rows.length};
+  const sh = SpreadsheetApp.getActive().getSheetByName(name);
+  if (!sh) throw new Error('타깃 시트를 찾지 못했습니다: ' + name);
+  const hr = CONFIG.TARGET_HEADER_ROWS;
+
+  const dataLast = lastDataRowBJ_(sh);
+  const haveIdx = [];
+  if (dataLast > hr){
+    const bc = sh.getRange(hr+1, 2, dataLast-hr, 2).getValues();
+    for (let i = 0; i < bc.length; i++){
+      const m = Number(String(bc[i][0]).replace(/[^\d]/g,''));
+      const d = Number(String(bc[i][1]).replace(/[^\d]/g,''));
+      if (m === month && d === day) haveIdx.push(hr+1+i);
+    }
+  }
+  
+  const existingMap = new Map();
+  haveIdx.forEach(idx => {
+    const v = sh.getRange(idx, 4, 1, 4).getDisplayValues()[0];
+    const k = [v[0], v[1], v[2], v[3]].map(normKey_).join('|');
+    if (!existingMap.has(k)) existingMap.set(k, []);
+    existingMap.get(k).push(idx);
+  });
+
+  const seen = new Set();
+  const filtered = [];
+  rows.forEach(r => {
+    const k = [r.time, r.place, r.subject, r.dept].map(normKey_).join('|');
+    if (!seen.has(k)) { seen.add(k); filtered.push(r); }
+  });
+
+  let written = 0;
+  const used = new Set();
+  const append = [];
+  filtered.forEach(r => {
+    const k = [r.time, r.place, r.subject, r.dept].map(normKey_).join('|');
+    const targets = (existingMap.get(k) || []).filter(i => !used.has(i));
+    const meetingType = r.title && r.title.trim() ? '주요회의' : '일반회의';
+    const payload = [month, day, r.time, r.place, r.subject, r.dept, format_headcount_(r.head), r.title || '', meetingType];
+    if (targets.length) {
+      const idx = targets[0];
+      sh.getRange(idx, 2, 1, 9).setValues([payload]);
+      used.add(idx);
+      written++;
+    } else {
+      append.push(payload);
+    }
+  });
+
+  let left = 0;
+  if (append.length){
+    const start = lastDataRowBJ_(sh) + 1;
+    const canWrite = Math.max(0, sh.getLastRow() - start + 1);
+    const n = Math.min(canWrite, append.length);
+    if (n > 0){
+      copyTemplateFormatDJ_(sh, start, n);
+      sh.getRange(start, 2, n, 9).setValues(append.slice(0, n));
+      written += n;
+    }
+    left = append.length - n;
+  }
+  haveIdx.forEach(i => { if (!used.has(i)) sh.getRange(i, 2, 1, 9).clearContent(); });
+
+  return {written, left};
+}
+
+function apply_sheet_font_(name){
+  const sh = SpreadsheetApp.getActive().getSheetByName(name);
+  if (!sh) return;
+
+  const lr = Math.max(1, sh.getLastRow());
+  const lc = Math.max(1, sh.getLastColumn());
+
+  sh.getRange(1, 1, lr, lc).setFontFamily(CONFIG.FONT_FAMILY);
+
+  if (lr >= 2) {
+    sh.getRange(2, 1, lr-1, lc).setFontSize(CONFIG.FONT_SIZE);
+  }
+  if (lc > 10) {
+    sh.getRange(1, 11, 1, lc-10).setFontSize(CONFIG.FONT_SIZE);
+  }
+}
+
+/* =========================================================
+ * ── 사진 포맷 확장 ──
+ * ========================================================= */
+function photoFormat_cloneBlockOnceHere(){ photoFormat_cloneBlocksRowPairHere_(1); }
+function photoFormat_cloneBlock100Here(){ photoFormat_cloneBlocksRowPairHere_(100); }
+
+function photoFormat_cloneBlocksRowPairHere_(count){
+  const sh = SpreadsheetApp.getActiveSheet(), ui = SpreadsheetApp.getUi(), sel = sh.getActiveRange();
+  if (!sel) { ui.alert('먼저 복제할 블록의 한 칸을 선택해 주세요.'); return; }
+
+  const slotName =
+    (sh.getName().indexOf('본관') > -1 && sh.getName().indexOf('보수') > -1) ? PHOTO_INPUT.SLOT_NAME.MB :
+    (sh.getName().indexOf('신관') > -1 && sh.getName().indexOf('보수') > -1) ? PHOTO_INPUT.SLOT_NAME.MS :
+    (sh.getName().indexOf('본관') > -1) ? PHOTO_INPUT.SLOT_NAME.B :
+    (sh.getName().indexOf('신관') > -1) ? PHOTO_INPUT.SLOT_NAME.S : null;
+
+  if (!slotName) { ui.alert('이 기능은 본관/신관 (사진)·(보수점검) 시트에서만 사용하세요.'); return; }
+
+  const base = sh.getParent().getRangeByName(slotName);
+  if (!base || base.getSheet().getSheetId() !== sh.getSheetId()){ ui.alert('이름범위 "' + slotName + '" (첫 사진칸 1칸)부터 설정하세요.'); return; }
+  if (base.getNumRows() !== 1 || base.getNumColumns() !== 1){ ui.alert('이름범위 "' + slotName + '" 은 1칸이어야 합니다.'); return; }
+
+  const r0 = base.getRow(), cL = base.getColumn(), cR = cL + (PHOTO_INPUT.SECOND_COL_OFFSET || 2), STEP = 3;
+  let top = sel.getRow(); top = top - ((top - r0) % STEP);
+  if (LB_isHeaderRow_(sh, top, cL, cR)){ ui.alert('레터박스 행에서는 복제할 수 없습니다.'); return; }
+
+  const tplL = sh.getRange(top, cL, STEP, 1), tplR = sh.getRange(top, cR, STEP, 1);
+  const insertAfter = top + STEP - 1;
+  sh.insertRowsAfter(insertAfter, STEP * count);
+
+  for (let i = 0; i < count; i++){
+    for (let r = 0; r < STEP; r++){
+      const h = sh.getRowHeight(top+r);
+      sh.setRowHeight(insertAfter + (i * STEP) + 1 + r, h);
+    }
+    const dstRow = insertAfter + 1 + (i * STEP);
+    const dstL = sh.getRange(dstRow, cL, STEP, 1); tplL.copyTo(dstL, {formatOnly:true}); dstL.clearContent();
+    const dstR = sh.getRange(dstRow, cR, STEP, 1); tplR.copyTo(dstR, {formatOnly:true}); dstR.clearContent();
+  }
+
+  PF_whitenColumnB_(sh, insertAfter+1, insertAfter + STEP * count);
+  ui.alert(`블록을 아래로 ${count}개(각각 A/C 한 쌍) 추가했습니다.`);
+}
+
+function PF_whitenColumnB_(sheet, rowFrom, rowTo){
+  if (rowTo < rowFrom) return;
+  sheet.getRange(rowFrom, 2, rowTo-rowFrom+1, 1)
+       .setBorder(true, null, true, null, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+/* =========================================================
+ * ── 레터박스 삽입/제거 ──
+ * ========================================================= */
+function LB_norm_(s){ return String(s || '').toLowerCase().replace(/\s+/g,'').replace(/[&/\\()]/g,''); }
+
+function PUP_isLetterboxTopRow_(sh, row){
+  const vals = sh.getRange(row, 1, 1, 3).getDisplayValues()[0].join(' ');
+  const t = LB_norm_(vals);
+  return t.includes(LB_norm_(MONTH_HEADER.MAIN_TEXT)) ||
+         (t.includes('월보수') && (t.includes('장애예방') || t.includes('사용불능')));
+}
+
+function LB_isHeaderRow_(sheet, row, cL, cR){
+  const cells = [sheet.getRange(row, cL), sheet.getRange(row, cR)];
+  for (let i = 0; i < cells.length; i++){
+    try {
+      const cell = cells[i]; if (!cell.isPartOfMerge()) continue;
+      const merged = cell.getMergedRanges()[0];
+      if (merged && merged.getNumRows() === 1 && merged.getNumColumns() >= MONTH_HEADER.WIDTH_COLS){
+        const t = LB_norm_(merged.getDisplayValue());
+        if (t.includes(LB_norm_(MONTH_HEADER.MAIN_TEXT))) return true;
+        if (t.includes('월보수') && (t.includes('장애예방') || t.includes('사용불능'))) return true;
+      }
+    } catch(_) {}
+  }
+  return false;
+}
+
+function LB_paintSpacerRowBorders_(sheet, spacerRow){
+  const A = sheet.getRange(spacerRow, 1, 1, 1);
+  const B = sheet.getRange(spacerRow, 2, 1, 1);
+  const C = sheet.getRange(spacerRow, 3, 1, 1);
+
+  [A,C].forEach(r => {
+    r.setBorder(true, true, true, true, false, false, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+  });
+
+  A.setBorder(null, null, null, true, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+  C.setBorder(null, true, null, true, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+  B.setBorder(true, null, true, null, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+function LB_paintHeaderBorders_(hdrRange){
+  hdrRange.setBorder(true, true, true, true, false, false, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+function LB_insertHeaderCore_(text, fontColor){
+  const sh = SpreadsheetApp.getActiveSheet();
+  const sel = sh.getActiveRange() || sh.getRange('A1');
+
+  const insertBelow = sel.getLastRow();
+  sh.insertRowsAfter(insertBelow, 2);
+
+  const headerRow = insertBelow + 1;
+  const spacerRow = insertBelow + 2;
+
+  try { sh.setRowHeight(headerRow, MONTH_HEADER.HDR_HEIGHT); sh.setRowHeight(spacerRow, MONTH_HEADER.SPC_HEIGHT); } catch(_) {}
+  sh.getRange(headerRow, 1, 1, MONTH_HEADER.WIDTH_COLS).breakApart();
+  sh.getRange(spacerRow, 1, 1, MONTH_HEADER.WIDTH_COLS).breakApart();
+
+  const letterBg = sh.getRange(1, 1).getBackground() || '#e0e0e0';
+  const hdr = sh.getRange(headerRow, 1, 1, MONTH_HEADER.WIDTH_COLS).merge();
+  hdr.setBackground(letterBg).setFontFamily('Arial').setFontSize(14).setFontStyle('normal').setFontColor(fontColor)
+     .setHorizontalAlignment('center').setVerticalAlignment('middle').setValue(text);
+
+  sh.getRange(spacerRow, 1, 1, MONTH_HEADER.WIDTH_COLS).setBackground(null);
+  LB_paintSpacerRowBorders_(sh, spacerRow);
+  LB_paintHeaderBorders_(hdr);
+  hdr.setBorder(null, null, true, null, null, null, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+
+  PF_whitenColumnB_(sh, headerRow, spacerRow);
+  SpreadsheetApp.getUi().alert('레터박스를 삽입했습니다.');
+}
+
+function photoFormat_insertMonthHeaderHere(){ LB_insertHeaderCore_(MONTH_HEADER.MAIN_TEXT, COLORS.FONT_MAIN); }
+function photoFormat_insertMaintenanceHeaderHere(){ LB_insertHeaderCore_(MONTH_HEADER.MAINT_TEXT, COLORS.FONT_MAINT); }
+
+function photoFormat_removeMonthHeaderHere(){
+  const sh = SpreadsheetApp.getActiveSheet();
+  const row = (sh.getActiveRange() || sh.getRange('A1')).getRow();
+
+  const mergedList = sh.getRange(row, 1, 1, MONTH_HEADER.WIDTH_COLS).getMergedRanges();
+  if (!mergedList.length){ SpreadsheetApp.getUi().alert('선택한 행이 레터박스(병합행)가 아닙니다.'); return; }
+  const merged = mergedList[0];
+
+  const t = LB_norm_(merged.getDisplayValue());
+  const ok = t.includes(LB_norm_(MONTH_HEADER.MAIN_TEXT)) ||
+             (t.includes('월보수') && (t.includes('장애예방') || t.includes('사용불능')));
+  if (!ok){ SpreadsheetApp.getUi().alert('기본 문구가 포함되지 않아 삭제하지 않았습니다.'); return; }
+
+  sh.deleteRow(row);
+  sh.deleteRow(row);
+
+  LB_restoreTopBorderAfterRemove_(sh, row);
+  SpreadsheetApp.getUi().alert('레터박스(2행)를 제거했습니다.');
+}
+
+function LB_restoreTopBorderAfterRemove_(sheet, imgRow){
+  if (imgRow > sheet.getLastRow()) return;
+
+  const A = sheet.getRange(imgRow, 1, 1, 1);
+  const B = sheet.getRange(imgRow, 2, 1, 1);
+  const C = sheet.getRange(imgRow, 3, 1, 1);
+
+  A.setBorder(true, null, null, null, null, null, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+  C.setBorder(true, null, null, null, null, null, COLORS.BLACK, SpreadsheetApp.BorderStyle.SOLID);
+  B.setBorder(true, null, true, null, null, null, COLORS.WHITE, SpreadsheetApp.BorderStyle.SOLID);
+}
+
+/* =========================================================
+ * ▶ 사진업로드
+ * ========================================================= */
+function simplePhotoUpload_fillFromInput() {
+  const sh = SpreadsheetApp.getActiveSheet(), ui = SpreadsheetApp.getUi();
+
+  const idsRaw = sh.getRange('K1:N1').getValues()[0];
+  const ids = idsRaw.map(v => PUP_extractDriveId(String(v || ''))).filter(Boolean);
+  if (!ids.length){ ui.alert('K1:N1에 유효한 구글 링크 또는 ID가 없습니다.'); return; }
+
+  const startFrom = PUP_forceBelowLetterbox_(sh, 2);
+  let cursor = Math.max(3, startFrom);
+
+  const placed = [];
+  ids.forEach(id => {
+    const slot = PUP_findNextFreeSlot_(sh, cursor); if (!slot) throw new Error('빈 슬롯을 찾지 못했습니다. 블록을 추가해 주세요.');
+
+    const img = sh.getRange(slot.row, slot.col);
+    const tit = sh.getRange(slot.row+1, slot.col);
+    const idc = sh.getRange(slot.row+2, slot.col);
+
+    idc.setValue(id).setFontColor(COLORS.WHITE);
+    img.setFormula(`=IMAGE("https://drive.google.com/uc?export=download&id=" & ${idc.getA1Notation()}, 2)`);
+
+    try { sheetResizeForPhoto_(sh); } catch(_) {}
+
+    if (String(tit.getValue() || '').trim() === '') tit.setValue('행사 제목');
+
+    placed.push(`${img.getA1Notation()} (ID=${id})`);
+    cursor = slot.nextStart;
+  });
+
+  ui.alert(`총 ${placed.length}개 업로드 완료\n` + placed.join('\n'));
+  sh.getRange('K1:N1').clearContent();
+}
+
+function sheetResizeForPhoto_(sh){
+  try {
+    sh.setColumnWidth(1, 280);
+    sh.setColumnWidth(3, 280);
+  } catch(_) {}
+}
+
+function PUP_forceBelowLetterbox_(sh, jump){
+  const last = sh.getLastRow();
+  for (let r = last; r >= 1; r--){
+    if (PUP_isLetterboxTopRow_(sh, r)) return r + Math.max(2, jump | 0);
+  }
+  return 3;
+}
+
+function PUP_findNextFreeSlot_(sh, startRow){
+  const lastRow = Math.max(sh.getMaxRows(), startRow);
+  let r = Math.max(3, startRow); const colA = 1, colC = 3;
+  while (r <= lastRow){
+    if (PUP_isLetterboxTopRow_(sh, r)){ r += 2; continue; }
+    if (!PUP_isBlockUsed_(sh, r, colA)) return {row:r, col:colA, nextStart:r};
+    if (!PUP_isBlockUsed_(sh, r, colC)) return {row:r, col:colC, nextStart:r+3};
+    r += 3;
+  }
+  return null;
+}
+
+function PUP_isBlockUsed_(sh, row, col){
+  const idc = sh.getRange(row+2, col), img = sh.getRange(row, col), tit = sh.getRange(row+1, col);
+  const idv = String(idc.getValue() || '').trim(), fm = String(img.getFormula() || '').trim(),
+        dv = String(img.getDisplayValue() || '').trim(), tv = String(tit.getValue() || '').trim();
+  const hasOverlay = (() => { try { return sh.getImages().some(im => {const a = im.getAnchorCell(); return a && a.getRow() === row && a.getColumn() === col;}); } catch(_) { return false; } })();
+  return !!(idv || /^=IMAGE\(/i.test(fm) || dv || hasOverlay || tv);
+}
+
+function PUP_extractDriveId(str){
+  if (!str) return '';
+  let m = str.match(/\/d\/([A-Za-z0-9_-]{25,})/); if (m) return m[1];
+  m = str.match(/[?&]id=([A-Za-z0-9_-]{25,})/); if (m) return m[1];
+  return /^[A-Za-z0-9_-]{25,40}$/.test(str) ? str : '';
+}
+
+/* =========================================================
+ * ── 연동 결과 리포트 ──
+ * ========================================================= */
+function showSyncReport_(stats){
+  const lines = Object.keys(CONFIG.TARGET_SHEET_BY_BUILDING).map(b => {
+    const s = stats[b] || {written:0, left:0};
+    return `${b} — 기록: ${s.written || 0}건  미기록: ${s.left || 0}건`;
+  });
+  const msg = lines.join('\n');
+  SpreadsheetApp.getUi().alert(msg);
+  if (CONFIG_UI.USE_TOAST) SpreadsheetApp.getActive().toast(msg, '동기화 결과', 5);
+}

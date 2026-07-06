@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NH 리마인더 알림 UI 프로토타입 (Swipe 적용)</title>
+  <style>
+    :root {
+      --bg: #000; --card-bg: #1c1c1e; --text-main: #fff; --text-sec: #98989d;
+      --primary: #4DB6AC; --btn-green: #34C759; --btn-gray: #3a3a3c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Malgun Gothic', -apple-system, sans-serif; }
+    body { background-color: #222; display: flex; justify-content: center; gap: 40px; padding: 40px; flex-wrap: wrap; }
+    
+    .phone {
+      width: 360px; height: 740px; border-radius: 36px; overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 8px solid #333;
+      position: relative; background: var(--bg); display: flex; flex-direction: column;
+    }
+    .phone-title { text-align: center; color: white; padding: 10px 0; font-size: 14px; font-weight: bold; background: #333; width: 100%; position: absolute; top: -35px; left:0; border-radius: 8px; }
+
+    /* 드래그 기본 스타일 */
+    .draggable { cursor: grab; touch-action: pan-y; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .draggable.dragging { transition: none; cursor: grabbing; }
+
+    /* 알림 뒤 배경색 (스와이프 시 노출) */
+    .swipe-bg-container { position: relative; width: 100%; }
+    .swipe-bg {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px;
+      display: flex; align-items: center; padding: 0 24px; font-weight: bold; color: white; font-size: 20px;
+      justify-content: space-between; z-index: 10; opacity: 0; transition: opacity 0.2s;
+    }
+    .swipe-bg .left-text { color: #34C759; }
+    .swipe-bg .right-text { color: #FF3B30; }
+
+    /* ========================================= SCENE 1 ========================================= */
+    .scene1-bg { background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-1.2.1&auto=format&fit=crop&w=360&q=80') center/cover; height: 100%; position: relative; }
+    .scene1-bg::after { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.6); }
+    .clock-area { position: relative; z-index: 10; padding-top: 80px; text-align: center; color: white; }
+    .clock-time { font-size: 72px; font-weight: 300; line-height: 1; }
+    .clock-date { font-size: 18px; margin-top: 8px; opacity: 0.8; }
+    
+    .fs-card-wrapper { position: absolute; top: 50%; left: 5%; width: 90%; z-index: 20; }
+    .fs-card {
+      background: var(--card-bg); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 20;
+    }
+    .scene1-bg .swipe-bg { background: linear-gradient(90deg, rgba(52,199,89,0.3) 0%, rgba(255,59,48,0.3) 100%); }
+
+    .fs-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .fs-header span { color: var(--text-sec); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; pointer-events: none; }
+    .fs-title { color: var(--text-main); font-size: 22px; font-weight: bold; margin-bottom: 12px; pointer-events: none; }
+    .fs-desc { color: var(--text-sec); font-size: 15px; margin-bottom: 24px; line-height: 1.5; pointer-events: none; }
+    .fs-actions { display: flex; flex-direction: column; gap: 12px; }
+    .fs-btn { padding: 16px; border-radius: 14px; text-align: center; font-weight: bold; font-size: 16px; cursor: pointer; }
+    .fs-btn.primary { background: var(--primary); color: #000; }
+    .fs-btn.secondary { background: var(--btn-gray); color: var(--text-main); }
+    .fs-hint { text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-sec); opacity: 0.6; pointer-events: none; }
+
+    /* ========================================= SCENE 2 ========================================= */
+    .scene2-bg { background: #E5E5EA; height: 100%; position: relative; }
+    .fake-app { height: 100%; padding: 60px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .fake-bubble { background: #fff; border-radius: 18px; padding: 16px; width: 80%; }
+    .fake-bubble.right { align-self: flex-end; background: #DBF8C6; }
+    
+    .hu-banner-container { position: absolute; top: 16px; left: 12px; right: 12px; z-index: 20; animation: slideDown 0.5s ease forwards; }
+    @keyframes slideDown { from { top: -100px; } to { top: 16px; } }
+    .hu-banner {
+      background: var(--card-bg); border-radius: 20px; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 20;
+    }
+    .scene2-bg .swipe-bg { background: rgba(0,0,0,0.8); border-radius: 20px; padding: 0 20px; font-size: 16px; }
+
+    .hu-top { display: flex; align-items: flex-start; gap: 12px; pointer-events: none; }
+    .hu-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--primary); display: flex; align-items: center; justify-content: center; }
+    .hu-icon svg { width: 24px; height: 24px; fill: #000; }
+    .hu-title { color: var(--text-main); font-weight: bold; font-size: 16px;  }
+    .hu-desc { color: var(--text-sec); font-size: 14px; margin-top: 4px; }
+    .hu-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .hu-btn { flex: 1; padding: 12px; border-radius: 12px; text-align: center; font-size: 14px; font-weight: bold; background: var(--btn-gray); color: var(--text-main); }
+    .hu-btn.primary { background: var(--btn-green); color: #fff; }
+
+    /* ========================================= SCENE 3 ========================================= */
+    .scene3-bg { background: rgba(30,30,30,0.9); height: 100%; position: relative; padding-top: 50px; }
+    .nc-header { padding: 0 24px 20px 24px; color: white; display: flex; justify-content: space-between; align-items: center; }
+    .nc-time { font-size: 28px; font-weight: 300; }
+    .nc-list { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; overflow-x: hidden; }
+    
+    .nc-card {
+      background: rgba(40,40,40,1); border-radius: 16px; padding: 16px 16px 16px 20px; position: relative;
+      display: flex; align-items: center; gap: 12px; z-index: 20; border: 1px solid rgba(255,255,255,0.05);
+    }
+    .scene3-bg .swipe-bg { background: rgba(0,0,0,0.5); border-radius: 16px; padding: 0 16px; font-size: 14px; }
+    
+    .nc-bar { position: absolute; left: 0; top: 16px; bottom: 16px; width: 4px; border-radius: 0 4px 4px 0; background: var(--primary); }
+    .nc-card.warning .nc-bar { background: #FF9F0A; }
+    .nc-card.danger .nc-bar { background: #FF453A; }
+    .nc-info { flex: 1; pointer-events: none; }
+    .nc-app { font-size: 12px; color: var(--text-sec); margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .nc-title { font-size: 15px; color: var(--text-main); font-weight: bold; margin-bottom: 4px; }
+    .nc-desc { font-size: 14px; color: var(--text-sec); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- SCENE 1 -->
+  <div>
+    <div class="phone-title">1. 잠금화면 풀스크린 팝업</div>
+    <div class="phone">
+      <div class="scene1-bg">
+        <div class="clock-area"><div class="clock-time">08:50</div><div class="clock-date">4월 21일 화요일</div></div>
+        
+        <div class="fs-card-wrapper swipe-bg-container">
+          <div class="swipe-bg" id="bg1">
+             <span class="left-text">✔️ 확인</span> <span class="right-text">❌ 무시</span>
+          </div>
+          <div class="fs-card draggable" id="card1">
+            <div class="fs-header">
+              <div style="width:20px;height:20px;background:#4DB6AC;border-radius:4px;"></div> <span>NH 리마인더</span>
+            </div>
+            <div class="fs-title">출퇴근 체크하셨나요?</div>
+            <div class="fs-desc">직장(서대문) 근처에 도착했습니다.<br>농협파트너스 앱에서 출근 버튼을 눌러주세요.</div>
+            <div class="fs-actions">
+              <div class="fs-btn primary">📲 NH파트너스 열기</div>
+              <div class="fs-btn secondary">✅ 이미 확인함</div>
+            </div>
+            <div class="fs-hint">💡 카드를 좌우로 밀어서 닫을 수도 있어요</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 2 -->
+  <div>
+    <div class="phone-title">2. 타앱 실행시 Heads-up 배너</div>
+    <div class="phone">
+      <div class="scene2-bg">
+        <div class="fake-app">
+          <div class="fake-bubble">오늘 출근길 어때? ㅎㅎ</div><div class="fake-bubble right">사람 엄청 많네 ㅠㅠ 서대문역 다왔당</div>
+        </div>
+        <div class="hu-banner-container swipe-bg-container">
+          <div class="swipe-bg" id="bg2">
+             <span class="left-text">✔️</span> <span class="right-text">❌</span>
+          </div>
+          <div class="hu-banner draggable" id="card2">
+            <div class="hu-top">
+              <div class="hu-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+              <div class="hu-text">
+                <div class="hu-title">NH 리마인더 긴급 알림</div>
+                <div class="hu-desc">출퇴근 체크를 잊지 마세요!</div>
+              </div>
+            </div>
+            <div class="hu-actions">
+              <div class="hu-btn primary">바로 열기</div><div class="hu-btn">확인함</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 3 -->
+  <div>
+    <div class="phone-title">3. 알림 센터 (상태바 드로어)</div>
+    <div class="phone">
+      <div class="scene3-bg">
+        <div class="nc-header">
+          <div class="nc-time">08:50</div>
+          <svg style="width:24px;fill:white;" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+        </div>
+        <div class="nc-list">
+          
+          <div class="swipe-bg-container">
+             <div class="swipe-bg" id="bg3"><span class="left-text">확인</span><span class="right-text">지우기</span></div>
+             <div class="nc-card draggable" id="card3">
+               <div class="nc-bar"></div>
+               <div class="nc-info">
+                 <div class="nc-app"><span>NH 리마인더</span> <span>방금</span></div>
+                 <div class="nc-title">출근 구역에 진입했습니다</div>
+                 <div class="nc-desc">서대문역 반경 30m, 농협파트너스 체크 확인!</div>
+               </div>
+             </div>
+          </div>
+
+          <div class="swipe-bg-container">
+             <div class="swipe-bg" id="bg4"><span class="left-text">확인</span><span class="right-text">지우기</span></div>
+             <div class="nc-card warning draggable" id="card4">
+               <div class="nc-bar"></div>
+               <div class="nc-info">
+                 <div class="nc-app"><span>시스템</span> <span>10분 전</span></div>
+                 <div class="nc-title">백그라운드 위치 서비스 실행 중</div>
+                 <div class="nc-desc">배터리 소모가 발생할 수 있습니다.</div>
+               </div>
+             </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.draggable').forEach(elem => {
+      let isDragging = false;
+      let startX = 0;
+      let currentX = 0;
+      const threshold = 100; // 스와이프 인정 기준 (픽셀)
+
+      elem.addEventListener('pointerdown', e => {
+        // 버튼 클릭은 드래그 막기
+        if(e.target.closest('.fs-btn') || e.target.closest('.hu-btn')) return;
+        isDragging = true;
+        startX = e.clientX;
+        elem.classList.add('dragging');
+        elem.setPointerCapture(e.pointerId);
+      });
+
+      elem.addEventListener('pointermove', e => {
+        if (!isDragging) return;
+        currentX = e.clientX - startX;
+        // 회전 효과 가미 (0.02배율)
+        let rotation = currentX * 0.05;
+        elem.style.transform = `translateX(${currentX}px) rotate(${rotation}deg)`;
+        
+        // 배경 불투명도 조절
+        let bg = elem.previousElementSibling;
+        if(bg && bg.classList.contains('swipe-bg')) {
+          bg.style.opacity = Math.min(Math.abs(currentX) / 100, 1);
+        }
+      });
+
+      elem.addEventListener('pointerup', e => {
+        if (!isDragging) return;
+        isDragging = false;
+        elem.classList.remove('dragging');
+        elem.releasePointerCapture(e.pointerId);
+
+        let bg = elem.previousElementSibling;
+
+        if (Math.abs(currentX) > threshold) {
+          // 스와이프 성공: 날아가기
+          let direction = currentX > 0 ? 1 : -1;
+          elem.style.transform = `translateX(${direction * 500}px) rotate(${direction * 20}deg)`;
+          setTimeout(() => {
+            elem.parentElement.style.display = 'none'; // 완전히 숨김
+          }, 300);
+        } else {
+          // 제자리로 복귀
+          elem.style.transform = `translateX(0) rotate(0deg)`;
+          if(bg && bg.classList.contains('swipe-bg')) {
+             bg.style.opacity = 0;
+          }
+        }
+        currentX = 0;
+      });
+    });
+  </script>
+</body>
+</html>

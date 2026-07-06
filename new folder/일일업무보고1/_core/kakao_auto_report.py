@@ -191,21 +191,35 @@ def click_chat_tab(hwnd):
         print(f"[경고] 채팅 탭 전환 클릭 실패: {e}")
 
 
+def _write_log(msg):
+    try:
+        log_file = os.path.join(os.path.dirname(__file__), 'run_log.txt')
+        now_str = time.strftime('%Y-%m-%d %H:%M:%S')
+        with open(log_file, 'a', encoding='utf-8') as lf:
+            lf.write(f"[{now_str}] {msg}\n")
+    except Exception:
+        pass
+
 def send_to_kakao(chatroom_name, message):
     """PC 카카오톡 단톡방에 메시지 전송"""
+    _write_log(f"시작: 카카오톡 전송 시도 ({chatroom_name})")
     if not GUI_AVAILABLE:
         print("[오류] pyautogui / pyperclip 라이브러리가 없습니다.")
-        print("   CMD에서 아래 명령어를 실행하세요:")
-        print("   python -m pip install pyautogui pyperclip pywin32")
+        _write_log("실패: 라이브러리 없음")
         return
 
-    # 1. 카카오톡 실행 (이미 실행 중이면 무시되거나 트레이에서 복원됨)
-    subprocess.Popen(
-        r'"C:\Program Files\Kakao\KakaoTalk\KakaoTalk.exe"',
-        shell=True
-    )
+    try:
+        # 1. 카카오톡 실행 (이미 실행 중이면 무시되거나 트레이에서 복원됨)
+        subprocess.Popen(
+            r'"C:\Program Files\Kakao\KakaoTalk\KakaoTalk.exe"',
+            shell=True
+        )
+    except Exception as e:
+        _write_log(f"실패: 카카오톡 실행 에러 - {e}")
+        return
+
     print("[정보] 카카오톡 창 활성화 대기 중...")
-    time.sleep(5)  # 트레이에서 올라오는 시간 충분히 대기
+    time.sleep(7)  # 트레이에서 올라오는 시간 충분히 대기
 
     # 2. 채팅방 창이 이미 열려있으면 바로 사용
     chat_hwnd = find_kakao_window(chatroom_name)
@@ -213,72 +227,73 @@ def send_to_kakao(chatroom_name, message):
         print(f"[정보] '{chatroom_name}' 채팅창 직접 탐지 성공.")
         activate_hwnd(chat_hwnd)
         time.sleep(SEND_DELAY)
-        pyperclip.copy(message)
-        pyautogui.hotkey('ctrl', 'v')
-        time.sleep(0.5)
-        pyautogui.press('enter')
-        time.sleep(0.5)
-        pyautogui.press('esc')
-        time.sleep(0.5)
-        print("[완료] 메시지 전송 및 창 닫기 완료!")
-        return
+        try:
+            pyperclip.copy(message)
+            pyautogui.hotkey('ctrl', 'v')
+            time.sleep(0.5)
+            pyautogui.press('enter')
+            time.sleep(0.5)
+            pyautogui.press('esc')
+            time.sleep(0.5)
+            print("[완료] 메시지 전송 및 창 닫기 완료!")
+            _write_log(f"성공: '{chatroom_name}' 채팅방 직접 전송 완료")
+            return
+        except Exception as e:
+            _write_log(f"실패: 채팅방 직접 제어 중 오류 발생 - {e}")
+            return
 
     # 3. 채팅창이 없으면 메인 카카오톡 창에서 검색
     print(f"[정보] '{chatroom_name}' 채팅창 미발견 -> 메인 창에서 검색합니다.")
     kakao_hwnd = find_kakao_window('카카오톡')
     if not kakao_hwnd:
         print("[오류] 카카오톡 창을 찾지 못했습니다. 카카오톡을 실행하고 다시 시도하세요.")
+        _write_log(f"실패: 카카오톡 메인 창을 찾지 못함")
         return
 
     activate_hwnd(kakao_hwnd)
     time.sleep(SEND_DELAY)
 
-    # ★ 핵심: 검색 전 반드시 채팅 탭(말풍선)으로 전환 ★
-    # - 친구 탭이나 다른 탭이 열려있으면 Ctrl+F 검색이 채팅방을 찾지 못함
-    print("[정보] 채팅 탭으로 전환 중 (말풍선 아이콘 클릭)...")
-    click_chat_tab(kakao_hwnd)
-    time.sleep(SEND_DELAY)
-
-    # Ctrl+F: 카카오톡 채팅방 검색창 포커스
-    pyautogui.hotkey('ctrl', 'f')
-    time.sleep(1.5)
-
-    # 기존 검색어가 있으면 삭제 (Ctrl+A는 친구추가를 띄우므로 절대 금지)
-    pyautogui.press('home')             # 커서를 필드 맨 앞으로
-    time.sleep(0.2)
-    pyautogui.hotkey('shift', 'end')    # 맨 앞부터 맨 끝까지 전체 선택
-    time.sleep(0.2)
-    pyautogui.press('delete')           # 선택된 텍스트 전체 삭제
-    time.sleep(0.5)
-
-    pyperclip.copy(chatroom_name)
-    pyautogui.hotkey('ctrl', 'v')
-    time.sleep(SEND_DELAY)
-
-    pyautogui.press('enter')
-    time.sleep(SEND_DELAY)
-
-    pyperclip.copy(message)
-    pyautogui.hotkey('ctrl', 'v')
-    time.sleep(0.5)
-
-    pyautogui.press('enter')
-    time.sleep(0.5)
-
-    # 전송 후 창 닫기 (Esc)
-    pyautogui.press('esc')
-    time.sleep(0.5)
-
-    print("[완료] 메시지 전송 및 창 닫기 완료!")
-    
-    # 실행 내역(로그) 파일 작성
     try:
-        log_file = os.path.join(os.path.dirname(__file__), 'run_log.txt')
-        now_str = time.strftime('%Y-%m-%d %H:%M:%S')
-        with open(log_file, 'a', encoding='utf-8') as lf:
-            lf.write(f"[{now_str}] 성공: '{chatroom_name}' 채팅방 전송 완료\n")
-    except:
-        pass
+        # ★ 핵심: 검색 전 반드시 채팅 탭(말풍선)으로 전환 ★
+        print("[정보] 채팅 탭으로 전환 중 (말풍선 아이콘 클릭)...")
+        click_chat_tab(kakao_hwnd)
+        time.sleep(SEND_DELAY)
+
+        # Ctrl+F: 카카오톡 채팅방 검색창 포커스
+        pyautogui.hotkey('ctrl', 'f')
+        time.sleep(1.5)
+
+        # 기존 검색어가 있으면 삭제
+        pyautogui.press('home')
+        time.sleep(0.2)
+        pyautogui.hotkey('shift', 'end')
+        time.sleep(0.2)
+        pyautogui.press('delete')
+        time.sleep(0.5)
+
+        pyperclip.copy(chatroom_name)
+        pyautogui.hotkey('ctrl', 'v')
+        time.sleep(SEND_DELAY)
+
+        pyautogui.press('enter')
+        time.sleep(SEND_DELAY)
+
+        pyperclip.copy(message)
+        pyautogui.hotkey('ctrl', 'v')
+        time.sleep(0.5)
+
+        pyautogui.press('enter')
+        time.sleep(0.5)
+
+        # 전송 후 창 닫기 (Esc)
+        pyautogui.press('esc')
+        time.sleep(0.5)
+
+        print("[완료] 메시지 전송 및 창 닫기 완료!")
+        _write_log(f"성공: '{chatroom_name}' 채팅방 전송 완료")
+    except Exception as e:
+        print(f"[오류] 화면 잠금, 절전 모드 또는 카카오톡 제어 중 문제 발생: {e}")
+        _write_log(f"실패: 제어 중 오류 발생 (화면잠금 등) - {e}")
 
 
 

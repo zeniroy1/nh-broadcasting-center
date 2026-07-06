@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Step 01 Intent Parser Status</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f7f4;
+        --ink: #171717;
+        --muted: #666a73;
+        --line: #d9d9d2;
+        --panel: #ffffff;
+        --accent: #0f766e;
+        --accent-soft: #d9f3ee;
+        --warn: #a16207;
+        --warn-soft: #fef3c7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Arial, "Malgun Gothic", sans-serif;
+      }
+
+      main {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      header {
+        display: grid;
+        gap: 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        font-size: 28px;
+        line-height: 1.25;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 6px;
+      }
+
+      .metric strong {
+        font-size: 26px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        min-height: 28px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .badge.warn {
+        background: var(--warn-soft);
+        color: var(--warn);
+      }
+
+      .section {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+        font-size: 14px;
+      }
+
+      th {
+        background: #efefea;
+      }
+
+      code,
+      pre {
+        font-family: Consolas, monospace;
+      }
+
+      pre {
+        overflow: auto;
+        margin: 0;
+        padding: 14px;
+        border-radius: 8px;
+        background: #202124;
+        color: #f5f5f5;
+        line-height: 1.5;
+      }
+
+      .wide {
+        grid-column: 1 / -1;
+      }
+
+      @media (max-width: 760px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="badge">Step 01 완료</span>
+        <h1>사용자 요청 해석 모듈</h1>
+        <p>
+          자연어 구매 요청을 카테고리, 색상, 스타일, 가격대, 성별, 연령대 힌트,
+          검색어 후보로 변환하는 로컬 파서입니다.
+        </p>
+      </header>
+
+      <section class="grid" aria-label="구현 요약">
+        <div class="panel metric">
+          <span>구현 정도</span>
+          <strong>100%</strong>
+          <p>1단계 정의 범위 기준 완료</p>
+        </div>
+        <div class="panel metric">
+          <span>테스트</span>
+          <strong>3/3</strong>
+          <p>단위 테스트 통과</p>
+        </div>
+        <div class="panel metric">
+          <span>목적 부합도</span>
+          <strong>100%</strong>
+          <p>최종 프로그램의 첫 입력 처리 단계</p>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>검수 결과</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th>결과</th>
+              <th>확인 내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>정적 검사</td>
+              <td><span class="badge">통과</span></td>
+              <td><code>python -m py_compile</code> 성공</td>
+            </tr>
+            <tr>
+              <td>구현 스킬 실현 시뮬레이션</td>
+              <td><span class="badge">통과</span></td>
+              <td>샘플 구매 요청을 구조화된 JSON으로 변환</td>
+            </tr>
+            <tr>
+              <td>불필요한 주석 삭제</td>
+              <td><span class="badge">완료</span></td>
+              <td>설명용 주석 없이 필요한 모듈 docstring만 유지</td>
+            </tr>
+            <tr>
+              <td>코드 충돌 여부</td>
+              <td><span class="badge">없음</span></td>
+              <td>신규 <code>scripts</code>, <code>tests</code>, <code>reports</code> 경로 사용</td>
+            </tr>
+            <tr>
+              <td>전체 코드 라인 정리</td>
+              <td><span class="badge warn">기록</span></td>
+              <td>1단계 Python 구현 파일과 테스트 파일 라인 수 확인 대상</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section panel">
+        <h2>시뮬레이션 입력</h2>
+        <pre>검은색 반팔 무지티를 2~3만원대에서 40대 남성이 입기 좋은 제품으로 찾아줘</pre>
+      </section>
+
+      <section class="section panel">
+        <h2>주요 출력</h2>
+        <pre>{
+  "product_group": "short_sleeve_tshirt",
+  "category_label": "반팔 티셔츠",
+  "colors": ["black"],
+  "styles": ["plain"],
+  "price_min": 20000,
+  "price_max": 30000,
+  "gender": "M",
+  "age_band": "40s",
+  "confidence": 1.0
+}</pre>
+      </section>
+    </main>
+  </body>
+</html>

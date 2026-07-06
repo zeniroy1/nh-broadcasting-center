@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Step 08 Scoring Model</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dde8;
+      --paper: #f5f7fa;
+      --panel: #ffffff;
+      --green: #15803d;
+      --blue: #2563eb;
+      --purple: #7c3aed;
+      --amber: #b45309;
+      --red: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .badge {
+      padding: 8px 12px;
+      border: 1px solid #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .metric {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    section {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .flow div {
+      min-height: 94px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+    .flow b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .flow span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      background: #fbfcfe;
+    }
+    .score {
+      display: inline-block;
+      min-width: 54px;
+      padding: 5px 8px;
+      color: #fff;
+      text-align: center;
+      font-weight: 700;
+    }
+    .high { background: var(--green); }
+    .mid { background: var(--amber); }
+    .low { background: var(--red); }
+    .boundary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .boundary div {
+      min-height: 104px;
+      padding: 12px;
+      border-left: 4px solid var(--purple);
+      background: #faf7ff;
+    }
+    .boundary b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .boundary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      header { flex-direction: column; }
+      .metrics, .flow, .boundary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>8단계 점수화 모델 설계</h1>
+        <p class="subtitle">리뷰 수를 구매 후 반응 누적 근거로, 리뷰 키워드를 구매자 타겟 추정 단서로 반영해 설명 가능한 final_score를 계산합니다.</p>
+      </div>
+      <div class="badge">검수 통과</div>
+    </header>
+
+    <div class="metrics" aria-label="핵심 수치">
+      <div class="metric"><strong>9</strong><span>점수 구성 요소</span></div>
+      <div class="metric"><strong>100</strong><span>가중치 총합</span></div>
+      <div class="metric"><strong>88%</strong><span>최종 신뢰도 상한</span></div>
+      <div class="metric"><strong>44</strong><span>누적 자동 테스트</span></div>
+    </div>
+
+    <section>
+      <h2>구현 흐름</h2>
+      <div class="flow">
+        <div><b>Proxy</b><span>목적 적합도, 구매 신뢰도, 리뷰 기반 구매 반응 누적 근거를 받습니다.</span></div>
+        <div><b>Review</b><span>리뷰 키워드 기반 리스크와 구매자 타겟 추정 단서를 보조 지표로 씁니다.</span></div>
+        <div><b>Public</b><span>가격, 배송, 품절, 광고 여부처럼 공개 노출값을 반영합니다.</span></div>
+        <div><b>Weight</b><span>`scoring_weights.json`의 가중치로 구성 점수를 합칩니다.</span></div>
+        <div><b>Output</b><span>final_score, confidence_percent, explanation, cautions를 만듭니다.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>샘플 점수 비교</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>상품</th>
+            <th>final_score</th>
+            <th>confidence</th>
+            <th>rank_ready</th>
+            <th>주의점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>샘플 브랜드 / 베이직 무지 반팔 티셔츠 블랙</td>
+            <td><span class="score high">96</span></td>
+            <td>82%</td>
+            <td>true</td>
+            <td>리뷰 수는 구매 후 반응 누적 근거로 쓰지만 실제 구매자 수로 환산하지 않습니다.</td>
+          </tr>
+          <tr>
+            <td>샘플 그래픽 / 그래픽 로고 반팔 티셔츠 블랙</td>
+            <td><span class="score mid">68</span></td>
+            <td>76%</td>
+            <td>true</td>
+            <td>광고/스폰서 가능성 감점과 낮은 구매 신뢰도 근거가 반영됐습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>점수 경계</h2>
+      <div class="boundary">
+        <div><b>전환율 아님</b><p>`final_score`는 실제 구매 전환율이 아니라 공개 지표 기반 추천 계산값입니다.</p></div>
+        <div><b>구매자 수 아님</b><p>리뷰 수는 구매 후 반응 누적량의 공개 단서지만 실제 구매자 수나 판매량이 아닙니다.</p></div>
+        <div><b>속성 통계 아님</b><p>리뷰 키워드의 구매자 타겟은 실제 연령/성별별 구매 통계가 아닙니다.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      다음 단계는 최종 후보 비교표와 추천 출력 템플릿입니다. 사용자 승인 전까지 진행하지 않습니다.
+    </footer>
+  </main>
+</body>
+</html>

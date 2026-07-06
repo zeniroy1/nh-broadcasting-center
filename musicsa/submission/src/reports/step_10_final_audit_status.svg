@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Step 10 Final Audit</title>
+  <desc id="desc">Step 10 final audit status showing plugin structure, step documents, reports, tests, boundaries, UI, and line count checks.</desc>
+  <rect width="1200" height="760" fill="#f6f7f9"/>
+  <rect x="40" y="36" width="1120" height="688" fill="#ffffff" stroke="#d0d5dd"/>
+  <text x="72" y="88" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="#182230">10단계 전체 검수</text>
+  <text x="72" y="120" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#667085">1~9단계 산출물과 제출 플러그인 구조를 한 번에 감사합니다.</text>
+  <rect x="1002" y="64" width="116" height="34" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="1026" y="86" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="700" fill="#166534">검수 통과</text>
+
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="96" y="195" font-size="32" font-weight="700" fill="#182230">10</text>
+    <text x="96" y="222" font-size="14" fill="#667085">로드맵 단계</text>
+    <rect x="336" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="360" y="195" font-size="32" font-weight="700" fill="#182230">9</text>
+    <text x="360" y="222" font-size="14" fill="#667085">구현 완료 단계</text>
+    <rect x="600" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="624" y="195" font-size="32" font-weight="700" fill="#182230">7</text>
+    <text x="624" y="222" font-size="14" fill="#667085">감사 항목</text>
+    <rect x="864" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="888" y="195" font-size="32" font-weight="700" fill="#182230">0</text>
+    <text x="888" y="222" font-size="14" fill="#667085">실패 항목</text>
+  </g>
+
+  <text x="72" y="300" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#182230">감사 항목</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif" font-size="13">
+    <rect x="72" y="326" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="96" y="346" width="54" height="22" fill="#167647"/>
+    <text x="107" y="362" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="170" y="354" font-weight="700" fill="#182230">플러그인 구조</text>
+    <text x="170" y="374" fill="#667085">plugin.json / SKILL.md</text>
+
+    <rect x="435" y="326" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="459" y="346" width="54" height="22" fill="#167647"/>
+    <text x="470" y="362" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="533" y="354" font-weight="700" fill="#182230">단계 문서</text>
+    <text x="533" y="374" fill="#667085">1~10단계 문서</text>
+
+    <rect x="798" y="326" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="822" y="346" width="54" height="22" fill="#167647"/>
+    <text x="833" y="362" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="896" y="354" font-weight="700" fill="#182230">HTML/SVG</text>
+    <text x="896" y="374" fill="#667085">1~10단계 리포트</text>
+
+    <rect x="72" y="414" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="96" y="434" width="54" height="22" fill="#167647"/>
+    <text x="107" y="450" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="170" y="442" font-weight="700" fill="#182230">테스트 파일</text>
+    <text x="170" y="462" fill="#667085">단계별 테스트 확인</text>
+
+    <rect x="435" y="414" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="459" y="434" width="54" height="22" fill="#167647"/>
+    <text x="470" y="450" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="533" y="442" font-weight="700" fill="#182230">내부 데이터 경계</text>
+    <text x="533" y="462" fill="#667085">실제 구매자 수 단정 방지</text>
+
+    <rect x="798" y="414" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="822" y="434" width="54" height="22" fill="#167647"/>
+    <text x="833" y="450" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="896" y="442" font-weight="700" fill="#182230">시각화 UI</text>
+    <text x="896" y="462" fill="#667085">세로 막대 / 타겟 적합도</text>
+
+    <rect x="72" y="502" width="330" height="62" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <rect x="96" y="522" width="54" height="22" fill="#167647"/>
+    <text x="107" y="538" font-size="12" font-weight="700" fill="#ffffff">PASS</text>
+    <text x="170" y="530" font-weight="700" fill="#182230">라인 수 정리</text>
+    <text x="170" y="550" fill="#667085">주요 파일 라인 수 확인</text>
+  </g>
+
+  <text x="72" y="636" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#182230">다음 단계 정책</text>
+  <text x="72" y="668" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" fill="#667085">사용자 승인 전에는 추가 구현, submission.zip 재생성, Google Drive 업로드를 진행하지 않습니다.</text>
+</svg>

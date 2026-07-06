@@ -50,3 +50,21 @@ mcp/
 
 # Build cache
 .next/
+
+# Build outputs and packaged binaries
+build/
+bin/
+obj/
+artifacts/
+*.pkg
+*.apk
+*.pth
+
+# Model/cache files
+cache/
+credentials.json
+token.json
+token.json.bak
+*.pyc
+__pycache__/
+*.zip

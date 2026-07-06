@@ -1,0 +1,58 @@
+{
+  "version": "0.1.0",
+  "source_limits": {
+    "search_results_page": {
+      "max_items": 30,
+      "max_pages": 2
+    },
+    "ranking_page": {
+      "max_items": 50,
+      "max_pages": 2
+    },
+    "category_page": {
+      "max_items": 40,
+      "max_pages": 2
+    },
+    "product_detail_page": {
+      "max_items": 0,
+      "max_pages": 0
+    },
+    "review_area": {
+      "max_items": 0,
+      "max_pages": 0
+    }
+  },
+  "purpose_multiplier": {
+    "exact_match": 1.0,
+    "core_search": 0.85,
+    "ranking_probe": 1.0,
+    "review_probe": 0.5,
+    "broad_discovery": 0.6,
+    "fallback": 0.4
+  },
+  "source_priority": {
+    "ranking_page": 100,
+    "search_results_page": 90,
+    "category_page": 75,
+    "product_detail_page": 30,
+    "review_area": 20
+  },
+  "excluded_first_pass_sources": [
+    "product_detail_page",
+    "review_area"
+  ],
+  "minimum_items_for_list_source": 5,
+  "policy": {
+    "ad_policy": "광고/스폰서 상품은 제외하지 않고 is_ad로 표시한다.",
+    "sold_out_policy": "품절 상품은 기본 비교 후보에서 제외하되, 품절 원인 분석용으로 원본 표시는 유지할 수 있다.",
+    "request_policy": "실제 수집 단계에서는 요청 간격과 재시도 제한을 둔다.",
+    "dedup_policy": {
+      "primary_key": "product_id",
+      "fallback_keys": [
+        "product_url",
+        "normalized_brand_name+normalized_product_name"
+      ],
+      "keep_rule": "동일 상품은 더 높은 priority의 수집 작업 결과를 우선 유지한다."
+    }
+  }
+}

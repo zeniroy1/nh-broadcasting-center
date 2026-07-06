@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Step 09 Visual Recommendation Output</title>
+  <desc id="desc">Step 9 visual comparison with five vertical colored bars and three shortlist target-fit summaries.</desc>
+  <rect width="1200" height="820" fill="#f6f7f9"/>
+  <rect x="40" y="36" width="1120" height="744" fill="#ffffff" stroke="#d0d5dd"/>
+  <text x="72" y="88" font-family="Arial, Noto Sans KR, sans-serif" font-size="30" font-weight="700" fill="#182230">9단계 후보 비교 및 추천 출력</text>
+  <text x="72" y="120" font-family="Arial, Noto Sans KR, sans-serif" font-size="15" fill="#667085">초기 5개 후보는 세로 막대그래프로 비교하고, 선택 3개는 타겟 지표까지 다시 판단합니다.</text>
+  <rect x="1002" y="64" width="116" height="34" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="1026" y="86" font-family="Arial, Noto Sans KR, sans-serif" font-size="14" font-weight="700" fill="#166534">검수 통과</text>
+
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="96" y="195" font-size="32" font-weight="700" fill="#182230">5</text>
+    <text x="96" y="222" font-size="14" fill="#667085">초기 비교 후보</text>
+    <rect x="336" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="360" y="195" font-size="32" font-weight="700" fill="#182230">3</text>
+    <text x="360" y="222" font-size="14" fill="#667085">shortlist 세부 비교</text>
+    <rect x="600" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="624" y="195" font-size="32" font-weight="700" fill="#182230">96</text>
+    <text x="624" y="222" font-size="14" fill="#667085">1순위 final_score</text>
+    <rect x="864" y="154" width="240" height="92" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <text x="888" y="195" font-size="32" font-weight="700" fill="#182230">82%</text>
+    <text x="888" y="222" font-size="14" fill="#667085">1순위 confidence</text>
+  </g>
+
+  <text x="72" y="300" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#182230">5개 후보 final_score 세로 막대그래프</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif" font-size="13">
+    <line x1="130" y1="512" x2="1040" y2="512" stroke="#d0d5dd"/>
+
+    <rect x="160" y="339" width="82" height="173" fill="#167647"/>
+    <text x="193" y="330" font-weight="700" fill="#182230">96</text>
+    <text x="180" y="540" fill="#667085">베이직</text>
+
+    <rect x="324" y="355" width="82" height="157" fill="#175cd3"/>
+    <text x="357" y="346" font-weight="700" fill="#182230">87</text>
+    <text x="351" y="540" fill="#667085">코튼</text>
+
+    <rect x="488" y="366" width="82" height="146" fill="#b54708"/>
+    <text x="521" y="357" font-weight="700" fill="#182230">81</text>
+    <text x="515" y="540" fill="#667085">데일리</text>
+
+    <rect x="652" y="366" width="82" height="146" fill="#7a5af8"/>
+    <text x="685" y="357" font-weight="700" fill="#182230">81</text>
+    <text x="679" y="540" fill="#667085">쿨링</text>
+
+    <rect x="816" y="390" width="82" height="122" fill="#c11574"/>
+    <text x="849" y="381" font-weight="700" fill="#182230">68</text>
+    <text x="837" y="540" fill="#667085">그래픽</text>
+  </g>
+
+  <text x="72" y="590" font-family="Arial, Noto Sans KR, sans-serif" font-size="19" font-weight="700" fill="#182230">선택 3개 후보 세부 지표</text>
+  <g font-family="Arial, Noto Sans KR, sans-serif">
+    <rect x="72" y="616" width="330" height="132" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <circle cx="128" cy="682" r="42" fill="#167647"/>
+    <circle cx="128" cy="682" r="25" fill="#fbfcfe"/>
+    <text x="118" y="688" font-size="17" font-weight="700" fill="#182230">96</text>
+    <text x="190" y="654" font-size="14" font-weight="700" fill="#182230">베이직</text>
+    <text x="190" y="680" font-size="12" fill="#667085">목적 100 / 리뷰 98</text>
+    <text x="190" y="704" font-size="12" fill="#667085">가격 100 / 타겟 77</text>
+    <text x="190" y="728" font-size="12" fill="#667085">리스크 66</text>
+
+    <rect x="435" y="616" width="330" height="132" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <circle cx="491" cy="682" r="42" fill="#175cd3"/>
+    <circle cx="491" cy="682" r="25" fill="#fbfcfe"/>
+    <text x="481" y="688" font-size="17" font-weight="700" fill="#182230">87</text>
+    <text x="553" y="654" font-size="14" font-weight="700" fill="#182230">코튼</text>
+    <text x="553" y="680" font-size="12" fill="#667085">목적 93 / 리뷰 84</text>
+    <text x="553" y="704" font-size="12" fill="#667085">가격 93 / 타겟 77</text>
+    <text x="553" y="728" font-size="12" fill="#667085">리스크 66</text>
+
+    <rect x="798" y="616" width="330" height="132" fill="#fbfcfe" stroke="#d0d5dd"/>
+    <circle cx="854" cy="682" r="42" fill="#b54708"/>
+    <circle cx="854" cy="682" r="25" fill="#fbfcfe"/>
+    <text x="844" y="688" font-size="17" font-weight="700" fill="#182230">81</text>
+    <text x="916" y="654" font-size="14" font-weight="700" fill="#182230">데일리</text>
+    <text x="916" y="680" font-size="12" fill="#667085">목적 100 / 리뷰 69</text>
+    <text x="916" y="704" font-size="12" fill="#667085">가격 100 / 타겟 77</text>
+    <text x="916" y="728" font-size="12" fill="#667085">리스크 66</text>
+  </g>
+
+  <text x="72" y="782" font-family="Arial, Noto Sans KR, sans-serif" font-size="13" fill="#667085">타겟 적합도는 리뷰 키워드 기반 추정이며 실제 구매자 속성 통계가 아닙니다.</text>
+</svg>

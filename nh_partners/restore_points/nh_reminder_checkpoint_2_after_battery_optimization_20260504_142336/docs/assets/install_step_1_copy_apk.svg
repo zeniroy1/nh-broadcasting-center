@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-label="APK 파일을 휴대폰으로 옮기는 그림">
+  <rect width="900" height="420" fill="#f6f8fb"/>
+  <rect x="70" y="80" width="250" height="180" rx="16" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <rect x="110" y="120" width="170" height="22" rx="6" fill="#dfe8f5"/>
+  <rect x="110" y="160" width="140" height="22" rx="6" fill="#dfe8f5"/>
+  <rect x="110" y="200" width="180" height="22" rx="6" fill="#dfe8f5"/>
+  <text x="195" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#1f2d3d">컴퓨터</text>
+  <rect x="605" y="55" width="180" height="300" rx="34" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <rect x="635" y="95" width="120" height="210" rx="12" fill="#eaf2fb"/>
+  <circle cx="695" cy="330" r="11" fill="#2f5f9f"/>
+  <text x="695" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#1f2d3d">휴대폰</text>
+  <path d="M355 180 H545" stroke="#18a058" stroke-width="12" stroke-linecap="round"/>
+  <path d="M525 145 L570 180 L525 215 Z" fill="#18a058"/>
+  <rect x="377" y="105" width="140" height="80" rx="12" fill="#ffffff" stroke="#18a058" stroke-width="4"/>
+  <text x="447" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#116b3a">APK</text>
+  <text x="450" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f2d3d">파일을 휴대폰으로 옮기기</text>
+</svg>

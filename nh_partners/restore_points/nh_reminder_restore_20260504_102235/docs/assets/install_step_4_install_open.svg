@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-label="설치 버튼과 열기 버튼 그림">
+  <rect width="900" height="420" fill="#f6f8fb"/>
+  <rect x="130" y="60" width="260" height="290" rx="30" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <text x="260" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2d3d">NH알리미</text>
+  <rect x="170" y="235" width="180" height="58" rx="18" fill="#18a058"/>
+  <text x="260" y="272" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">설치</text>
+  <path d="M430 205 H520" stroke="#18a058" stroke-width="10" stroke-linecap="round"/>
+  <path d="M505 175 L545 205 L505 235 Z" fill="#18a058"/>
+  <rect x="570" y="60" width="260" height="290" rx="30" fill="#ffffff" stroke="#2f5f9f" stroke-width="4"/>
+  <text x="700" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2d3d">설치 완료</text>
+  <rect x="610" y="235" width="180" height="58" rx="18" fill="#2f5f9f"/>
+  <text x="700" y="272" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">열기</text>
+  <text x="450" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f2d3d">설치 누르고, 끝나면 열기</text>
+</svg>

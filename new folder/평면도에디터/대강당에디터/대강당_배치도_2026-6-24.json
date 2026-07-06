@@ -1,0 +1,762 @@
+{
+  "version": "4.0",
+  "timestamp": "2026-06-24T04:51:53.823Z",
+  "objects": [
+    {
+      "className": "obj shape-stage-ext-c",
+      "style": "width: 122.479px; height: 103px; left: 852.516px; top: 475px; font-size: 10.8397px; z-index: 1;",
+      "html": "<div class=\"shape-bg\" style=\"background: url(&quot;data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22rgba(255%2C255%2C255%2C0.8)%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2220%22%20x2%3D%22100%22%20y2%3D%2220%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2240%22%20x2%3D%22100%22%20y2%3D%2240%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2260%22%20x2%3D%22100%22%20y2%3D%2260%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2280%22%20x2%3D%22100%22%20y2%3D%2280%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%3C%2Fsvg%3E&quot;) center center / 100% 100% no-repeat transparent;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-stage-ext-r",
+      "style": "width: 110px; height: 102px; left: 974px; top: 475px; z-index: 2;",
+      "html": "<div class=\"shape-bg\" style=\"background: url(&quot;data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%200%200%20L%20100%200%20A%20100%20100%200%200%201%200%20100%20Z%22%20fill%3D%22rgba(255%2C255%2C255%2C0.8)%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2080%200%20A%2080%2080%200%200%201%200%2080%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2060%200%20A%2060%2060%200%200%201%200%2060%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2040%200%20A%2040%2040%200%200%201%200%2040%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2020%200%20A%2020%2020%200%200%201%200%2020%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%3C%2Fsvg%3E&quot;) center center / 100% 100% no-repeat transparent;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-stage-ext-c",
+      "style": "width: 10px; height: 58px; left: 126.516px; top: 420px; font-size: 10.8397px; z-index: 3;",
+      "html": "<div class=\"shape-bg\" style=\"background: url(&quot;data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22rgba(255%2C255%2C255%2C0.8)%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2220%22%20x2%3D%22100%22%20y2%3D%2220%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2240%22%20x2%3D%22100%22%20y2%3D%2240%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2260%22%20x2%3D%22100%22%20y2%3D%2260%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2280%22%20x2%3D%22100%22%20y2%3D%2280%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%3C%2Fsvg%3E&quot;) center center / 100% 100% no-repeat transparent;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-stage-ext-c",
+      "style": "width: 10px; height: 58px; left: 1241.52px; top: 422px; font-size: 10.8397px; z-index: 4;",
+      "html": "<div class=\"shape-bg\" style=\"background: url(&quot;data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22rgba(255%2C255%2C255%2C0.8)%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2220%22%20x2%3D%22100%22%20y2%3D%2220%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2240%22%20x2%3D%22100%22%20y2%3D%2240%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2260%22%20x2%3D%22100%22%20y2%3D%2260%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2280%22%20x2%3D%22100%22%20y2%3D%2280%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%3C%2Fsvg%3E&quot;) center center / 100% 100% no-repeat transparent;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-stage-ext-l",
+      "style": "width: 105.521px; height: 103px; left: 293.993px; top: 475.987px; font-size: 10.8397px; z-index: 5;",
+      "html": "<div class=\"shape-bg\" style=\"background: url(&quot;data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%200%200%20L%20100%200%20L%20100%20100%20A%20100%20100%200%200%201%200%200%20Z%22%20fill%3D%22rgba(255%2C255%2C255%2C0.8)%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2020%200%20A%2080%2080%200%200%200%20100%2080%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2040%200%20A%2060%2060%200%200%200%20100%2060%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2060%200%20A%2040%2040%200%200%200%20100%2040%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M%2080%200%20A%2020%2020%200%200%200%20100%2020%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%3C%2Fsvg%3E&quot;) center center / 100% 100% no-repeat transparent;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-stage-ext-c",
+      "style": "width: 122.479px; height: 103px; left: 397.516px; top: 476px; font-size: 10.8397px; z-index: 6;",
+      "html": "<div class=\"shape-bg\" style=\"background: url(&quot;data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22rgba(255%2C255%2C255%2C0.8)%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2220%22%20x2%3D%22100%22%20y2%3D%2220%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2240%22%20x2%3D%22100%22%20y2%3D%2240%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2260%22%20x2%3D%22100%22%20y2%3D%2260%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%20%20%3Cline%20x1%3D%220%22%20y1%3D%2280%22%20x2%3D%22100%22%20y2%3D%2280%22%20stroke%3D%22%23333%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%2C4%22%2F%3E%0A%20%20%3C%2Fsvg%3E&quot;) center center / 100% 100% no-repeat transparent;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 118px; height: 158px; left: 628px; top: 477px; font-size: 20.3104px; z-index: 7;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(171, 171, 171) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 88px; height: 85px; left: 1139px; top: 574.047px; transform: rotate(51.2696deg); z-index: 8;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(155, 165, 176) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 23px; height: 56px; left: 517px; top: 525px; z-index: 9;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(0, 0, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 23px; height: 56px; left: 832px; top: 522px; z-index: 10;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(0, 0, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 65px; height: 58px; left: 135px; top: 420px; z-index: 11;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(119, 56, 14) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 65px; height: 58px; left: 1176px; top: 421px; z-index: 12;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(119, 56, 14) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 815px; font-size: 20.3104px; z-index: 13;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>A1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 815px; font-size: 20.3104px; z-index: 14;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>A2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 815px; font-size: 20.3104px; z-index: 15;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>A3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 815px; font-size: 20.3104px; z-index: 16;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>A4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 815px; font-size: 20.3104px; z-index: 17;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>A5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 886.219px; font-size: 20.3104px; z-index: 18;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>B1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 886.219px; font-size: 20.3104px; z-index: 19;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>B2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 886.219px; font-size: 20.3104px; z-index: 20;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>B3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 886.219px; font-size: 20.3104px; z-index: 21;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>B4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 886.219px; font-size: 20.3104px; z-index: 22;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>B5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 957.5px; font-size: 20.3104px; z-index: 23;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>C1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 957.5px; font-size: 20.3104px; z-index: 24;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>C2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 957.5px; font-size: 20.3104px; z-index: 25;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>C3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 957.5px; font-size: 20.3104px; z-index: 26;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>C4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 957.5px; font-size: 20.3104px; z-index: 27;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>C5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1028.72px; font-size: 20.3104px; z-index: 28;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>D1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1028.72px; font-size: 20.3104px; z-index: 29;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>D3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1028.72px; font-size: 20.3104px; z-index: 30;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>D4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1028.72px; font-size: 20.3104px; z-index: 31;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>D5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1100px; font-size: 20.3104px; z-index: 32;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>E1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1100px; font-size: 20.3104px; z-index: 33;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>E2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1100px; font-size: 20.3104px; z-index: 34;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>E3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1100px; font-size: 20.3104px; z-index: 35;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>E4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1100px; font-size: 20.3104px; z-index: 36;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>E5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1171.27px; font-size: 20.3104px; z-index: 37;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>F1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1171.27px; font-size: 20.3104px; z-index: 38;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>F2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1171.27px; font-size: 20.3104px; z-index: 39;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>F3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1171.27px; font-size: 20.3104px; z-index: 40;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>F4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1171.27px; font-size: 20.3104px; z-index: 41;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>F5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1242.5px; font-size: 20.3104px; z-index: 42;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>G1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1242.5px; font-size: 20.3104px; z-index: 43;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>G2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1242.5px; font-size: 20.3104px; z-index: 44;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>G3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1242.5px; font-size: 20.3104px; z-index: 45;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>G4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1242.5px; font-size: 20.3104px; z-index: 46;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>G5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1313.77px; font-size: 20.3104px; z-index: 47;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>H1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1313.77px; font-size: 20.3104px; z-index: 48;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>H2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1313.77px; font-size: 20.3104px; z-index: 49;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>H3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1313.77px; font-size: 20.3104px; z-index: 50;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>H4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1313.77px; font-size: 20.3104px; z-index: 51;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>H5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1385px; font-size: 20.3104px; z-index: 52;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>I1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1385px; font-size: 20.3104px; z-index: 53;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>I2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1385px; font-size: 20.3104px; z-index: 54;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>I3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1385px; font-size: 20.3104px; z-index: 55;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>I4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1385px; font-size: 20.3104px; z-index: 56;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>I5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1456.27px; font-size: 20.3104px; z-index: 57;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>J1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1456.27px; font-size: 20.3104px; z-index: 58;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>J2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1456.27px; font-size: 20.3104px; z-index: 59;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>J3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1456.27px; font-size: 20.3104px; z-index: 60;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>J4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1456.27px; font-size: 20.3104px; z-index: 61;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>J5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1527.52px; font-size: 20.3104px; z-index: 62;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>K1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1527.52px; font-size: 20.3104px; z-index: 63;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>K2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1527.52px; font-size: 20.3104px; z-index: 64;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>K3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1527.52px; font-size: 20.3104px; z-index: 65;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>K4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1527.52px; font-size: 20.3104px; z-index: 66;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>K5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1598.77px; font-size: 20.3104px; z-index: 67;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1598.77px; font-size: 20.3104px; z-index: 68;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1598.77px; font-size: 20.3104px; z-index: 69;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1598.77px; font-size: 20.3104px; z-index: 70;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1598.77px; font-size: 20.3104px; z-index: 71;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1028.72px; font-size: 20.3104px; z-index: 72;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>D2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 201px; top: 1677.94px; font-size: 20.3104px; z-index: 73;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L1",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 399.797px; top: 1677.94px; font-size: 20.3104px; z-index: 74;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L2",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 598.688px; top: 1677.94px; font-size: 20.3104px; z-index: 75;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L3",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 797.516px; top: 1677.94px; font-size: 20.3104px; z-index: 76;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L4",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 177.551px; height: 54.811px; left: 996.391px; top: 1677.94px; font-size: 20.3104px; z-index: 77;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 132, 109) !important;\"></div>L5",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 30px; height: 30px; left: 168px; top: 588px; z-index: 78;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(255, 213, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 31px; height: 54px; left: 1149.01px; top: 603.624px; transform: rotate(142.688deg); z-index: 79;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(113, 185, 65) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 28px; height: 26px; left: 1149px; top: 619px; z-index: 80;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(255, 213, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 28px; height: 26px; left: 38px; top: 333px; z-index: 81;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(255, 213, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 31px; height: 31px; left: 153.573px; top: 601.064px; transform: rotate(-45deg); z-index: 82;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(64, 240, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-group",
+      "style": "left: 632px; top: 591px; width: 112px; height: 38px; background: transparent; border: 1px dashed transparent; z-index: 83;",
+      "html": "<div class=\"obj text-layer\" style=\"width: 112px; height: 28px; left: 0px; top: 7px; z-index: 96;\">의장석</div><div class=\"obj shape-rect\" style=\"width: 102px; height: 38px; left: 3px; top: 0px; z-index: 95;\"><div class=\"shape-bg\" style=\"background: rgb(184, 70, 50) !important;\"></div></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-circle",
+      "style": "width: 10px; height: 10px; left: 161.984px; top: 611.984px; z-index: 84;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(255, 0, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 28px; height: 26px; left: 38.9946px; top: 362.995px; z-index: 85;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(186, 178, 166) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-circle",
+      "style": "width: 12px; height: 10px; left: 1171.4px; top: 669px; transform: rotate(80.7598deg); z-index: 86;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(255, 0, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-circle",
+      "style": "width: 10px; height: 10px; left: 1118.4px; top: 606px; transform: rotate(78.0413deg); z-index: 87;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(255, 0, 0) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 112px; height: 28px; left: 1129.77px; top: 605.037px; font-size: 14px; z-index: 88; transform: rotate(52.4536deg);",
+      "html": "발언석",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 97px; height: 44px; left: 481.313px; top: 532.233px; transform: rotate(89deg); z-index: 89;",
+      "html": "스피커",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 97px; height: 44px; left: 795.657px; top: 530.123px; transform: rotate(89deg); z-index: 90;",
+      "html": "스피커",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 112px; height: 28px; left: 73px; top: 332px; color: rgb(255, 221, 0); z-index: 91;",
+      "html": "MIC 입력단위치",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 112px; height: 28px; left: 115.989px; top: 631.959px; font-size: 15px; color: rgb(0, 0, 0); z-index: 92;",
+      "html": "(가로 4,세로 4)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 112px; height: 28px; left: 1126px; top: 675.976px; font-size: 15px; color: rgb(0, 0, 0); z-index: 93;",
+      "html": "(가로 5,세로 6)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 112px; height: 28px; left: 1008.99px; top: 599.979px; font-size: 15px; color: rgb(0, 0, 0); z-index: 94;",
+      "html": "(가로 7,세로 4)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 149px; height: 29px; left: 64.972px; top: 362.998px; color: rgb(150, 150, 150); z-index: 95;",
+      "html": " 자투리타일(노카운트)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 81px; height: 32px; left: 132.345px; top: 607.08px; color: rgb(255, 255, 255); transform: rotate(-45deg); z-index: 96;",
+      "html": "사회석",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 32px; height: 31px; left: 336px; top: 784px; z-index: 97;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(0, 238, 255) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 32px; height: 31px; left: 840px; top: 784px; z-index: 98;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(246, 9, 214) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 29px; height: 28px; left: 38px; top: 299px; z-index: 99;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(246, 9, 214) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 154px; height: 32px; left: 64px; top: 300px; color: rgb(246, 9, 214); z-index: 100;",
+      "html": "프롬프터 입력단위치",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 148px; height: 28px; left: 524px; top: 789px; font-size: 15px; color: rgb(0, 0, 0); z-index: 101;",
+      "html": "(가로 17,세로 11)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 148px; height: 28px; left: 703px; top: 789px; font-size: 15px; color: rgb(0, 0, 0); z-index: 102;",
+      "html": "(가로 17,세로 11)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 32px; height: 31px; left: 504px; top: 784px; z-index: 103;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(246, 9, 214) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 32px; height: 31px; left: 1008px; top: 784px; z-index: 104;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(0, 238, 255) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj shape-rect",
+      "style": "width: 28px; height: 28px; left: 39px; top: 266px; z-index: 105;",
+      "html": "<div class=\"shape-bg\" style=\"background: rgb(0, 238, 255) !important;\"></div>",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 148px; height: 28px; left: 197px; top: 788px; font-size: 15px; color: rgb(0, 0, 0); z-index: 106;",
+      "html": "(가로 11,세로 11)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 148px; height: 28px; left: 1031px; top: 788px; font-size: 15px; color: rgb(0, 0, 0); z-index: 107;",
+      "html": "(가로 11,세로 11)",
+      "locked": "false",
+      "hidden": "false"
+    },
+    {
+      "className": "obj text-layer",
+      "style": "width: 154px; height: 32px; left: 71px; top: 268px; color: rgb(0, 238, 255); z-index: 108;",
+      "html": "델리게이트 입력단위치",
+      "locked": "false",
+      "hidden": "false"
+    }
+  ]
+}

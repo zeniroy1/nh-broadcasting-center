@@ -25,13 +25,15 @@
 import fs from 'fs';
 import path from 'path';
 import http from 'http';
-import { URL } from 'url';
+import { URL, fileURLToPath } from 'url';
 import { google } from 'googleapis';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 // ===== 경로 설정 =====
-const PROJECT_ROOT = 'c:\\Users\\hamcoding\\Desktop\\codding';
-const BASE_DIR = path.join(PROJECT_ROOT, 'new folder', '로비전광판');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);                 // 로비전광판 폴더
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');  // codding 폴더 (new folder의 상위)
+const BASE_DIR = __dirname;
 const CREDENTIALS_PATH = path.join(PROJECT_ROOT, 'credentials.json');
 const TOKEN_PATH = path.join(PROJECT_ROOT, 'token.json');
 
@@ -89,31 +91,43 @@ async function parsePDF(pdfPath, month) {
     return events;
 }
 
-// ===== 1-2. JPG 파일 자동 분류 =====
+// ===== 1-2. 파일 자동 분류 =====
 function organizeFiles() {
-    console.log('📂 루트 폴더의 JPG 파일 분류 중...');
+    console.log('📂 루트 폴더의 파일 분류 중...');
     const rootFiles = fs.readdirSync(BASE_DIR);
-    const jpgFiles = rootFiles.filter(f => f.toLowerCase().endsWith('.jpg'));
 
     let movedCount = 0;
-    for (const file of jpgFiles) {
-        // 파일명에서 월 추출 (예: 0331 -> 3월)
-        const monthMatch = file.match(/^(\d{2})/);
-        if (monthMatch) {
-            const month = parseInt(monthMatch[1]);
-            if (month >= 1 && month <= 12) {
-                const targetDir = path.join(BASE_DIR, `${month}월`);
-                if (!fs.existsSync(targetDir)) {
-                    fs.mkdirSync(targetDir, { recursive: true });
-                }
-                const oldPath = path.join(BASE_DIR, file);
-                const newPath = path.join(targetDir, file);
-                
-                // 파일 이동 (이미 있으면 덮어씀)
-                fs.renameSync(oldPath, newPath);
-                console.log(`  ➡️  ${file} → ${month}월 폴더로 이동됨`);
-                movedCount++;
+    for (const file of rootFiles) {
+        if (fs.statSync(path.join(BASE_DIR, file)).isDirectory()) continue;
+
+        let targetMonth = null;
+        
+        if (file.toLowerCase().endsWith('.jpg')) {
+            // 파일명에서 월 추출 (예: 0331 -> 3월)
+            const monthMatch = file.match(/^(\d{2})/);
+            if (monthMatch) {
+                targetMonth = parseInt(monthMatch[1], 10);
             }
+        } else if (file.toLowerCase().endsWith('.pdf')) {
+            // 파일명에서 M월 추출
+            const monthMatch = file.match(/(\d{1,2})월/);
+            if (monthMatch) {
+                targetMonth = parseInt(monthMatch[1], 10);
+            }
+        }
+
+        if (targetMonth && targetMonth >= 1 && targetMonth <= 12) {
+            const targetDir = path.join(BASE_DIR, `${targetMonth}월`);
+            if (!fs.existsSync(targetDir)) {
+                fs.mkdirSync(targetDir, { recursive: true });
+            }
+            const oldPath = path.join(BASE_DIR, file);
+            const newPath = path.join(targetDir, file);
+            
+            // 파일 이동 (이미 있으면 덮어씀)
+            fs.renameSync(oldPath, newPath);
+            console.log(`  ➡️  ${file} → ${targetMonth}월 폴더로 이동됨`);
+            movedCount++;
         }
     }
     if (movedCount > 0) {
@@ -133,22 +147,37 @@ function matchJPGFiles(events, monthDir) {
         const datePrefix = event.date.slice(5).replace('-', ''); // MM/DD → MMDD
 
         // 날짜 + 농협명으로 매칭
+        const nameNorm = event.name.replace(/\s+/g, '');
         const matched = jpgFiles.find(f => {
             const normalized = f.replace(/\s+/g, '');
-            return f.startsWith(datePrefix) && normalized.includes(event.name.replace(/\s+/g, ''));
+            return f.startsWith(datePrefix) && normalized.includes(nameNorm);
         });
 
         if (matched) {
             event.jpg = matched;
             console.log(`  ✅ ${event.date} ${event.name} → ${matched}`);
         } else {
-            // 날짜만으로 매칭 시도
-            const dateMatched = jpgFiles.find(f => f.startsWith(datePrefix));
-            if (dateMatched && events.filter(e => e.date === event.date).length === 1) {
-                event.jpg = dateMatched;
-                console.log(`  ✅ ${event.date} ${event.name} → ${dateMatched} (날짜 매칭)`);
+            // 농협 ↔ 축협 상호 대체 매칭 (PDF 추출명과 파일명이 다를 경우)
+            const altName = nameNorm.includes('농협')
+                ? nameNorm.replace('농협', '축협')
+                : nameNorm.replace('축협', '농협');
+            const altMatched = jpgFiles.find(f => {
+                const normalized = f.replace(/\s+/g, '');
+                return f.startsWith(datePrefix) && normalized.includes(altName);
+            });
+
+            if (altMatched) {
+                event.jpg = altMatched;
+                console.log(`  ✅ ${event.date} ${event.name} → ${altMatched} (농협↔축협 대체 매칭)`);
             } else {
-                console.log(`  ⚠️  ${event.date} ${event.name} → JPG 파일 없음`);
+                // 날짜만으로 매칭 시도
+                const dateMatched = jpgFiles.find(f => f.startsWith(datePrefix));
+                if (dateMatched && events.filter(e => e.date === event.date).length === 1) {
+                    event.jpg = dateMatched;
+                    console.log(`  ✅ ${event.date} ${event.name} → ${dateMatched} (날짜 매칭)`);
+                } else {
+                    console.log(`  ⚠️  ${event.date} ${event.name} → JPG 파일 없음`);
+                }
             }
         }
     }
@@ -164,15 +193,24 @@ async function authorize() {
 
     if (fs.existsSync(TOKEN_PATH)) {
         const token = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf-8'));
-        oAuth2Client.setCredentials(token);
+        
+        // 필수 권한(Scope)이 모두 포함되어 있는지 확인
+        const grantedScopes = (token.scope || '').split(' ');
+        const hasAllScopes = SCOPES.every(s => grantedScopes.includes(s));
 
-        // 토큰 만료 확인 및 갱신
-        try {
-            await oAuth2Client.getAccessToken();
-            console.log('🔑 기존 토큰으로 인증 완료\n');
-            return oAuth2Client;
-        } catch (e) {
-            console.log('🔄 토큰 만료, 재인증 필요...\n');
+        if (hasAllScopes) {
+            oAuth2Client.setCredentials(token);
+
+            // 토큰 만료 확인 및 갱신
+            try {
+                await oAuth2Client.getAccessToken();
+                console.log('🔑 기존 토큰으로 인증 완료\n');
+                return oAuth2Client;
+            } catch (e) {
+                console.log('🔄 토큰 만료, 재인증 필요...\n');
+            }
+        } else {
+            console.log('🔄 필수 권한(Scope) 누락으로 재인증 필요...\n');
         }
     }
 
@@ -343,6 +381,9 @@ async function main() {
     console.log('╚══════════════════════════════════════════╝');
     console.log('');
 
+    // 파일 자동 분류 실행
+    organizeFiles();
+
     // 1. PDF 찾기 및 파싱
     const files = fs.readdirSync(monthDir);
     const pdfFile = files.find(f => f.toLowerCase().endsWith('.pdf') && f.includes('일정'));
@@ -371,8 +412,8 @@ async function main() {
     console.log('─'.repeat(80));
     console.log('');
 
-    // 3-2. 파일 자동 분류 실행
-    organizeFiles();
+    console.log('─'.repeat(80));
+    console.log('');
 
     // 4. 인증
     const auth = await authorize();

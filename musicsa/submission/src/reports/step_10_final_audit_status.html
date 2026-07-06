@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Step 10 Final Audit</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182230;
+      --muted: #667085;
+      --line: #d0d5dd;
+      --paper: #f6f7f9;
+      --panel: #ffffff;
+      --green: #167647;
+      --blue: #175cd3;
+      --amber: #b54708;
+      --red: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 42px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .badge {
+      align-self: flex-start;
+      padding: 8px 12px;
+      border: 1px solid #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .summary div, section {
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .summary div {
+      min-height: 94px;
+      padding: 16px;
+    }
+    .summary strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1.1;
+    }
+    .summary span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    section {
+      margin-top: 14px;
+      padding: 18px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .check {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+    .pass {
+      display: inline-block;
+      padding: 5px 8px;
+      color: #fff;
+      background: var(--green);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .check b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    .check span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .flow div {
+      min-height: 102px;
+      padding: 12px;
+      border-left: 4px solid var(--blue);
+      background: #f5f8ff;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .flow b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      header { flex-direction: column; }
+      .summary, .checks, .flow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>10단계 전체 검수</h1>
+        <p class="subtitle">1~9단계 산출물과 제출 플러그인 구조를 한 번에 감사합니다.</p>
+      </div>
+      <div class="badge">검수 통과</div>
+    </header>
+
+    <div class="summary" aria-label="핵심 수치">
+      <div><strong>10</strong><span>로드맵 단계</span></div>
+      <div><strong>9</strong><span>구현 완료 단계</span></div>
+      <div><strong>7</strong><span>감사 항목</span></div>
+      <div><strong>0</strong><span>실패 항목</span></div>
+    </div>
+
+    <section>
+      <h2>감사 항목</h2>
+      <div class="checks">
+        <div class="check"><span class="pass">PASS</span><div><b>플러그인 구조</b><span>plugin.json, SKILL.md, roadmap 문서 확인</span></div></div>
+        <div class="check"><span class="pass">PASS</span><div><b>단계 문서</b><span>1~10단계 구현 문서와 자체검수 문서 확인</span></div></div>
+        <div class="check"><span class="pass">PASS</span><div><b>HTML/SVG 리포트</b><span>1~10단계 시각화 산출물 확인</span></div></div>
+        <div class="check"><span class="pass">PASS</span><div><b>테스트 파일</b><span>단계별 테스트 파일 존재 확인</span></div></div>
+        <div class="check"><span class="pass">PASS</span><div><b>내부 데이터 경계</b><span>실제 구매자 수, 실제 판매, 실제 반품률 단정 방지</span></div></div>
+        <div class="check"><span class="pass">PASS</span><div><b>시각화 UI</b><span>세로 막대그래프와 타겟 적합도 표현 확인</span></div></div>
+        <div class="check"><span class="pass">PASS</span><div><b>라인 수 정리</b><span>주요 감사 파일 라인 수 확인</span></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>검수 흐름</h2>
+      <div class="flow">
+        <div><b>1. 구조</b>플러그인 필수 파일과 스킬 경로를 확인합니다.</div>
+        <div><b>2. 산출물</b>문서, 자체검수, HTML/SVG 리포트 누락 여부를 봅니다.</div>
+        <div><b>3. 안전 경계</b>내부 데이터를 단정하지 않는 표현을 확인합니다.</div>
+        <div><b>4. 대기</b>사용자 승인 전 zip 재생성이나 업로드를 하지 않습니다.</div>
+      </div>
+    </section>
+
+    <footer>
+      10단계는 전체 검수 단계이며, 실제 무신사 네트워크 요청이나 Google Drive 재업로드를 수행하지 않습니다.
+    </footer>
+  </main>
+</body>
+</html>

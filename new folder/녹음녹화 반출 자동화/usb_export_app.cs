@@ -3,8 +3,20 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+[assembly: AssemblyTitle("NHMediaExportTool")]
+[assembly: AssemblyDescription("농협 방송실 녹음녹화파일 반출 도구")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Nonghyup")]
+[assembly: AssemblyProduct("NHMediaExportTool")]
+[assembly: AssemblyCopyright("Copyright (C) Nonghyup")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("5.1.0.0")]
+[assembly: AssemblyFileVersion("5.1.0.0")]
 
 namespace NHMediaExportTool
 {
@@ -23,6 +35,7 @@ namespace NHMediaExportTool
         #region UI 구성 요소 선언 (Fields)
         private TextBox txtSearch;
         private Button btnRefresh;
+        private Button btnLog;
         private ListBox lstFolders;
         private ListBox lstFiles;
         private ComboBox cboUsb;
@@ -60,8 +73,13 @@ namespace NHMediaExportTool
             this.MaximizeBox = false;
             
             Label lblSearch = new Label() { Text = "🔍 실시간 검색어 입력 (이전/폐기 자료 자동 포함):", Location = new Point(20, 20), AutoSize = true, Font = new Font("Malgun Gothic", 10, FontStyle.Bold) };
-            txtSearch = new TextBox() { Location = new Point(20, 45), Width = 640, Font = new Font("Malgun Gothic", 12) };
-            btnRefresh = new Button() { Text = "🔄 목록 갱신", Location = new Point(670, 44), Size = new Size(95, 29), Font = new Font("Malgun Gothic", 9, FontStyle.Bold), Cursor = Cursors.Hand };
+            txtSearch = new TextBox() { Location = new Point(20, 48), Width = 630, Font = new Font("Malgun Gothic", 12) };
+            
+            btnLog = new Button() { Text = "📋 반출기록", Location = new Point(660, 15), Size = new Size(105, 30), BackColor = Color.FromArgb(255, 235, 59), FlatStyle = FlatStyle.Flat, Font = new Font("Malgun Gothic", 9, FontStyle.Bold), Cursor = Cursors.Hand };
+            btnLog.FlatAppearance.BorderColor = Color.FromArgb(212, 193, 44);
+            
+            btnRefresh = new Button() { Text = "🔄 목록 갱신", Location = new Point(660, 48), Size = new Size(105, 30), Font = new Font("Malgun Gothic", 9, FontStyle.Bold), Cursor = Cursors.Hand, BackColor = Color.FromArgb(224, 224, 224), FlatStyle = FlatStyle.Flat };
+            btnRefresh.FlatAppearance.BorderColor = Color.Silver;
             
             Label lblRes = new Label() { Text = "📂 검색 결과 선택 (폴더):", Location = new Point(20, 85), AutoSize = true, Font = new Font("Malgun Gothic", 10, FontStyle.Bold) };
             lstFolders = new ListBox() { Location = new Point(20, 110), Size = new Size(360, 150), Font = new Font("Malgun Gothic", 11), HorizontalScrollbar = true };
@@ -81,10 +99,10 @@ namespace NHMediaExportTool
             pbProgress = new ProgressBar() { Location = new Point(20, 385), Size = new Size(745, 25) };
             lblStatus = new Label() { Text = "대기 중...", Location = new Point(20, 420), Size = new Size(600, 40), ForeColor = Color.DimGray };
             
-            chkMoveToDiscard = new CheckBox() { Text = "폐기", Location = new Point(630, 417), Size = new Size(130, 25), Font = new Font("Malgun Gothic", 10, FontStyle.Bold), ForeColor = Color.DarkRed, Cursor = Cursors.Hand };
+            chkMoveToDiscard = new CheckBox() { Text = "폐기", Location = new Point(630, 417), Size = new Size(130, 30), Font = new Font("Malgun Gothic", 12, FontStyle.Bold), ForeColor = Color.DarkRed, Cursor = Cursors.Hand };
             
             this.Controls.AddRange(new Control[] { 
-                lblSearch, txtSearch, btnRefresh, 
+                lblSearch, txtSearch, btnLog, btnRefresh, 
                 lblRes, lstFolders, lblFiles, lstFiles, 
                 lblUsb, cboUsb, lblFolder, txtUsbFolder, btnBrowseFolder, 
                 btnExport, pbProgress, lblStatus, chkMoveToDiscard
@@ -97,6 +115,7 @@ namespace NHMediaExportTool
         private void InitializeEventHandlers()
         {
             this.Load += MainForm_Load;
+            btnLog.Click += BtnLog_Click;
             txtSearch.TextChanged += (s, e) => FilterResults();
             btnRefresh.Click += (s, e) => AutoRefreshUI();
             lstFolders.SelectedIndexChanged += LstFolders_SelectedIndexChanged;
@@ -348,6 +367,57 @@ namespace NHMediaExportTool
                 }
             }
         }
+
+        private void BtnLog_Click(object sender, EventArgs e)
+        {
+            string logFilePath = Path.Combine(currentNetPath, AppConfig.LogFileName);
+            string logContent = "로그 파일이 존재하지 않거나 읽을 수 없습니다.";
+            
+            try
+            {
+                if (File.Exists(logFilePath))
+                {
+                    using (var fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (var sr = new StreamReader(fs, System.Text.Encoding.UTF8))
+                    {
+                        logContent = sr.ReadToEnd();
+                    }
+                }
+                else
+                {
+                    logContent = "아직 기록된 반출대장이 없습니다. (" + AppConfig.LogFileName + ")";
+                }
+            }
+            catch (Exception ex)
+            {
+                logContent = "로그 읽기 오류:\r\n" + ex.Message;
+            }
+
+            using (Form logForm = new Form())
+            {
+                logForm.Text = "📋 반출대장_자동기록.txt 열람";
+                logForm.Size = new Size(800, 550); // 창 크기 확대
+                logForm.StartPosition = FormStartPosition.CenterParent;
+                logForm.FormBorderStyle = FormBorderStyle.Sizable; // 사용자가 직접 창 크기를 조절할 수 있도록 허용
+                logForm.MaximizeBox = true; // 최대화 허용
+                logForm.MinimizeBox = false;
+
+                TextBox txtLog = new TextBox();
+                txtLog.Multiline = true;
+                txtLog.ReadOnly = true;
+                txtLog.ScrollBars = ScrollBars.Vertical;
+                txtLog.Dock = DockStyle.Fill;
+                txtLog.Font = new Font("Malgun Gothic", 12); // 한글 가독성이 높은 맑은 고딕으로 변경, 폰트 크기 확대
+                txtLog.BackColor = Color.White;
+                txtLog.Text = logContent;
+                
+                txtLog.SelectionStart = txtLog.Text.Length;
+                txtLog.ScrollToCaret();
+
+                logForm.Controls.Add(txtLog);
+                logForm.ShowDialog(this);
+            }
+        }
         #endregion
 
         #region 반출 실행 로직 (Export Execution)
@@ -531,6 +601,7 @@ namespace NHMediaExportTool
             btnBrowseFolder.Enabled = state;
             txtSearch.Enabled = state;
             btnRefresh.Enabled = state;
+            if (btnLog != null) btnLog.Enabled = state;
             lstFolders.Enabled = state;
             lstFiles.Enabled = state;
             if (chkMoveToDiscard != null) chkMoveToDiscard.Enabled = state;
