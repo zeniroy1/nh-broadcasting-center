@@ -68,3 +68,4 @@ token.json.bak
 *.pyc
 __pycache__/
 *.zip
+backupcdrive/
